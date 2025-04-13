@@ -30,22 +30,23 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      {/* ✅ Autoplay Background Video */}
+      <video
+        muted
+        playsInline
+        autoPlay
+        loop
+        preload="auto"
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
+        src="/bg-enter.mp4"
+      />
+
+      {/* 🎵 Ambient + Click Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Background video with full compatibility */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        src="/bg-enter.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-      />
-
-      {/* Orb Header */}
-      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-5">
+      {/* 💬 Orb Header */}
+      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
             className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
@@ -65,7 +66,7 @@ export default function EnterPage() {
           </motion.p>
         </div>
 
-        {/* 📱 Mobile Buttons */}
+        {/* 📱 Mobile Vertical Nav Buttons */}
         <div className="mt-4 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
           {[
             ["Explore Drops", "/drops"],
@@ -76,7 +77,7 @@ export default function EnterPage() {
             <button
               key={link}
               onClick={() => navigateTo(link)}
-              className="w-full px-6 py-3 rounded-full font-semibold text-sm shadow-md border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+              className="w-full px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
             >
               {label}
             </button>
@@ -84,7 +85,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* 🖥 Floating Buttons */}
+      {/* 🖥 Floating Buttons (Desktop Only) */}
       <div className="absolute inset-0 z-40 pointer-events-none hidden md:block">
         {[
           ["Explore Drops", "/drops", "top-[20%] left-[10%]"],
@@ -104,7 +105,7 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* 🌟 Logo Toggle Nav */}
+      {/* 🌟 Logo Nav Button */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -116,7 +117,7 @@ export default function EnterPage() {
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* 🌀 Slide Up Nav */}
+      {/* 🌀 Floating Toggle Nav */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -152,7 +153,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* HUD Labels */}
+      {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -163,7 +164,6 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* Global Fixes */}
       <style jsx global>{`
         video::-webkit-media-controls {
           display: none !important;
