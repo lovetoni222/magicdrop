@@ -30,10 +30,11 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-[100dvh] w-full overflow-hidden bg-black text-white">
+      {/* Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* 🎥 Background */}
+      {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
         src="/bg-enter.mp4"
@@ -64,7 +65,7 @@ export default function EnterPage() {
           </motion.p>
         </div>
 
-        {/* 📱 Mobile Buttons */}
+        {/* Mobile Buttons */}
         <div className="mt-8 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
           {[
             ["Explore Drops", "/drops"],
@@ -83,7 +84,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* 🖥 Desktop Buttons */}
+      {/* Desktop Floating Buttons */}
       <div className="absolute inset-0 z-40 pointer-events-none hidden md:block">
         {[
           ["Explore Drops", "/drops", "top-[20%] left-[10%]"],
@@ -103,19 +104,19 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* 💎 Logo Toggle Nav (non-sticky + styled) */}
+      {/* Logo Toggle Nav (ENLARGED + STYLED) */}
       <motion.img
         onClick={() => {
           handleClickSound();
           setMenuOpen(!menuOpen);
         }}
         src="/logo.png"
-        alt="MagicDrop Logo"
+        alt="MagicDrop Nav"
         className="mx-auto mt-8 h-20 cursor-pointer z-50 ring-2 ring-purple-400 rounded-full hover:scale-105 transition-transform duration-300"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* 🎮 Slide-up Menu */}
+      {/* Toggle Menu (build-safe keys) */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -133,18 +134,18 @@ export default function EnterPage() {
             </button>
 
             {[
-              ["Home", "/enter", <Home size={18} />],
-              ["Explore Drops", "/drops", <Sparkles size={18} />],
-              ["Collaborate", "/collaborate", <Mail size={18} />],
-              ["Meet Our Team", "/team", <Users size={18} />],
-              ["Become a Fan Advisor", "/fan-advisor", <Star size={18} />],
-            ].map(([label, link, icon]) => (
+              { label: "Home", link: "/enter", icon: <Home size={18} /> },
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
               <button
-                key={`${label}-${link}`}
-                onClick={() => navigateTo(link)}
+                key={`${item.label}-${item.link}`}
+                onClick={() => navigateTo(item.link)}
                 className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
               >
-                {icon} {label}
+                {item.icon} {item.label}
               </button>
             ))}
           </motion.div>
@@ -162,6 +163,7 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
+      {/* Global CSS */}
       <style jsx global>{`
         video::-webkit-media-controls {
           display: none !important;
@@ -173,13 +175,16 @@ export default function EnterPage() {
 
         @keyframes shimmerAnim {
           0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            filter: brightness(1)
+              drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
           50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+            filter: brightness(1.3)
+              drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
           }
           100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            filter: brightness(1)
+              drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
         }
 
