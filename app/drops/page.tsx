@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
 
-export default function DropsPage() {
+export default function EnterPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,10 +29,11 @@ export default function DropsPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+    <div className="relative h-[100dvh] w-full overflow-hidden bg-black text-white">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
+      {/* 🎥 Background */}
       <video
         className="absolute inset-0 h-full w-full object-cover z-0"
         src="/bg-enter.mp4"
@@ -42,85 +43,57 @@ export default function DropsPage() {
         playsInline
       />
 
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 pt-32 pb-20">
-        <motion.h1
-          className="text-4xl md:text-6xl font-bold text-white text-glow-hard [font-family:var(--font-playfair)] mb-12"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          Explore the Dropverse
-        </motion.h1>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full">
-          {/* Becky G Drop */}
-          <motion.div
-            className="bg-white/10 border border-white/20 p-4 rounded-xl backdrop-blur-md shadow-md hover:shadow-xl transition duration-300 text-left"
-            whileHover={{ scale: 1.03 }}
+      {/* 🌀 Orb + Header */}
+      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-5">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
+          <motion.h1
+            className="text-3xl md:text-6xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
           >
-            <img
-              src="/becky.jpg"
-              alt="Becky G Drop"
-              className="w-full h-40 object-cover rounded-lg mb-4 border border-white/20"
-            />
-            <h3 className="text-xl font-semibold text-white mb-2">
-              Becky G: Drop 01
-            </h3>
-            <p className="text-sm text-white/80 mb-4">
-              Becky G's "Otro Capítulo del Mercado" celebrated her album{" "}
-              <em>Encuentros</em> through a vibrant fan reunion. Inspired by
-              Mexican culture, this immersive experience featured a curated
-              market and limited-edition mercado bags — given upon entry — that
-              unified fans as they explored, shopped, and connected. The event
-              transformed Becky’s music into tangible moments of vulnerability,
-              empowerment, and shared belonging.
-            </p>
-            <a
-              href="https://beckygmercado.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleClickSound}
-              className="text-[#a855f7] hover:text-white font-semibold text-[15px] sparkle"
-            >
-              View Drop →
-            </a>
-          </motion.div>
-
-          {/* Placeholder Drops */}
-          <motion.div
-            className="bg-white/5 border border-white/10 p-6 rounded-xl backdrop-blur-md text-center text-white/60"
+            Welcome to MagicDrop
+          </motion.h1>
+          <motion.p
+            className="mt-4 text-base md:text-xl text-white text-shadow-strong"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.5, duration: 1 }}
           >
-            <h3 className="text-lg font-semibold">Coming Soon</h3>
-            <p className="text-sm">New artist drops are being conjured.</p>
-          </motion.div>
+            Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
+          </motion.p>
+        </div>
 
-          <motion.div
-            className="bg-white/5 border border-white/10 p-6 rounded-xl backdrop-blur-md text-center text-white/60"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
+        {/* Buttons */}
+        <div className="mt-8 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
+          <button
+            onClick={() => navigateTo("/drops")}
+            className="w-full px-6 py-3 rounded-full font-semibold text-sm shadow-md border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
           >
-            <h3 className="text-lg font-semibold">Coming Soon</h3>
-            <p className="text-sm">New artist drops are being conjured.</p>
-          </motion.div>
+            Explore Drops
+          </button>
+          <button
+            onClick={() => navigateTo("/collaborate")}
+            className="w-full px-6 py-3 rounded-full font-semibold text-sm shadow-md border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+          >
+            Collaborate
+          </button>
+          <button
+            onClick={() => navigateTo("/team")}
+            className="w-full px-6 py-3 rounded-full font-semibold text-sm shadow-md border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+          >
+            Meet Our Team
+          </button>
+          <button
+            onClick={() => navigateTo("/fan-advisor")}
+            className="w-full px-6 py-3 rounded-full font-semibold text-sm shadow-md border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+          >
+            Become a Fan Advisor
+          </button>
         </div>
       </div>
 
-      {/* 🧭 HUD */}
-      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        MAGICDROP UI
-      </p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        Build 01 — Public Alpha
-      </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
-        Powered by Fan Magic
-      </p>
-
-      {/* 💎 Logo Toggle Nav */}
+      {/* 💎 Logo Toggle */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -128,7 +101,7 @@ export default function DropsPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Logo"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 h-16 shimmer cursor-pointer z-50"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 h-16 shimmer cursor-pointer z-50"
         whileTap={{ scale: 0.9 }}
       />
 
@@ -140,7 +113,7 @@ export default function DropsPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[240px]"
+            className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[240px]"
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -183,10 +156,29 @@ export default function DropsPage() {
         )}
       </AnimatePresence>
 
+      {/* 🧭 HUD */}
+      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
+        MAGICDROP UI
+      </p>
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
+        Build 01 — Public Alpha
+      </p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
+        Powered by Fan Magic
+      </p>
+
+      {/* ✨ Styles */}
       <style jsx global>{`
+        html,
+        body {
+          overflow: hidden;
+          touch-action: manipulation;
+        }
+
         .shimmer {
           animation: shimmerAnim 4s infinite ease-in-out;
         }
+
         @keyframes shimmerAnim {
           0% {
             filter: brightness(1)
@@ -201,14 +193,21 @@ export default function DropsPage() {
               drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
         }
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
-        }
+
         .text-glow-hard {
           text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
             0 0 28px rgba(213, 179, 255, 0.5),
             0 0 48px rgba(213, 179, 255, 0.3);
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
+            0 0 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sparkle:hover {
+          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
+            0 0 20px rgba(213, 179, 255, 0.5);
         }
       `}</style>
     </div>
