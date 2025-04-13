@@ -1,4 +1,3 @@
-// [ENTER PAGE CODE — optimized for mobile]
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,11 +30,13 @@ export default function EnterPage() {
 
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden bg-black text-white">
+      {/* 🎧 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
+      {/* 🎥 Background Video */}
       <video
-        className="absolute inset-0 h-full w-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0"
         src="/bg-enter.mp4"
         autoPlay
         loop
@@ -43,7 +44,7 @@ export default function EnterPage() {
         playsInline
       />
 
-      {/* Center Orb & Header */}
+      {/* 🌀 Orb + Header */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-5">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
@@ -64,7 +65,7 @@ export default function EnterPage() {
           </motion.p>
         </div>
 
-        {/* Mobile Button Stack */}
+        {/* 📱 Mobile Stacked Buttons */}
         <div className="mt-8 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
           {[
             ["Explore Drops", "/drops"],
@@ -83,7 +84,43 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* Logo Nav Toggle */}
+      {/* 🖥 Desktop Floating Buttons */}
+      <div className="absolute inset-0 z-40 pointer-events-none hidden md:block">
+        <motion.button
+          onClick={() => navigateTo("/drops")}
+          className="absolute top-[20%] left-[10%] px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white pointer-events-auto"
+          animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+        >
+          Explore Drops
+        </motion.button>
+        <motion.button
+          onClick={() => navigateTo("/collaborate")}
+          className="absolute bottom-[25%] right-[10%] px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white pointer-events-auto"
+          animate={{ y: [0, 10, 0], x: [0, -6, 0] }}
+          transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
+        >
+          Collaborate
+        </motion.button>
+        <motion.button
+          onClick={() => navigateTo("/team")}
+          className="absolute bottom-[18%] left-[6%] px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white pointer-events-auto"
+          animate={{ y: [0, 10, 0], x: [0, 3, 0] }}
+          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+        >
+          Meet Our Team
+        </motion.button>
+        <motion.button
+          onClick={() => navigateTo("/fan-advisor")}
+          className="absolute top-[22%] right-[12%] px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white pointer-events-auto"
+          animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+          transition={{ repeat: Infinity, duration: 6.5, ease: "easeInOut" }}
+        >
+          Become a Fan Advisor
+        </motion.button>
+      </div>
+
+      {/* 💎 Logo Nav Toggle */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -95,6 +132,7 @@ export default function EnterPage() {
         whileTap={{ scale: 0.9 }}
       />
 
+      {/* 🎮 Slide-up Menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -111,34 +149,19 @@ export default function EnterPage() {
               <X size={18} />
             </button>
 
-            <button
-              onClick={() => navigateTo("/enter")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/enter")} className="flex items-center gap-2 text-white hover:text-purple-300 transition">
               <Home size={18} /> Home
             </button>
-            <button
-              onClick={() => navigateTo("/drops")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/drops")} className="flex items-center gap-2 text-white hover:text-purple-300 transition">
               <Sparkles size={18} /> Explore Drops
             </button>
-            <button
-              onClick={() => navigateTo("/collaborate")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/collaborate")} className="flex items-center gap-2 text-white hover:text-purple-300 transition">
               <Mail size={18} /> Collaborate
             </button>
-            <button
-              onClick={() => navigateTo("/team")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/team")} className="flex items-center gap-2 text-white hover:text-purple-300 transition">
               <Users size={18} /> Meet Our Team
             </button>
-            <button
-              onClick={() => navigateTo("/fan-advisor")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/fan-advisor")} className="flex items-center gap-2 text-white hover:text-purple-300 transition">
               <Star size={18} /> Become a Fan Advisor
             </button>
           </motion.div>
@@ -156,7 +179,6 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* Styles */}
       <style jsx global>{`
         html,
         body {
@@ -192,11 +214,6 @@ export default function EnterPage() {
         .text-shadow-strong {
           text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
             0 0 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
         }
       `}</style>
     </div>
