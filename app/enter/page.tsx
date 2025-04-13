@@ -30,25 +30,24 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white flex flex-col justify-between">
-      {/* 🎥 Background Video */}
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      {/* ✅ Fixed Background Video for Mobile/Autoplay */}
       <video
-        muted
-        playsInline
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10 pointer-events-none"
+        src="/bg-enter.mp4"
         autoPlay
         loop
+        muted
+        playsInline
         preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
-      >
-        <source src="/bg-enter.mp4" type="video/mp4" />
-      </video>
+      />
 
       {/* 🎵 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
       {/* 💬 Orb Header */}
-      <div className="flex flex-col items-center justify-center text-center px-4 mt-10 md:mt-32 space-y-6 z-20">
+      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
             className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
@@ -67,47 +66,27 @@ export default function EnterPage() {
             Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
           </motion.p>
         </div>
+
+        {/* 📱 Mobile Buttons */}
+        <div className="mt-4 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
+          {[
+            ["Explore Drops", "/drops"],
+            ["Collaborate", "/collaborate"],
+            ["Meet Our Team", "/team"],
+            ["Become a Fan Advisor", "/fan-advisor"],
+          ].map(([label, link]) => (
+            <button
+              key={link}
+              onClick={() => navigateTo(link)}
+              className="w-full px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* 📱 Mobile Buttons */}
-      <div className="md:hidden mt-8 mb-20 flex flex-col items-center gap-4 z-30 px-4">
-        {[
-          ["Explore Drops", "/drops"],
-          ["Collaborate", "/collaborate"],
-          ["Meet Our Team", "/team"],
-          ["Become a Fan Advisor", "/fan-advisor"],
-        ].map(([label, link]) => (
-          <button
-            key={link}
-            onClick={() => navigateTo(link)}
-            className="w-full max-w-xs px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* 🖥 Floating Buttons */}
-      <div className="absolute inset-0 z-30 pointer-events-none hidden md:block">
-        {[
-          ["Explore Drops", "/drops", "top-[20%] left-[10%]"],
-          ["Collaborate", "/collaborate", "bottom-[25%] right-[10%]"],
-          ["Meet Our Team", "/team", "bottom-[18%] left-[6%]"],
-          ["Become a Fan Advisor", "/fan-advisor", "top-[22%] right-[12%]"],
-        ].map(([label, link, position], i) => (
-          <motion.button
-            key={link}
-            onClick={() => navigateTo(link)}
-            className={`absolute ${position} px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white pointer-events-auto`}
-            animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 6 + i, ease: "easeInOut" }}
-          >
-            {label}
-          </motion.button>
-        ))}
-      </div>
-
-      {/* 🎮 Logo Toggle Nav */}
+      {/* 🌟 Logo Toggle Nav */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -115,11 +94,11 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="mx-auto my-6 h-20 cursor-pointer z-50 ring-2 ring-purple-400 rounded-full hover:scale-105 transition-transform duration-300"
+        className="mx-auto mt-6 h-20 cursor-pointer z-50 ring-2 ring-purple-400 rounded-full hover:scale-105 transition-transform duration-300 block"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* 🔽 Slide-Up Menu */}
+      {/* 🎮 Slide-Up Nav Panel */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -127,7 +106,7 @@ export default function EnterPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[240px]"
+            className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[240px]"
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -166,22 +145,34 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
+      {/* 🔧 Global Fixes */}
       <style jsx global>{`
         video::-webkit-media-controls {
           display: none !important;
         }
-
+        .shimmer {
+          animation: shimmerAnim 4s infinite ease-in-out;
+        }
+        @keyframes shimmerAnim {
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+        }
         .text-glow-hard {
           text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
             0 0 28px rgba(213, 179, 255, 0.5),
             0 0 48px rgba(213, 179, 255, 0.3);
         }
-
         .text-shadow-strong {
           text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
             0 0 4px rgba(0, 0, 0, 0.3);
         }
-
         .sparkle:hover {
           text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
             0 0 20px rgba(213, 179, 255, 0.5);
@@ -190,4 +181,3 @@ export default function EnterPage() {
     </div>
   );
 }
-
