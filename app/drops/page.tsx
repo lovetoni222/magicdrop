@@ -36,7 +36,7 @@ export default function DropsPage() {
 
       {/* 🎥 Background */}
       <video
-        className="absolute inset-0 h-full w-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0"
         src="/bg-enter.mp4"
         autoPlay
         loop
@@ -44,8 +44,8 @@ export default function DropsPage() {
         playsInline
       />
 
-      {/* 🌌 Content */}
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 pt-32 pb-20">
+      {/* 🌌 Dropverse Header & Cards */}
+      <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 pt-32 pb-20">
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-white text-glow-hard [font-family:var(--font-playfair)] mb-12"
           initial={{ opacity: 0, y: 15 }}
@@ -55,7 +55,7 @@ export default function DropsPage() {
           Explore the Dropverse
         </motion.h1>
 
-        <div className="grid gap-8 w-full max-w-6xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 w-full max-w-6xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {/* Becky G Drop */}
           <motion.div
             className="bg-white/10 border border-white/20 p-4 rounded-xl backdrop-blur-md shadow-md hover:shadow-xl transition duration-300 text-left"
@@ -87,7 +87,7 @@ export default function DropsPage() {
             </a>
           </motion.div>
 
-          {/* Coming Soon placeholders */}
+          {/* Placeholders */}
           {[1, 2].map((i) => (
             <motion.div
               key={i}
@@ -103,7 +103,7 @@ export default function DropsPage() {
         </div>
       </div>
 
-      {/* 🧭 HUD */}
+      {/* 🧭 HUD Text */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -143,34 +143,19 @@ export default function DropsPage() {
               <X size={18} />
             </button>
 
-            <button
-              onClick={() => navigateTo("/enter")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/enter")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
               <Home size={18} /> Home
             </button>
-            <button
-              onClick={() => navigateTo("/drops")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/drops")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
               <Sparkles size={18} /> Explore Drops
             </button>
-            <button
-              onClick={() => navigateTo("/collaborate")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/collaborate")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
               <Mail size={18} /> Collaborate
             </button>
-            <button
-              onClick={() => navigateTo("/team")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/team")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
               <Users size={18} /> Meet Our Team
             </button>
-            <button
-              onClick={() => navigateTo("/fan-advisor")}
-              className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-            >
+            <button onClick={() => navigateTo("/fan-advisor")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
               <Star size={18} /> Become a Fan Advisor
             </button>
           </motion.div>
@@ -178,28 +163,31 @@ export default function DropsPage() {
       </AnimatePresence>
 
       <style jsx global>{`
-        .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
-        }
         .shimmer {
           animation: shimmerAnim 4s infinite ease-in-out;
         }
         @keyframes shimmerAnim {
           0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            filter: brightness(1)
+              drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
           50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+            filter: brightness(1.3)
+              drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
           }
           100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            filter: brightness(1)
+              drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
         }
         .sparkle:hover {
           text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
             0 0 20px rgba(213, 179, 255, 0.5);
+        }
+        .text-glow-hard {
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
+            0 0 28px rgba(213, 179, 255, 0.5),
+            0 0 48px rgba(213, 179, 255, 0.3);
         }
       `}</style>
     </div>
