@@ -7,7 +7,7 @@ import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
 export default function EnterPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [menuOpen, setMenuOpen] = useState(true); // Auto-open nav on enter
+  const [menuOpen, setMenuOpen] = useState(true); // Menu open on load
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -30,21 +30,20 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100">
-      {/* Ambient Audio */}
+    <div className="relative min-h-screen w-full overflow-hidden text-white bg-gradient-to-br from-[#fbe8ff] via-[#e5d6f5] to-[#d0f0ff] animate-gradient">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Iridescent Streaks Overlay */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute w-full h-full bg-[url('/window.svg')] bg-cover opacity-10 animate-move" />
-      </div>
+      {/* Background Gradient Layer (animated) */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,200,255,0.3)_0%,transparent_70%)] blur-2xl opacity-70 animate-gradientPulse" />
 
-      {/* Orb Header */}
-      <div className="relative z-10 flex flex-col items-center justify-start pt-24 px-4 text-center">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-lg shadow-elevated max-w-xl">
+      {/* Page Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-24 text-center space-y-6">
+
+        {/* Orb Header */}
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_30px_rgba(213,179,255,0.4)] max-w-xl">
           <motion.h1
-            className="text-3xl md:text-5xl font-bold tracking-wide [font-family:var(--font-playfair)] text-iridescent"
+            className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
@@ -60,122 +59,95 @@ export default function EnterPage() {
             Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
           </motion.p>
         </div>
-      </div>
 
-      {/* Logo Toggle Button */}
-      <motion.img
-        onClick={() => {
-          handleClickSound();
-          setMenuOpen(!menuOpen);
-        }}
-        src="/logo.png"
-        alt="MagicDrop Nav"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 h-20 cursor-pointer z-40 ring-2 ring-purple-400 rounded-full shimmer-glow hover:scale-105 transition duration-300"
-        whileTap={{ scale: 0.95 }}
-      />
+        {/* Logo Toggle Button */}
+        <motion.img
+          onClick={() => {
+            handleClickSound();
+            setMenuOpen(!menuOpen);
+          }}
+          src="/logo.png"
+          alt="MagicDrop Nav"
+          className="mt-12 h-20 w-20 rounded-full border-2 border-purple-400 bg-black/50 p-2 cursor-pointer z-30 hover:scale-105 transition-transform backdrop-blur-md shadow-lg"
+          whileTap={{ scale: 0.95 }}
+        />
 
-      {/* Navigation Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 30, opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="absolute z-30 top-[28%] left-1/2 -translate-x-1/2 w-[90%] max-w-md px-6 py-6 bg-black/30 backdrop-blur-xl rounded-3xl border border-white/20 shadow-elevated space-y-5"
-          >
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="text-white font-bold text-lg md:text-xl text-glow-hard">
-                Navigate the Dropverse
-              </h2>
+        {/* Nav Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute top-28 md:top-36 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-md rounded-2xl px-6 py-6 z-50 shadow-xl border border-white/20 flex flex-col gap-4 items-center w-[90%] max-w-sm"
+            >
               <button
                 onClick={() => setMenuOpen(false)}
-                className="text-white/60 hover:text-white transition"
+                className="absolute top-3 right-4 text-white/60 hover:text-white transition"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
-            </div>
+              <h2 className="text-xl font-bold text-white text-shadow-strong mb-4">
+                Navigate the Dropverse
+              </h2>
+              {[
+                { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+                { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+                { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+                { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+              ].map((item) => (
+                <button
+                  key={item.link}
+                  onClick={() => navigateTo(item.link)}
+                  className="w-full flex items-center gap-3 px-5 py-3 rounded-full border border-white/30 text-white bg-white/5 hover:bg-purple-600 hover:text-white hover:border-purple-400 transition-all text-sm font-semibold"
+                >
+                  {item.icon} {item.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
-            {[
-              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
-              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-            ].map((item) => (
-              <button
-                key={item.link}
-                onClick={() => navigateTo(item.link)}
-                className="w-full flex items-center justify-start gap-3 px-6 py-3 rounded-full font-semibold text-sm border border-white/20 text-white bg-black/40 hover:bg-purple-600 hover:text-white transition-all duration-300 glow-hover"
-              >
-                {item.icon} {item.label}
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* HUD Labels */}
+      {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/60 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
       <p className="absolute bottom-2 left-3 text-xs text-white/60 font-mono tracking-wide z-50">
         Build 01 — Public Alpha
       </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/60 font-mono tracking-wide z-50 text-right">
+      <p className="absolute bottom-2 right-3 text-xs text-white/60 font-mono tracking-wide z-50">
         Powered by Fan Magic
       </p>
 
-      {/* Style Injections */}
+      {/* Global Styling */}
       <style jsx global>{`
-        .text-shadow-strong {
-          text-shadow: 0 0 12px rgba(0, 0, 0, 0.4), 0 0 4px rgba(0, 0, 0, 0.2);
-        }
-
         .text-glow-hard {
           text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 24px rgba(213, 179, 255, 0.4);
+            0 0 28px rgba(213, 179, 255, 0.4),
+            0 0 48px rgba(213, 179, 255, 0.2);
         }
-
-        .text-iridescent {
-          background: linear-gradient(to right, #ffffff, #d5b3ff, #ffffff);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4),
+            0 0 2px rgba(0, 0, 0, 0.2);
         }
-
-        .shimmer-glow {
-          animation: shimmerAnim 3s infinite ease-in-out;
+        .animate-gradientPulse {
+          animation: gradientPulse 20s ease infinite;
         }
-
-        @keyframes shimmerAnim {
-          0%, 100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.2));
+        @keyframes gradientPulse {
+          0% {
+            transform: scale(1) translate(0, 0);
+            opacity: 0.6;
           }
           50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.5));
-          }
-        }
-
-        .glow-hover:hover {
-          box-shadow: 0 0 12px rgba(213, 179, 255, 0.5),
-            0 0 20px rgba(213, 179, 255, 0.3);
-          transform: scale(1.03);
-        }
-
-        .shadow-elevated {
-          box-shadow: 0 10px 40px rgba(213, 179, 255, 0.2);
-        }
-
-        @keyframes move {
-          0% {
-            background-position: 0% 0%;
+            transform: scale(1.05) translate(5px, -5px);
+            opacity: 0.8;
           }
           100% {
-            background-position: 100% 100%;
+            transform: scale(1) translate(0, 0);
+            opacity: 0.6;
           }
-        }
-
-        .animate-move {
-          animation: move 20s linear infinite;
         }
       `}</style>
     </div>
