@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
@@ -30,16 +30,47 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white bg-gradient-to-br from-[#ddb6f2] via-[#bfa6ff] to-[#8e99f3]">
+    <div className="relative min-h-screen w-full overflow-hidden text-white bg-black">
+      {/* AUDIO */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Glow spotlight center orb */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-radial from-white/10 via-transparent to-transparent rounded-full blur-[120px] opacity-30 scale-150 mx-auto my-auto" />
+      {/* GRADIENT BACKGROUND */}
+      <div className="absolute inset-0 z-0 animated-prism" />
+
+      {/* AURORA OVERLAY */}
+      <motion.div
+        className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08)_0%,transparent_60%)]"
+        animate={{ opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* STARDUST PARTICLES */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        {Array.from({ length: 40 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-white/60"
+            initial={{
+              x: Math.random() * 100 + "%",
+              y: Math.random() * 100 + "%",
+              opacity: 0,
+            }}
+            animate={{
+              y: "-10%",
+              opacity: [0, 0.6, 0],
+            }}
+            transition={{
+              duration: 12 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 5,
+            }}
+          />
+        ))}
       </div>
 
-      {/* HUD Text */}
+      {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -50,59 +81,35 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* Center Title */}
-      <div className="relative z-20 flex flex-col items-center justify-center h-screen text-center px-4 space-y-6">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_50px_rgba(213,179,255,0.4)] max-w-xl transition-all duration-700">
-          <motion.h1
-            className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
+      {/* HEADER ORB */}
+      <div className="relative z-20 flex flex-col items-center justify-center pt-28 text-center px-4 space-y-6">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
+          <h1 className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]">
             Welcome to MagicDrop
-          </motion.h1>
-          <motion.p
-            className="mt-4 text-base md:text-xl text-white text-shadow-strong"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
+          </h1>
+          <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
             Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
-          </motion.p>
+          </p>
         </div>
       </div>
 
-      {/* Floating MagicDrop Logo Button */}
-      <motion.img
-        onClick={() => {
-          handleClickSound();
-          setMenuOpen(!menuOpen);
-        }}
-        src="/logo.png"
-        alt="MagicDrop Nav"
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 h-16 w-16 z-40 cursor-pointer rounded-full border border-purple-400 shadow-xl bg-[#8e99f3]/30 hover:scale-105 transition duration-300 backdrop-blur-md"
-        whileTap={{ scale: 0.95 }}
-      />
-
-      {/* Slide-Up Nav Panel */}
+      {/* NAV MENU */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ y: "100%", opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
+            exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl px-8 py-6 z-50 w-[90%] max-w-sm text-white space-y-4"
+            className="relative z-30 mt-12 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
           >
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="text-lg font-semibold text-white drop-shadow text-glow-hard">Navigate the Dropverse</h2>
-              <button
-                onClick={() => setMenuOpen(false)}
-                className="text-white/50 hover:text-white transition"
-              >
-                <X size={20} />
-              </button>
-            </div>
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
+            >
+              <X size={18} />
+            </button>
+            <h2 className="text-lg font-bold text-shadow-strong">Navigate the Dropverse</h2>
 
             {[
               { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
@@ -113,7 +120,7 @@ export default function EnterPage() {
               <button
                 key={item.link}
                 onClick={() => navigateTo(item.link)}
-                className="w-full flex items-center justify-start gap-3 px-6 py-3 rounded-full text-sm font-medium border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:text-white transition-all duration-300"
+                className="w-full flex items-center gap-3 justify-center px-5 py-3 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition-all text-sm font-semibold"
               >
                 {item.icon} {item.label}
               </button>
@@ -122,21 +129,69 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* Global Styles */}
+      {/* LOGO TOGGLE BUTTON */}
+      <motion.img
+        onClick={() => {
+          handleClickSound();
+          setMenuOpen(!menuOpen);
+        }}
+        src="/logo.png"
+        alt="MagicDrop Nav"
+        className="fixed bottom-[8%] left-1/2 -translate-x-1/2 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 z-50 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+        whileTap={{ scale: 0.95 }}
+      />
+
+      {/* GLOBAL STYLES */}
       <style jsx global>{`
         .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.8),
-            0 0 24px rgba(213, 179, 255, 0.4);
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
+            0 0 28px rgba(213, 179, 255, 0.5),
+            0 0 48px rgba(213, 179, 255, 0.3);
         }
+
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
-        .bg-radial {
-          background: radial-gradient(
-            circle at center,
-            rgba(255, 255, 255, 0.12) 0%,
-            transparent 70%
+
+        .animated-prism {
+          background: linear-gradient(
+            135deg,
+            #c084fc,
+            #f472b6,
+            #60a5fa,
+            #fcd34d,
+            #a5f3fc
           );
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+
+        @keyframes prismShift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerPulse {
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
         }
       `}</style>
     </div>
