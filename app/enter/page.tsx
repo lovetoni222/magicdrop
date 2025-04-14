@@ -6,7 +6,9 @@ import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
   const [typedText, setTypedText] = useState("");
-  const fullText = "Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.";
+  const fullText =
+    "Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.";
+
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
 
@@ -45,7 +47,7 @@ export default function EnterPage() {
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Background Gradient */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* HUD */}
@@ -53,8 +55,8 @@ export default function EnterPage() {
       <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
 
-      {/* Header */}
-      <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
+      {/* HEADER */}
+      <div className="relative z-20 flex flex-col items-center justify-center pt-20 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
           <h1 className="text-3xl md:text-5xl font-bold text-white font-cinzel rainbow-glow tracking-wide">
             Welcome to MagicDrop
@@ -66,56 +68,59 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* Nav + Logo Toggle (Grouped) */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 40, opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="relative z-30 mt-8 px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
-          >
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-3 right-4 text-white/60 hover:text-white"
+      {/* FLOATING NAV HUD (menu + logo toggle) */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-40">
+        {/* Nav Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3"
             >
-              <X size={18} />
-            </button>
-
-            <h2 className="text-lg font-bold text-shadow-strong mt-4">Navigate the Dropverse</h2>
-
-            {[
-              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
-              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-            ].map((item) => (
               <button
-                key={item.link}
-                onClick={() => navigateTo(item.link)}
-                className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition-all text-sm font-semibold"
+                onClick={() => setMenuOpen(false)}
+                className="absolute top-3 right-4 text-white/60 hover:text-white"
               >
-                {item.icon} {item.label}
+                <X size={18} />
               </button>
-            ))}
+              <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">
+                Navigate the Dropverse
+              </h2>
+              {[
+                { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+                { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+                { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+                { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+              ].map((item) => (
+                <button
+                  key={item.link}
+                  onClick={() => navigateTo(item.link)}
+                  className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
+                >
+                  {item.icon} {item.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            {/* Logo Toggle (inside nav now) */}
-            <motion.img
-              onClick={() => {
-                handleClickSound();
-                setMenuOpen(!menuOpen);
-              }}
-              src="/logo.png"
-              alt="MagicDrop Nav"
-              className="mt-4 h-14 w-14 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
-              whileTap={{ scale: 0.95 }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Logo Toggle Button */}
+        <motion.img
+          onClick={() => {
+            handleClickSound();
+            setMenuOpen(!menuOpen);
+          }}
+          src="/logo.png"
+          alt="MagicDrop Nav"
+          className="h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+          whileTap={{ scale: 0.95 }}
+        />
+      </div>
 
-      {/* Global styles */}
+      {/* STYLES */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
 
@@ -140,12 +145,8 @@ export default function EnterPage() {
         }
 
         @keyframes rainbowPulse {
-          0%, 100% {
-            text-shadow: 0 0 10px rgba(213, 179, 255, 0.5);
-          }
-          50% {
-            text-shadow: 0 0 20px rgba(213, 179, 255, 0.9);
-          }
+          0%, 100% { text-shadow: 0 0 10px rgba(213, 179, 255, 0.5); }
+          50% { text-shadow: 0 0 20px rgba(213, 179, 255, 0.9); }
         }
 
         .blinking-cursor {
