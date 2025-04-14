@@ -119,7 +119,6 @@ export default function TeamPage() {
           </motion.div>
         ))}
       </div>
-
       {/* Bio Modal */}
       <AnimatePresence>
         {selectedId && (
@@ -164,32 +163,40 @@ export default function TeamPage() {
 
       {/* NAV + LOGO */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
-        <motion.div className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3 relative">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="absolute top-3 right-4 text-white/60 hover:text-white"
+        {menuOpen && (
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3 relative"
           >
-            <X size={18} />
-          </button>
-          <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
-          {[
-            { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-            { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-            { label: "Home", link: "/enter", icon: <Users size={18} /> },
-            { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-          ].map((item) => (
             <button
-              key={item.link}
-              onClick={() => {
-                playClick();
-                window.location.href = item.link;
-              }}
-              className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
             >
-              {item.icon} {item.label}
+              <X size={18} />
             </button>
-          ))}
-        </motion.div>
+            <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
+            {[
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Home", link: "/enter", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
+              <button
+                key={item.link}
+                onClick={() => {
+                  playClick();
+                  window.location.href = item.link;
+                }}
+                className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
+              >
+                {item.icon} {item.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
 
         <motion.img
           onClick={() => setMenuOpen(!menuOpen)}
