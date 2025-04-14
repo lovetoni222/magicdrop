@@ -51,7 +51,7 @@ const team = [
     title: "Future MagicDrop Collaborator",
     description:
       "MagicDrop is growing, and we’re always looking for curious, passionate minds who believe in the power of fandom and storytelling. If you’re a designer, developer, strategist, or vibe curator who feels called to build with us, we’d love to hear from you.",
-    img: null, // We'll render a ? instead
+    img: undefined,
   },
 ];
 
@@ -133,7 +133,7 @@ export default function TeamPage() {
                   className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover z-10"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full border border-white/20 shadow-lg bg-white/10 flex items-center justify-center text-4xl font-bold text-white z-10">
+                <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-4xl font-bold text-white z-10">
                   ?
                 </div>
               )}
@@ -144,7 +144,7 @@ export default function TeamPage() {
         ))}
       </div>
 
-      {/* Bio Modal */}
+      {/* Modal */}
       <AnimatePresence>
         {selectedId && (
           <motion.div
@@ -167,52 +167,43 @@ export default function TeamPage() {
               >
                 <X size={20} />
               </button>
-              {selectedId === "mystery" ? (
-                <>
-                  <div className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 bg-white/10 flex items-center justify-center text-4xl font-bold text-white">
-                    ?
-                  </div>
-                  <h3 className="text-xl font-cinzel font-semibold">You?</h3>
-                  <p className="text-sm text-purple-300 font-medium mt-1">
-                    Future MagicDrop Collaborator
-                  </p>
-                  <p className="text-xs text-white/80 mt-3">
-                    MagicDrop is growing, and we’re always looking for curious, passionate minds who
-                    believe in the power of fandom and storytelling. If you’re a designer,
-                    developer, strategist, or vibe curator who feels called to build with us, we’d
-                    love to hear from you.
-                  </p>
-                  <a
-                    href="mailto:concierge@getmagicdrop.com"
-                    className="mt-4 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition"
-                  >
-                    Apply via Email
-                  </a>
-                </>
+
+              {team.find((m) => m.id === selectedId)?.img ? (
+                <img
+                  src={team.find((m) => m.id === selectedId)?.img}
+                  alt=""
+                  className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 object-cover"
+                />
               ) : (
-                <>
-                  <img
-                    src={team.find((m) => m.id === selectedId)?.img}
-                    alt=""
-                    className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 object-cover"
-                  />
-                  <h3 className="text-xl font-cinzel font-semibold">
-                    {team.find((m) => m.id === selectedId)?.name}
-                  </h3>
-                  <p className="text-sm text-purple-300 font-medium mt-1">
-                    {team.find((m) => m.id === selectedId)?.title}
-                  </p>
-                  <p className="text-xs text-white/80 mt-3">
-                    {team.find((m) => m.id === selectedId)?.description}
-                  </p>
-                </>
+                <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-4xl font-bold text-white mx-auto mb-4">
+                  ?
+                </div>
+              )}
+
+              <h3 className="text-xl font-cinzel font-semibold">
+                {team.find((m) => m.id === selectedId)?.name}
+              </h3>
+              <p className="text-sm text-purple-300 font-medium mt-1">
+                {team.find((m) => m.id === selectedId)?.title}
+              </p>
+              <p className="text-xs text-white/80 mt-3">
+                {team.find((m) => m.id === selectedId)?.description}
+              </p>
+
+              {selectedId === "mystery" && (
+                <a
+                  href="mailto:concierge@getmagicdrop.com"
+                  className="mt-4 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition"
+                >
+                  Apply via Email
+                </a>
               )}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* NAV + LOGO TOGGLE */}
+      {/* Nav + Logo */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         {menuOpen && (
           <motion.div
@@ -261,44 +252,8 @@ export default function TeamPage() {
         />
       </div>
 
-      {/* GLOBAL STYLES */}
+      {/* Styles */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-
-        .font-cinzel {
-          font-family: 'Cinzel', serif;
-        }
-
-        .font-inter {
-          font-family: 'Inter', sans-serif;
-        }
-
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-        }
-
-        .animated-prism {
-          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
-          background-size: 600% 600%;
-          animation: prismShift 30s ease infinite;
-        }
-
-        @keyframes prismShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        .shimmer {
-          animation: shimmerPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmerPulse {
-          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
-          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-        }
-
         .glow-halo {
           pointer-events: none;
           border: 2px solid rgba(213, 179, 255, 0.6);
@@ -330,6 +285,42 @@ export default function TeamPage() {
         @keyframes sparkleFade {
           0% { opacity: 1; }
           100% { opacity: 0; }
+        }
+
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+
+        @keyframes prismShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerPulse {
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
+
+        .font-cinzel {
+          font-family: 'Cinzel', serif;
+        }
+
+        .font-inter {
+          font-family: 'Inter', sans-serif;
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
       `}</style>
     </div>
