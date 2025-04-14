@@ -12,17 +12,20 @@ const stickers = [
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
   const [playing, setPlaying] = useState<Record<string, boolean>>({});
-  const [positions, setPositions] = useState(() =>
-    stickers.reduce((acc, { id }) => {
-      acc[id] = { x: 0, y: 0 };
-      return acc;
-    }, {} as Record<string, { x: number; y: number }>)
-  );
-
   const boardRef = useRef<HTMLDivElement>(null);
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+
+  const [positions, setPositions] = useState(() =>
+    stickers.reduce((acc, { id }) => {
+      acc[id] = {
+        x: Math.floor(Math.random() * 240) + 30,
+        y: Math.floor(Math.random() * 120) + 30,
+      };
+      return acc;
+    }, {} as Record<string, { x: number; y: number }>)
+  );
 
   useEffect(() => {
     ambientAudioRef.current?.play().catch(() => {});
@@ -99,6 +102,7 @@ export default function EnterPage() {
         />
       ))}
 
+      {/* Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* HUD */}
@@ -123,11 +127,11 @@ export default function EnterPage() {
           </p>
         </div>
         <p className="text-sm text-white/70 max-w-sm mt-4">
-          ✨ Move the icons below to remix your own vibe. Tap them to play a sound — tap again to stop.
+          ✨ Tap an icon to play a sound — tap again to stop. Drag anywhere to create your own vibe.
         </p>
       </div>
 
-      {/* Sticker Board */}
+      {/* Sticker Zone */}
       <div
         ref={boardRef}
         id="sticker-board"
@@ -136,25 +140,24 @@ export default function EnterPage() {
         {stickers.map((s) => (
           <motion.div
             key={s.id}
-            className="absolute text-4xl cursor-grab touch-none hover:scale-110 transition"
             drag
             dragConstraints={boardRef}
+            dragElastic={0.2}
+            dragTransition={{ power: 0, bounceStiffness: 300, bounceDamping: 20 }}
+            animate={{ x: positions[s.id].x, y: positions[s.id].y }}
             onClick={() => toggleStickerAudio(s.id)}
             onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
-            animate={{
-              x: positions[s.id].x,
-              y: positions[s.id].y,
-            }}
+            className="absolute text-4xl cursor-pointer hover:scale-110 transition-transform duration-200 select-none"
             style={{
               width: 60,
               height: 60,
               borderRadius: "50%",
-              background: "rgba(255,255,255,0.1)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "32px",
-              boxShadow: "0 0 10px rgba(213,179,255,0.6)",
+              background: "rgba(255, 255, 255, 0.1)",
+              boxShadow: "0 0 10px rgba(213, 179, 255, 0.6)",
+              zIndex: 30,
             }}
           >
             {s.icon}
@@ -208,8 +211,14 @@ export default function EnterPage() {
 
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-        .font-cinzel { font-family: 'Cinzel', serif; }
-        .font-inter { font-family: 'Inter', sans-serif; }
+
+        .font-cinzel {
+          font-family: 'Cinzel', serif;
+        }
+
+        .font-inter {
+          font-family: 'Inter', sans-serif;
+        }
 
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
