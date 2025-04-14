@@ -28,6 +28,7 @@ export default function DropsPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const navClickAudioRef = useRef<HTMLAudioElement>(null);
   const dropClickAudioRef = useRef<HTMLAudioElement>(null);
+  const beckyAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -54,12 +55,21 @@ export default function DropsPage() {
     playDropClick();
     setSelectedId(id);
   };
+
+  const closeDrop = () => {
+    if (beckyAudioRef.current) {
+      beckyAudioRef.current.pause();
+      beckyAudioRef.current.currentTime = 0;
+    }
+    setSelectedId(null);
+  };
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
       {/* Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={navClickAudioRef} src="/ui-hover.mp3" preload="auto" />
-      <audio ref={dropClickAudioRef} src="/drop-click.mp3" preload="auto" />
+      <audio ref={dropClickAudioRef} src="/team-click.mp3" preload="auto" />
+      <audio ref={beckyAudioRef} src="/becky-snippet.mp3" preload="auto" />
 
       {/* Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
@@ -76,7 +86,7 @@ export default function DropsPage() {
         </div>
       </div>
 
-      {/* Drop Orbs */}
+      {/* Drop Cards */}
       <div className="relative z-20 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 pb-40">
         {drops.map((drop) => (
           <motion.div
@@ -130,7 +140,7 @@ export default function DropsPage() {
               exit={{ scale: 0.8 }}
             >
               <button
-                onClick={() => setSelectedId(null)}
+                onClick={closeDrop}
                 className="absolute top-4 right-5 text-white/60 hover:text-white"
               >
                 <X size={20} />
@@ -159,7 +169,7 @@ export default function DropsPage() {
         )}
       </AnimatePresence>
 
-      {/* NAV + Logo */}
+      {/* NAV + LOGO */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         {menuOpen && (
           <motion.div
@@ -209,7 +219,6 @@ export default function DropsPage() {
         />
       </div>
 
-      {/* Global styles */}
       <style jsx global>{`
         .animated-prism {
           background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
@@ -218,24 +227,17 @@ export default function DropsPage() {
         }
 
         @keyframes prismShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
         .glow-halo {
           pointer-events: none;
           border: 2px solid rgba(213, 179, 255, 0.6);
           border-radius: 9999px;
-          box-shadow:
-            0 0 6px rgba(213, 179, 255, 0.4),
-            0 0 14px rgba(213, 179, 255, 0.3);
+          box-shadow: 0 0 6px rgba(213, 179, 255, 0.4),
+                      0 0 14px rgba(213, 179, 255, 0.3);
           animation: haloPulse 3s ease-in-out infinite;
         }
 
