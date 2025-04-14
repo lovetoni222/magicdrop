@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
@@ -46,7 +45,7 @@ export default function EnterPage() {
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Background */}
+      {/* Background Gradient */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* HUD */}
@@ -67,7 +66,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* Nav Menu */}
+      {/* Nav + Logo Toggle (Grouped) */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -75,12 +74,17 @@ export default function EnterPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="relative z-30 mt-12 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
+            className="relative z-30 mt-8 px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
           >
-            <button onClick={() => setMenuOpen(false)} className="absolute top-3 right-4 text-white/60 hover:text-white">
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
+            >
               <X size={18} />
             </button>
-            <h2 className="text-lg font-bold text-shadow-strong">Navigate the Dropverse</h2>
+
+            <h2 className="text-lg font-bold text-shadow-strong mt-4">Navigate the Dropverse</h2>
+
             {[
               { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
               { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
@@ -90,26 +94,26 @@ export default function EnterPage() {
               <button
                 key={item.link}
                 onClick={() => navigateTo(item.link)}
-                className="w-full flex items-center gap-3 justify-center px-5 py-3 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition-all text-sm font-semibold"
+                className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition-all text-sm font-semibold"
               >
                 {item.icon} {item.label}
               </button>
             ))}
+
+            {/* Logo Toggle (inside nav now) */}
+            <motion.img
+              onClick={() => {
+                handleClickSound();
+                setMenuOpen(!menuOpen);
+              }}
+              src="/logo.png"
+              alt="MagicDrop Nav"
+              className="mt-4 h-14 w-14 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+              whileTap={{ scale: 0.95 }}
+            />
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Logo Button – Now below the nav menu */}
-      <motion.img
-        onClick={() => {
-          handleClickSound();
-          setMenuOpen(!menuOpen);
-        }}
-        src="/logo.png"
-        alt="MagicDrop Nav"
-        className="relative z-40 mt-10 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 mx-auto cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
-        whileTap={{ scale: 0.95 }}
-      />
 
       {/* Global styles */}
       <style jsx global>{`
@@ -136,8 +140,12 @@ export default function EnterPage() {
         }
 
         @keyframes rainbowPulse {
-          0%, 100% { text-shadow: 0 0 10px rgba(213, 179, 255, 0.5); }
-          50% { text-shadow: 0 0 20px rgba(213, 179, 255, 0.9); }
+          0%, 100% {
+            text-shadow: 0 0 10px rgba(213, 179, 255, 0.5);
+          }
+          50% {
+            text-shadow: 0 0 20px rgba(213, 179, 255, 0.9);
+          }
         }
 
         .blinking-cursor {
