@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
@@ -51,6 +52,7 @@ export default function TeamPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
+  const sparkleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -59,26 +61,34 @@ export default function TeamPage() {
     }
   }, []);
 
-  const handleClickSound = () => {
+  const playClick = () => {
     if (clickAudioRef.current) {
       clickAudioRef.current.currentTime = 0;
       clickAudioRef.current.play().catch(() => {});
     }
   };
 
-  const navigateTo = (url: string) => {
-    handleClickSound();
-    setMenuOpen(false);
-    window.location.href = url;
+  const triggerSparkle = () => {
+    if (sparkleRef.current) {
+      sparkleRef.current.classList.remove("fade");
+      void sparkleRef.current.offsetWidth; // trigger reflow
+      sparkleRef.current.classList.add("fade");
+    }
+  };
+
+  const openProfile = (id: string) => {
+    playClick();
+    setSelectedId(id);
+    triggerSparkle();
   };
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden text-white font-inter bg-black">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
-      <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
+      <audio ref={clickAudioRef} src="/team-click.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* Header */}
+      {/* HEADER */}
       <div className="pt-24 text-center z-20 relative px-4">
         <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong mb-4">
           Meet the Team
@@ -88,29 +98,29 @@ export default function TeamPage() {
         </p>
       </div>
 
-      {/* Orbs */}
+      {/* ORBS */}
       <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-3 gap-6 px-6 pb-40">
         {team.map((member) => (
           <motion.div
             key={member.id}
-            className="flex flex-col items-center cursor-pointer"
+            className="flex flex-col items-center cursor-pointer group"
             whileHover={{ scale: 1.08 }}
-            onClick={() => {
-              handleClickSound();
-              setSelectedId(member.id);
-            }}
+            onClick={() => openProfile(member.id)}
           >
-            <img
-              src={member.img}
-              alt={member.name}
-              className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover"
-            />
+            <div className="relative">
+              <img
+                src={member.img}
+                alt={member.name}
+                className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover group-hover:ring-2 ring-purple-300 transition-all duration-300"
+              />
+              <div className="absolute inset-0 rounded-full glow-pulse" />
+            </div>
             <p className="text-sm text-white mt-2 font-semibold">{member.name.split(" ")[0]}</p>
           </motion.div>
         ))}
       </div>
 
-      {/* Bio Modal */}
+      {/* BIO MODAL */}
       <AnimatePresence>
         {selectedId && (
           <motion.div
@@ -121,11 +131,14 @@ export default function TeamPage() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl max-w-md w-full p-6 text-center shadow-xl relative"
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl max-w-md w-full p-6 text-center shadow-xl relative overflow-hidden"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
             >
+              {/* Glitter Burst */}
+              <div ref={sparkleRef} className="sparkle-overlay pointer-events-none" />
+
               <button
                 onClick={() => setSelectedId(null)}
                 className="absolute top-4 right-5 text-white/60 hover:text-white"
@@ -151,49 +164,30 @@ export default function TeamPage() {
         )}
       </AnimatePresence>
 
-      {/* NAV + Logo */}
+      {/* NAV + LOGO (same as enter) */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 40, opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3"
+        <motion.div
+          className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3"
+        >
+          <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
+          {[
+            { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+            { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+            { label: "Enter", link: "/enter", icon: <Users size={18} /> },
+            { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+          ].map((item) => (
+            <button
+              key={item.link}
+              onClick={() => navigateTo(item.link)}
+              className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
             >
-              <button
-                onClick={() => setMenuOpen(false)}
-                className="absolute top-3 right-4 text-white/60 hover:text-white"
-              >
-                <X size={18} />
-              </button>
-              <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">
-                Navigate the Dropverse
-              </h2>
-              {[
-                { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-                { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-                { label: "Enter", link: "/enter", icon: <Users size={18} /> },
-                { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-              ].map((item) => (
-                <button
-                  key={item.link}
-                  onClick={() => navigateTo(item.link)}
-                  className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
-                >
-                  {item.icon} {item.label}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {item.icon} {item.label}
+            </button>
+          ))}
+        </motion.div>
 
         <motion.img
-          onClick={() => {
-            handleClickSound();
-            setMenuOpen(!menuOpen);
-          }}
+          onClick={() => setMenuOpen(!menuOpen)}
           src="/logo.png"
           alt="MagicDrop Nav"
           className="h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
@@ -201,7 +195,7 @@ export default function TeamPage() {
         />
       </div>
 
-      {/* Styles */}
+      {/* STYLES */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
 
@@ -231,6 +225,35 @@ export default function TeamPage() {
           0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
           50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+        .glow-pulse {
+          pointer-events: none;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 9999px;
+          box-shadow: 0 0 12px rgba(213, 179, 255, 0.4),
+                      0 0 24px rgba(213, 179, 255, 0.2);
+          animation: pulse 3s infinite ease-in-out;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.05); }
+        }
+        .sparkle-overlay {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: url('/sparkle.gif') center/contain no-repeat;
+          opacity: 0;
+        }
+        .sparkle-overlay.fade {
+          opacity: 1;
+          animation: sparkleFade 1s ease-out forwards;
+        }
+        @keyframes sparkleFade {
+          0% { opacity: 1; }
+          100% { opacity: 0; }
         }
       `}</style>
     </div>
