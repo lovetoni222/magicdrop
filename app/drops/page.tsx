@@ -28,7 +28,6 @@ export default function DropsPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const navClickAudioRef = useRef<HTMLAudioElement>(null);
   const dropClickAudioRef = useRef<HTMLAudioElement>(null);
-  const beckyAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -54,16 +53,9 @@ export default function DropsPage() {
   const openDrop = (id: string) => {
     playDropClick();
     setSelectedId(id);
-    if (id === "becky" && beckyAudioRef.current) {
-      beckyAudioRef.current.play().catch(() => {});
-    }
   };
 
   const closeDrop = () => {
-    if (beckyAudioRef.current) {
-      beckyAudioRef.current.pause();
-      beckyAudioRef.current.currentTime = 0;
-    }
     setSelectedId(null);
   };
 
@@ -72,7 +64,6 @@ export default function DropsPage() {
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={navClickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <audio ref={dropClickAudioRef} src="/team-click.mp3" preload="auto" />
-      <audio ref={beckyAudioRef} src="/becky-snippet.mp3" preload="auto" />
 
       <div className="absolute inset-0 z-0 animated-prism" />
 
@@ -162,11 +153,12 @@ export default function DropsPage() {
               >
                 View Full Drop →
               </a>
+
               {selectedId === "becky" && (
                 <audio
-                  ref={beckyAudioRef}
                   src="/becky-snippet.mp3"
                   controls
+                  autoPlay
                   className="mt-4 mx-auto w-full"
                 />
               )}
@@ -210,6 +202,7 @@ export default function DropsPage() {
             ))}
           </motion.div>
         )}
+
         <motion.img
           onClick={() => {
             playNavClick();
@@ -228,31 +221,38 @@ export default function DropsPage() {
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
+
         @keyframes prismShift {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
+
         .glow-halo {
           pointer-events: none;
           border: 2px solid rgba(213, 179, 255, 0.6);
           border-radius: 9999px;
-          box-shadow: 0 0 6px rgba(213, 179, 255, 0.4),
-                      0 0 14px rgba(213, 179, 255, 0.3);
+          box-shadow:
+            0 0 6px rgba(213, 179, 255, 0.4),
+            0 0 14px rgba(213, 179, 255, 0.3);
           animation: haloPulse 3s ease-in-out infinite;
         }
+
         @keyframes haloPulse {
           0%, 100% { opacity: 0.7; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
         }
+
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
+
         @keyframes shimmerPulse {
           0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
           50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
+
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
