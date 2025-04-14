@@ -30,21 +30,11 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* ✅ Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-1]"
-      >
-        <source src="/bg-enter.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+    <div className="relative min-h-screen w-full overflow-hidden text-white">
+      {/* 🌈 Animated Gradient Background */}
+      <div className="fixed inset-0 z-[-1] animated-gradient" />
 
-      {/* 🎵 Audio */}
+      {/* 🔊 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
@@ -70,7 +60,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* 🌟 Logo Toggle Nav */}
+      {/* 🌟 Logo Toggle - bottom center, 1/4 from bottom */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -78,7 +68,7 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="mx-auto mt-6 h-20 cursor-pointer z-50 hover:scale-105 transition-transform duration-300"
+        className="fixed bottom-[25%] left-1/2 -translate-x-1/2 h-20 cursor-pointer z-50 hover:scale-105 transition-transform duration-300"
         whileTap={{ scale: 0.95 }}
       />
 
@@ -86,20 +76,20 @@ export default function EnterPage() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[260px]"
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.35 }}
+            className="fixed bottom-28 z-50 px-6 py-6 rounded-3xl bg-black/80 border border-white/20 backdrop-blur-md shadow-lg w-[90%] max-w-sm flex flex-col gap-4"
           >
             <button
               onClick={() => setMenuOpen(false)}
-              className="absolute top-2 right-2 text-white/50 hover:text-white transition"
+              className="absolute top-3 right-3 text-white/50 hover:text-white"
             >
               <X size={18} />
             </button>
 
-            <h2 className="text-white text-xl font-semibold mb-2 sparkle text-glow-hard">
+            <h2 className="text-white text-center text-xl font-semibold tracking-wide text-glow-hard mb-2">
               Navigate the Dropverse
             </h2>
 
@@ -110,9 +100,9 @@ export default function EnterPage() {
               { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
             ].map((item) => (
               <button
-                key={`${item.label}-${item.link}`}
+                key={item.link}
                 onClick={() => navigateTo(item.link)}
-                className="w-full flex items-center gap-2 text-white px-4 py-2 rounded-full border border-white/30 hover:bg-purple-600 hover:border-purple-600 hover:text-white sparkle transition"
+                className="w-full flex items-center gap-2 justify-center px-5 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
               >
                 {item.icon} {item.label}
               </button>
@@ -132,26 +122,28 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* 🌐 Global Fixes */}
+      {/* 🎨 Global Styles */}
       <style jsx global>{`
-        video::-webkit-media-controls {
-          display: none !important;
+        .animated-gradient {
+          background: linear-gradient(-45deg, #a985ff, #ffe3ec, #d1caff, #c0f0ff);
+          background-size: 400% 400%;
+          animation: gradientFlow 12s ease infinite;
         }
 
-        .shimmer {
-          animation: shimmerAnim 4s infinite ease-in-out;
-        }
-
-        @keyframes shimmerAnim {
+        @keyframes gradientFlow {
           0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            background-position: 0% 50%;
           }
           50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+            background-position: 100% 50%;
           }
           100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            background-position: 0% 50%;
           }
+        }
+
+        video::-webkit-media-controls {
+          display: none !important;
         }
 
         .text-glow-hard {
@@ -163,11 +155,6 @@ export default function EnterPage() {
         .text-shadow-strong {
           text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
             0 0 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
         }
       `}</style>
     </div>
