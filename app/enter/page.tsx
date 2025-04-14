@@ -7,7 +7,7 @@ import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
 export default function EnterPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [menuOpen, setMenuOpen] = useState(true); // Auto-open on enter
+  const [menuOpen, setMenuOpen] = useState(true); // Auto-open nav on load
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -30,26 +30,27 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white flex flex-col justify-center items-center">
-      {/* 🔊 Audio */}
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      {/* ✅ Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="fixed top-0 left-0 w-full h-full object-cover z-[-1]"
+      >
+        <source src="/bg-enter.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* 🎵 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* 🎞️ Background Video */}
-      <video
-        muted
-        playsInline
-        autoPlay
-        loop
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover -z-10"
-      >
-        <source src="/bg-enter.mp4" type="video/mp4" />
-      </video>
-
-      {/* 💬 Header */}
-      <div className="text-center px-6 mt-20 md:mt-28 space-y-6 z-20">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl mx-auto">
+      {/* 💬 Orb Header */}
+      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
             className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
             initial={{ opacity: 0, y: 10 }}
@@ -69,7 +70,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* 🌟 Logo Toggle */}
+      {/* 🌟 Logo Toggle Nav */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -77,28 +78,28 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="mt-10 h-20 cursor-pointer z-50 hover:scale-105 transition-transform duration-300"
+        className="mx-auto mt-6 h-20 cursor-pointer z-50 hover:scale-105 transition-transform duration-300"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* 🎮 Floating Nav Panel */}
+      {/* 🎮 Slide-Up Nav Panel */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.35 }}
-            className="fixed bottom-36 md:bottom-28 z-50 px-6 py-6 rounded-3xl bg-black/80 border border-white/20 backdrop-blur-md shadow-lg w-[90%] max-w-sm flex flex-col gap-4"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "100%", opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[260px]"
           >
             <button
               onClick={() => setMenuOpen(false)}
-              className="absolute top-3 right-3 text-white/50 hover:text-white"
+              className="absolute top-2 right-2 text-white/50 hover:text-white transition"
             >
               <X size={18} />
             </button>
 
-            <h2 className="text-white text-center text-xl font-semibold tracking-wide text-glow-hard mb-2">
+            <h2 className="text-white text-xl font-semibold mb-2 sparkle text-glow-hard">
               Navigate the Dropverse
             </h2>
 
@@ -109,9 +110,9 @@ export default function EnterPage() {
               { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
             ].map((item) => (
               <button
-                key={item.link}
+                key={`${item.label}-${item.link}`}
                 onClick={() => navigateTo(item.link)}
-                className="w-full flex items-center gap-2 justify-center px-5 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+                className="w-full flex items-center gap-2 text-white px-4 py-2 rounded-full border border-white/30 hover:bg-purple-600 hover:border-purple-600 hover:text-white sparkle transition"
               >
                 {item.icon} {item.label}
               </button>
@@ -131,10 +132,26 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* 🌐 Global Styles */}
+      {/* 🌐 Global Fixes */}
       <style jsx global>{`
         video::-webkit-media-controls {
           display: none !important;
+        }
+
+        .shimmer {
+          animation: shimmerAnim 4s infinite ease-in-out;
+        }
+
+        @keyframes shimmerAnim {
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
         }
 
         .text-glow-hard {
@@ -146,6 +163,11 @@ export default function EnterPage() {
         .text-shadow-strong {
           text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
             0 0 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sparkle:hover {
+          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
+            0 0 20px rgba(213, 179, 255, 0.5);
         }
       `}</style>
     </div>
