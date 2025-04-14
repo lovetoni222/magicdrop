@@ -30,24 +30,25 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* 🎥 Background Video */}
+    <div className="relative min-h-screen w-full overflow-hidden text-white">
+      {/* ✅ Background Video */}
       <video
         autoPlay
-        loop
         muted
+        loop
         playsInline
         preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10 bg-black"
       >
         <source src="/bg-enter.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
       </video>
 
-      {/* 🔊 Audio */}
+      {/* 🎵 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* 💫 Orb Header */}
+      {/* 💬 Orb Header */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
@@ -107,7 +108,7 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* 🔘 Logo Nav Toggle (no border) */}
+      {/* 🌟 Logo Toggle Nav */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -166,9 +167,26 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
+      {/* 🧪 Global Fixes */}
       <style jsx global>{`
         video::-webkit-media-controls {
           display: none !important;
+        }
+
+        .shimmer {
+          animation: shimmerAnim 4s infinite ease-in-out;
+        }
+
+        @keyframes shimmerAnim {
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
         }
 
         .text-glow-hard {
