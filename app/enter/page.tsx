@@ -20,8 +20,8 @@ export default function EnterPage() {
   const [positions, setPositions] = useState(() =>
     stickers.reduce((acc, { id }) => {
       acc[id] = {
-        x: Math.floor(Math.random() * 240) + 30,
-        y: Math.floor(Math.random() * 120) + 30,
+        x: Math.floor(Math.random() * 200) + 40,
+        y: Math.floor(Math.random() * 100) + 40,
       };
       return acc;
     }, {} as Record<string, { x: number; y: number }>)
@@ -46,9 +46,11 @@ export default function EnterPage() {
       Object.values(audioRefs.current).forEach((a) => a.pause());
       Object.keys(playing).forEach((k) => playing[k] && setPlaying((p) => ({ ...p, [k]: false })));
 
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-      setPlaying((prev) => ({ ...prev, [id]: true }));
+      audio.load();
+      setTimeout(() => {
+        audio.play().catch(() => {});
+        setPlaying((prev) => ({ ...prev, [id]: true }));
+      }, 50);
     }
   };
 
@@ -59,25 +61,20 @@ export default function EnterPage() {
   ) => {
     const board = boardRef.current;
     const boardRect = board?.getBoundingClientRect();
-    const iconSize = 60;
+    const iconSize = 64;
 
-    if (
-      !boardRect ||
-      info.point.x < boardRect.left ||
-      info.point.x > boardRect.right - iconSize ||
-      info.point.y < boardRect.top ||
-      info.point.y > boardRect.bottom - iconSize
-    ) {
-      return;
-    }
+    if (!board || !boardRect) return;
 
-    setPositions((prev) => ({
-      ...prev,
-      [id]: {
-        x: info.point.x - boardRect.left - iconSize / 2,
-        y: info.point.y - boardRect.top - iconSize / 2,
-      },
-    }));
+    let x = info.point.x - boardRect.left - iconSize / 2;
+    let y = info.point.y - boardRect.top - iconSize / 2;
+
+    const maxX = board.clientWidth - iconSize;
+    const maxY = board.clientHeight - iconSize;
+
+    x = Math.max(0, Math.min(x, maxX));
+    y = Math.max(0, Math.min(y, maxY));
+
+    setPositions((prev) => ({ ...prev, [id]: { x, y } }));
   };
 
   const navigateTo = (url: string) => {
@@ -85,7 +82,6 @@ export default function EnterPage() {
     setMenuOpen(false);
     window.location.href = url;
   };
-
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
@@ -102,7 +98,6 @@ export default function EnterPage() {
         />
       ))}
 
-      {/* Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* HUD */}
@@ -127,11 +122,12 @@ export default function EnterPage() {
           </p>
         </div>
         <p className="text-sm text-white/70 max-w-sm mt-4">
-          ✨ Tap an icon to play a sound — tap again to stop. Drag anywhere to create your own vibe.
+          ✨ Tap and drag icons below to create your own genre mix.
+          Each icon plays trending audio from artists like Charli XCX, viral TikTok beats, and more.
         </p>
       </div>
 
-      {/* Sticker Zone */}
+      {/* Sticker Play Area */}
       <div
         ref={boardRef}
         id="sticker-board"
@@ -142,21 +138,21 @@ export default function EnterPage() {
             key={s.id}
             drag
             dragConstraints={boardRef}
-            dragElastic={0.2}
-            dragTransition={{ power: 0, bounceStiffness: 300, bounceDamping: 20 }}
+            dragElastic={0.1}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 20, power: 0 }}
             animate={{ x: positions[s.id].x, y: positions[s.id].y }}
             onClick={() => toggleStickerAudio(s.id)}
             onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
-            className="absolute text-4xl cursor-pointer hover:scale-110 transition-transform duration-200 select-none"
+            className="absolute text-5xl cursor-pointer hover:scale-110 transition-transform duration-200 select-none"
             style={{
-              width: 60,
-              height: 60,
+              width: 64,
+              height: 64,
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               background: "rgba(255, 255, 255, 0.1)",
-              boxShadow: "0 0 10px rgba(213, 179, 255, 0.6)",
+              boxShadow: "0 0 10px rgba(213,179,255,0.6)",
               zIndex: 30,
             }}
           >
