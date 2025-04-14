@@ -31,23 +31,23 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* ✅ Background Video - fixed and lowest z-index */}
+      {/* 🎥 Background Video */}
       <video
-        muted
-        playsInline
         autoPlay
         loop
+        muted
+        playsInline
         preload="auto"
         className="fixed top-0 left-0 w-full h-full object-cover -z-10"
       >
         <source src="/bg-enter.mp4" type="video/mp4" />
       </video>
 
-      {/* 🎵 Audio */}
+      {/* 🔊 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* 🧠 Header */}
+      {/* 💫 Orb Header */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
@@ -87,7 +87,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* 🖥 Floating Desktop Buttons */}
+      {/* 🖥 Floating Buttons (Desktop Only) */}
       <div className="absolute inset-0 z-40 pointer-events-none hidden md:block">
         {[
           ["Explore Drops", "/drops", "top-[20%] left-[10%]"],
@@ -107,7 +107,7 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* 🌟 Logo Toggle */}
+      {/* 🔘 Logo Nav Toggle (no border) */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -115,11 +115,11 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="mx-auto mt-6 h-20 cursor-pointer z-50 ring-2 ring-purple-400 rounded-full hover:scale-105 transition-transform duration-300 block"
+        className="mx-auto mt-6 h-20 cursor-pointer z-50 hover:scale-105 transition-transform duration-300 block"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* 🎮 Nav Panel */}
+      {/* 🎮 Slide-Up Nav Panel */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -155,7 +155,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* 💡 HUD */}
+      {/* 🧭 HUD Labels */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -170,29 +170,18 @@ export default function EnterPage() {
         video::-webkit-media-controls {
           display: none !important;
         }
-        .shimmer {
-          animation: shimmerAnim 4s infinite ease-in-out;
-        }
-        @keyframes shimmerAnim {
-          0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-          50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
-          }
-          100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-        }
+
         .text-glow-hard {
           text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
             0 0 28px rgba(213, 179, 255, 0.5),
             0 0 48px rgba(213, 179, 255, 0.3);
         }
+
         .text-shadow-strong {
           text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
             0 0 4px rgba(0, 0, 0, 0.3);
         }
+
         .sparkle:hover {
           text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
             0 0 20px rgba(213, 179, 255, 0.5);
