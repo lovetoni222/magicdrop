@@ -119,7 +119,6 @@ export default function TeamPage() {
           </motion.div>
         ))}
       </div>
-
       {/* Bio Modal */}
       <AnimatePresence>
         {selectedId && (
@@ -164,12 +163,18 @@ export default function TeamPage() {
 
       {/* NAV + LOGO */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
-        <motion.div className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3">
+        <motion.div className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3 relative">
+          <button
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-3 right-4 text-white/60 hover:text-white"
+          >
+            <X size={18} />
+          </button>
           <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
           {[
             { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
             { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-            { label: "Enter", link: "/enter", icon: <Users size={18} /> },
+            { label: "Home", link: "/enter", icon: <Users size={18} /> },
             { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
           ].map((item) => (
             <button
