@@ -30,11 +30,10 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden text-white bg-black">
-      {/* AUDIO */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* GRADIENT BACKGROUND */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* HUD */}
@@ -45,7 +44,7 @@ export default function EnterPage() {
       {/* HEADER */}
       <div className="relative z-20 flex flex-col items-center justify-center pt-40 md:pt-52 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-wide [font-family:var(--font-playfair)] text-rainbow-outline">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-wide [font-family:var(--font-playfair)] rainbow-header">
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
@@ -62,9 +61,12 @@ export default function EnterPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="relative z-30 mt-20 px-6 py-6 mb-20 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
+            className="relative z-30 mt-20 px-6 py-6 mb-32 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
           >
-            <button onClick={() => setMenuOpen(false)} className="absolute top-3 right-4 text-white/60 hover:text-white">
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
+            >
               <X size={18} />
             </button>
             <h2 className="text-lg font-bold text-shadow-strong">Navigate the Dropverse</h2>
@@ -86,7 +88,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* LOGO TOGGLE BUTTON */}
+      {/* LOGO TOGGLE */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -94,7 +96,7 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="fixed bottom-[8%] left-1/2 -translate-x-1/2 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 z-20 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+        className="fixed bottom-[5%] left-1/2 -translate-x-1/2 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 z-20 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
         whileTap={{ scale: 0.95 }}
       />
 
@@ -103,13 +105,11 @@ export default function EnterPage() {
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
-
         .animated-prism {
           background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
-
         @keyframes prismShift {
           0% {
             background-position: 0% 50%;
@@ -121,11 +121,9 @@ export default function EnterPage() {
             background-position: 0% 50%;
           }
         }
-
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
-
         @keyframes shimmerPulse {
           0% {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
@@ -137,15 +135,14 @@ export default function EnterPage() {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
         }
-
-        .text-rainbow-outline {
+        .rainbow-header {
           color: white;
           text-shadow:
-            0 0 5px #f9a8d4,
-            0 0 10px #c084fc,
+            0 0 5px #f0abfc,
+            0 0 10px #a78bfa,
             0 0 15px #60a5fa,
-            0 0 20px #fcd34d,
-            0 0 25px #a5f3fc;
+            0 0 20px #34d399,
+            0 0 25px #facc15;
         }
       `}</style>
     </div>
