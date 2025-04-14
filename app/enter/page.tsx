@@ -7,7 +7,7 @@ import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
 export default function EnterPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [menuOpen, setMenuOpen] = useState(true); // Menu opens by default on this page
+  const [menuOpen, setMenuOpen] = useState(true); // Open on load
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -31,14 +31,14 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden text-white">
-      {/* Background Gradient */}
+      {/* Gradient Background */}
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#f4c4f3] via-[#e6d0ff] to-[#c9e4ff] animate-gradientFade" />
 
       {/* 🎵 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Orb Header */}
+      {/* 🌀 Orb Header */}
       <div className="relative z-10 flex flex-col items-center justify-start pt-28 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
@@ -60,7 +60,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* Logo Nav Toggle Button */}
+      {/* 🌟 Logo Toggle Button */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -68,19 +68,19 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="fixed bottom-[6%] left-1/2 -translate-x-1/2 z-50 h-20 w-20 cursor-pointer rounded-full object-contain bg-white/5 border border-purple-500 shadow-[0_0_20px_rgba(213,179,255,0.4)] animate-pulse-glow transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] sparkle"
+        className="fixed bottom-[6%] left-1/2 -translate-x-1/2 z-50 h-20 w-20 cursor-pointer rounded-full object-contain bg-white/5 border border-purple-500 shadow-[0_0_20px_rgba(213,179,255,0.4)] animate-pulse-glow transition-all duration-300 hover:scale-105 sparkle"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* Nav Menu */}
+      {/* 🎮 Nav Menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
+            exit={{ opacity: 0, y: 60 }}
             transition={{ duration: 0.4 }}
-            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm bg-black/70 backdrop-blur-md rounded-2xl px-6 py-6 shadow-xl border border-white/20 flex flex-col items-start gap-4"
+            className="fixed bottom-[22%] left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm bg-white/10 border border-white/20 backdrop-blur-lg rounded-2xl px-6 py-6 shadow-2xl flex flex-col items-start gap-4"
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -167,6 +167,7 @@ export default function EnterPage() {
 
         .animate-gradientFade {
           animation: gradientFade 16s ease infinite;
+          background-size: 200% 200%;
         }
 
         @keyframes gradientFade {
