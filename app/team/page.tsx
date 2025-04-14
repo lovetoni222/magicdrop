@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
@@ -10,7 +9,7 @@ const team = [
     name: "Toni Dippolito",
     title: "Founder & Chief Vision Weaver",
     description:
-      "The visionary behind MagicDrop, blending strategic partnerships and creative leadership. Previously at Instagram, tech and beauty startups.",
+      "Toni blends a decade of cross-industry experience across tech and CPG startups with a background in creator strategy at Instagram, where she worked alongside top video creators and artists. As MagicDrop’s visionary founder, she leads brand direction, strategy, and partnerships — crafting a world where fans, artists, and storytelling collide in ways that feel intimate, immersive, and unforgettable.",
     img: "/toni.png",
   },
   {
@@ -18,7 +17,7 @@ const team = [
     name: "Patrick Stephens",
     title: "Head of Artist & Brand Alchemy",
     description:
-      "Forging legendary partnerships (Capitol, Salxco). Ensures collaborations enhance artist narrative.",
+      "A true architect of iconic collaborations, Patrick brings senior-level experience from Capitol Records and Salxco, where he supported global artists like The Weeknd and Doja Cat. At MagicDrop, he shapes transformative artist and brand partnerships — ensuring every drop adds depth to the narrative and becomes a living, breathing part of the fandom.",
     img: "/patrick.png",
   },
   {
@@ -26,7 +25,7 @@ const team = [
     name: "Oliver Sussman",
     title: "Head of Narrative Worlds & Visual Identity",
     description:
-      "Visual architect behind the Dropverse. Directs campaigns and creative that embody artist stories.",
+      "Oliver’s creative eye was shaped by his work in creative production at VFILES, where he contributed to projects across fashion, music, and editorial. He’s worked with high-profile celebrities and editorial properties on creative direction that’s bold, expressive, and highly visual. At MagicDrop, he transforms each drop into a story-driven world — immersive, cinematic, and collectable.",
     img: "/oliver.png",
   },
   {
@@ -34,7 +33,7 @@ const team = [
     name: "Pammy Hilton",
     title: "Head of Fandom & Community Weaving",
     description:
-      "Fan-first strategist, formerly Head of Little Hiltons. Builds authentic bridges between artists and fans.",
+      "A notable leader in the fan community and trusted advisor to Paris Hilton’s brand and fandom, Pammy channels a deep understanding of fan culture into everything MagicDrop creates. She ensures the fan perspective remains sacred, weaving authentic community touchpoints throughout every project and turning fans into collaborators.",
     img: "/pammy.png",
   },
   {
@@ -42,7 +41,7 @@ const team = [
     name: "Em Argio",
     title: "Lead Design Alchemist",
     description:
-      "Multi-disciplinary visual artist crafting the look and feel of every drop. RCA Records alum. Designed for Miley.",
+      "With a background designing for RCA Records and shaping visuals for stars like Miley Cyrus, Em brings a multi-sensory approach to MagicDrop’s creative output. They translate emotion and narrative into stunning visual systems — turning each drop into a design-forward expression of fandom, magic, and identity.",
     img: "/em.png",
   },
 ];
@@ -205,6 +204,7 @@ export default function TeamPage() {
       {/* Styles */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
+
         .font-cinzel {
           font-family: 'Cinzel', serif;
         }
