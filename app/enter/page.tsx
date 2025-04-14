@@ -70,6 +70,13 @@ export default function EnterPage() {
       [id]: { x: info.point.x, y: info.point.y },
     }));
   };
+
+  const navigateTo = (url: string) => {
+    playClick();
+    setMenuOpen(false);
+    window.location.href = url;
+  };
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
       {/* Audio */}
@@ -121,7 +128,7 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* Nav + Logo */}
+      {/* NAV + LOGO */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         <motion.img
           onClick={() => {
