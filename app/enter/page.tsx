@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
+import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
 export default function EnterPage() {
-  const ambientAudioRef = useRef<HTMLAudioElement>(null);
-  const clickAudioRef = useRef<HTMLAudioElement>(null);
   const [menuOpen, setMenuOpen] = useState(true);
+  const clickAudioRef = useRef<HTMLAudioElement>(null);
+  const ambientAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -30,42 +30,29 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* Audio */}
+    <div className="relative min-h-screen w-full overflow-hidden text-white bg-gradient-to-br from-[#ddb6f2] via-[#bfa6ff] to-[#8e99f3]">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Animated Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 animate-pulse-slow z-0" />
-
-      {/* Particle Layer */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        {[...Array(40)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-white/50"
-            initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
-              opacity: 0,
-            }}
-            animate={{
-              y: "-10%",
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 10 + Math.random() * 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
+      {/* Glow spotlight center orb */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-radial from-white/10 via-transparent to-transparent rounded-full blur-[120px] opacity-30 scale-150 mx-auto my-auto" />
       </div>
 
-      {/* Header + Subtitle */}
-      <div className="relative z-30 flex flex-col items-center justify-center h-[75vh] text-center px-4 space-y-6">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
+      {/* HUD Text */}
+      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
+        MAGICDROP UI
+      </p>
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
+        Build 01 — Public Alpha
+      </p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
+        Powered by Fan Magic
+      </p>
+
+      {/* Center Title */}
+      <div className="relative z-20 flex flex-col items-center justify-center h-screen text-center px-4 space-y-6">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_50px_rgba(213,179,255,0.4)] max-w-xl transition-all duration-700">
           <motion.h1
             className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
             initial={{ opacity: 0, y: 10 }}
@@ -85,7 +72,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* Toggle Logo */}
+      {/* Floating MagicDrop Logo Button */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -93,11 +80,11 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="fixed bottom-[10%] left-1/2 -translate-x-1/2 h-16 w-16 rounded-full bg-white/10 backdrop-blur-lg shadow-xl border-2 border-purple-400 p-2 z-50 cursor-pointer hover:scale-110 transition-transform duration-300"
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 h-16 w-16 z-40 cursor-pointer rounded-full border border-purple-400 shadow-xl bg-[#8e99f3]/30 hover:scale-105 transition duration-300 backdrop-blur-md"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* Nav Panel */}
+      {/* Slide-Up Nav Panel */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -105,65 +92,51 @@ export default function EnterPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed bottom-[15%] left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-xl text-white px-6 py-6 rounded-2xl z-40 border border-white/20 shadow-xl w-[90vw] max-w-sm"
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl px-8 py-6 z-50 w-[90%] max-w-sm text-white space-y-4"
           >
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-3 right-4 text-white/70 hover:text-white"
-            >
-              <X size={20} />
-            </button>
-            <h2 className="text-lg font-bold mb-5 text-center text-shadow-strong">Navigate the Dropverse</h2>
-            <div className="flex flex-col gap-4">
-              {[
-                { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-                { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-                { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
-                { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => navigateTo(item.link)}
-                  className="flex items-center justify-center gap-2 rounded-full px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-purple-600 transition text-white text-sm font-medium"
-                >
-                  {item.icon}
-                  {item.label}
-                </button>
-              ))}
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-lg font-semibold text-white drop-shadow text-glow-hard">Navigate the Dropverse</h2>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="text-white/50 hover:text-white transition"
+              >
+                <X size={20} />
+              </button>
             </div>
+
+            {[
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
+              <button
+                key={item.link}
+                onClick={() => navigateTo(item.link)}
+                className="w-full flex items-center justify-start gap-3 px-6 py-3 rounded-full text-sm font-medium border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:text-white transition-all duration-300"
+              >
+                {item.icon} {item.label}
+              </button>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* HUD Footer */}
-      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
-
-      {/* Global CSS */}
+      {/* Global Styles */}
       <style jsx global>{`
         .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.8),
+            0 0 24px rgba(213, 179, 255, 0.4);
         }
-
         .text-shadow-strong {
-          text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
-            0 0 4px rgba(0, 0, 0, 0.3);
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
-
-        .animate-pulse-slow {
-          animation: pulseBg 20s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseBg {
-          0% {
-            filter: hue-rotate(0deg) brightness(1);
-          }
-          100% {
-            filter: hue-rotate(30deg) brightness(1.1);
-          }
+        .bg-radial {
+          background: radial-gradient(
+            circle at center,
+            rgba(255, 255, 255, 0.12) 0%,
+            transparent 70%
+          );
         }
       `}</style>
     </div>
