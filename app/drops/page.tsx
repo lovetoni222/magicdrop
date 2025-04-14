@@ -54,6 +54,10 @@ export default function DropsPage() {
   const openDrop = (id: string) => {
     playDropClick();
     setSelectedId(id);
+
+    if (id === "becky" && beckyAudioRef.current) {
+      beckyAudioRef.current.play().catch(() => {});
+    }
   };
 
   const closeDrop = () => {
@@ -86,7 +90,7 @@ export default function DropsPage() {
         </div>
       </div>
 
-      {/* Drop Cards */}
+      {/* Drop Orbs */}
       <div className="relative z-20 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 pb-40">
         {drops.map((drop) => (
           <motion.div
@@ -164,6 +168,17 @@ export default function DropsPage() {
               >
                 View Full Drop →
               </a>
+
+              {selectedId === "becky" && (
+                <audio
+                  ref={beckyAudioRef}
+                  src="/becky-snippet.mp3"
+                  autoPlay
+                  preload="auto"
+                  controls
+                  className="mt-4 mx-auto w-full"
+                />
+              )}
             </motion.div>
           </motion.div>
         )}
