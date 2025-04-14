@@ -109,7 +109,7 @@ export default function TeamPage() {
       </div>
 
       {/* Orbs */}
-      <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-3 gap-6 px-6 pb-40">
+      <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-3 gap-6 px-6 pb-48">
         {team.map((member) => (
           <motion.div
             key={member.id}
@@ -121,9 +121,9 @@ export default function TeamPage() {
               <img
                 src={member.img}
                 alt={member.name}
-                className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover group-hover:ring-2 ring-purple-300 transition-all duration-300 z-10"
+                className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover z-10"
               />
-              <div className="absolute inset-0 rounded-full glow-pulse z-0" />
+              <div className="absolute inset-0 rounded-full glow-halo z-0" />
             </div>
             <p className="text-sm text-white mt-2 font-semibold">{member.name.split(" ")[0]}</p>
           </motion.div>
@@ -221,20 +221,38 @@ export default function TeamPage() {
         />
       </div>
 
-      {/* GLOBAL STYLES */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-
-        .font-cinzel {
-          font-family: 'Cinzel', serif;
+        .glow-halo {
+          pointer-events: none;
+          border: 2px solid rgba(213, 179, 255, 0.6);
+          border-radius: 9999px;
+          box-shadow:
+            0 0 6px rgba(213, 179, 255, 0.4),
+            0 0 14px rgba(213, 179, 255, 0.3);
+          animation: haloPulse 3s ease-in-out infinite;
         }
 
-        .font-inter {
-          font-family: 'Inter', sans-serif;
+        @keyframes haloPulse {
+          0%, 100% { opacity: 0.7; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.05); }
         }
 
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        .sparkle-overlay {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: url('/sparkle.gif') center/contain no-repeat;
+          opacity: 0;
+        }
+
+        .sparkle-overlay.fade {
+          opacity: 1;
+          animation: sparkleFade 1s ease-out forwards;
+        }
+
+        @keyframes sparkleFade {
+          0% { opacity: 1; }
+          100% { opacity: 0; }
         }
 
         .animated-prism {
@@ -259,37 +277,18 @@ export default function TeamPage() {
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
 
-        .glow-pulse {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 9999px;
-          background: radial-gradient(circle, rgba(213,179,255,0.4) 10%, transparent 60%);
-          box-shadow: 0 0 16px rgba(213, 179, 255, 0.5);
-          animation: pulse 3s ease-in-out infinite;
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
+
+        .font-cinzel {
+          font-family: 'Cinzel', serif;
         }
 
-        @keyframes pulse {
-          0%, 100% { opacity: 0.6; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.1); }
+        .font-inter {
+          font-family: 'Inter', sans-serif;
         }
 
-        .sparkle-overlay {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background: url('/sparkle.gif') center/contain no-repeat;
-          opacity: 0;
-        }
-
-        .sparkle-overlay.fade {
-          opacity: 1;
-          animation: sparkleFade 1s ease-out forwards;
-        }
-
-        @keyframes sparkleFade {
-          0% { opacity: 1; }
-          100% { opacity: 0; }
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
       `}</style>
     </div>
