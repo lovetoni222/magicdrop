@@ -6,6 +6,9 @@ import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
+  const [typedText, setTypedText] = useState("");
+  const fullText =
+    "Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.";
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
 
@@ -14,6 +17,15 @@ export default function EnterPage() {
       ambientAudioRef.current.volume = 0.4;
       ambientAudioRef.current.play().catch(() => {});
     }
+
+    let index = 0;
+    const interval = setInterval(() => {
+      setTypedText((prev) => prev + fullText[index]);
+      index++;
+      if (index === fullText.length) clearInterval(interval);
+    }, 35);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleClickSound = () => {
@@ -35,7 +47,7 @@ export default function EnterPage() {
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* GRADIENT BACKGROUND */}
+      {/* BACKGROUND GRADIENT */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* AURORA OVERLAY */}
@@ -45,23 +57,23 @@ export default function EnterPage() {
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* STARDUST PARTICLES */}
+      {/* PARTICLES */}
       <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        {Array.from({ length: 40 }).map((_, i) => (
+        {Array.from({ length: 50 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 rounded-full bg-white/60"
+            className="absolute w-1.5 h-1.5 rounded-full bg-white/80 backdrop-blur-sm shadow-[0_0_6px_rgba(255,255,255,0.4)]"
             initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
+              x: `${Math.random() * 100}%`,
+              y: `${Math.random() * 100}%`,
               opacity: 0,
             }}
             animate={{
-              y: "-10%",
-              opacity: [0, 0.6, 0],
+              y: "-20%",
+              opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 12 + Math.random() * 10,
+              duration: 16 + Math.random() * 8,
               repeat: Infinity,
               ease: "easeInOut",
               delay: Math.random() * 5,
@@ -81,14 +93,15 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* HEADER ORB */}
-      <div className="relative z-30 flex flex-col items-center justify-center pt-28 text-center px-4 space-y-6">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]">
+      {/* HEADER */}
+      <div className="relative z-20 flex flex-col items-center justify-center pt-28 text-center px-4 space-y-6">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_50px_rgba(213,179,255,0.4)] max-w-xl">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-wide prism-text animate-pulse-slow">
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
-            Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
+            {typedText}
+            <span className="inline-block w-[1ch] animate-blink">|</span>
           </p>
         </div>
       </div>
@@ -142,14 +155,6 @@ export default function EnterPage() {
 
       {/* GLOBAL STYLES */}
       <style jsx global>{`
-        .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
-        }
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-        }
         .animated-prism {
           background: linear-gradient(
             135deg,
@@ -162,6 +167,7 @@ export default function EnterPage() {
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
+
         @keyframes prismShift {
           0% {
             background-position: 0% 50%;
@@ -173,9 +179,21 @@ export default function EnterPage() {
             background-position: 0% 50%;
           }
         }
+
+        .prism-text {
+          background: linear-gradient(to right, #fcd34d, #a5f3fc, #f472b6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
+
         @keyframes shimmerPulse {
           0% {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
@@ -185,6 +203,19 @@ export default function EnterPage() {
           }
           100% {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+        }
+
+        .animate-blink {
+          animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
           }
         }
       `}</style>
