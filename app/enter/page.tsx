@@ -7,7 +7,7 @@ import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
 export default function EnterPage() {
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [menuOpen, setMenuOpen] = useState(true); // Auto open on page load
+  const [menuOpen, setMenuOpen] = useState(true); // Auto-open on enter
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -30,24 +30,46 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* 🌌 Background Video */}
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white flex flex-col justify-center items-center">
+      {/* 🔊 Audio */}
+      <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
+      <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
+
+      {/* 🎞️ Background Video */}
       <video
         muted
         playsInline
         autoPlay
         loop
         preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
+        className="absolute inset-0 w-full h-full object-cover -z-10"
       >
         <source src="/bg-enter.mp4" type="video/mp4" />
       </video>
 
-      {/* 🎵 Audio */}
-      <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
-      <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
+      {/* 💬 Header */}
+      <div className="text-center px-6 mt-20 md:mt-28 space-y-6 z-20">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl mx-auto">
+          <motion.h1
+            className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            Welcome to MagicDrop
+          </motion.h1>
+          <motion.p
+            className="mt-4 text-base md:text-xl text-white text-shadow-strong"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          >
+            Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
+          </motion.p>
+        </div>
+      </div>
 
-      {/* 🌟 Logo Toggle (Bottom Center) */}
+      {/* 🌟 Logo Toggle */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -55,55 +77,45 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 h-20 z-50 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_20px_rgba(213,179,255,0.6)]"
+        className="mt-10 h-20 cursor-pointer z-50 hover:scale-105 transition-transform duration-300"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* 🎮 Nav Overlay Panel */}
+      {/* 🎮 Floating Nav Panel */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xl z-40 flex flex-col items-center justify-center px-6"
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.35 }}
+            className="fixed bottom-36 md:bottom-28 z-50 px-6 py-6 rounded-3xl bg-black/80 border border-white/20 backdrop-blur-md shadow-lg w-[90%] max-w-sm flex flex-col gap-4"
           >
-            {/* Close Button */}
             <button
               onClick={() => setMenuOpen(false)}
-              className="absolute top-6 right-6 text-white/50 hover:text-white transition"
+              className="absolute top-3 right-3 text-white/50 hover:text-white"
             >
-              <X size={22} />
+              <X size={18} />
             </button>
 
-            {/* Title */}
-            <motion.h2
-              className="text-2xl md:text-4xl font-semibold text-white mb-6 text-glow-hard"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.1 }}
-            >
+            <h2 className="text-white text-center text-xl font-semibold tracking-wide text-glow-hard mb-2">
               Navigate the Dropverse
-            </motion.h2>
+            </h2>
 
-            {/* Nav Options */}
-            <div className="flex flex-col gap-4 w-full max-w-xs">
-              {[
-                { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-                { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-                { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
-                { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-              ].map((item) => (
-                <button
-                  key={`${item.label}-${item.link}`}
-                  onClick={() => navigateTo(item.link)}
-                  className="w-full px-6 py-3 flex items-center justify-center gap-2 rounded-full font-semibold text-white border border-white/30 bg-white/10 backdrop-blur-md hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
-                >
-                  {item.icon} {item.label}
-                </button>
-              ))}
-            </div>
+            {[
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
+              <button
+                key={item.link}
+                onClick={() => navigateTo(item.link)}
+                className="w-full flex items-center gap-2 justify-center px-5 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
+              >
+                {item.icon} {item.label}
+              </button>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -119,7 +131,7 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* 🌐 Global Fixes */}
+      {/* 🌐 Global Styles */}
       <style jsx global>{`
         video::-webkit-media-controls {
           display: none !important;
@@ -131,9 +143,9 @@ export default function EnterPage() {
             0 0 48px rgba(213, 179, 255, 0.3);
         }
 
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
+        .text-shadow-strong {
+          text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
+            0 0 4px rgba(0, 0, 0, 0.3);
         }
       `}</style>
     </div>
