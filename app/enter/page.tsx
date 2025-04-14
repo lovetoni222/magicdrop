@@ -31,26 +31,25 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* ✅ Fixed Background Video for Mobile/Autoplay */}
+      {/* ✅ Working test video config */}
       <video
-        className="fixed top-0 left-0 w-full h-full object-cover -z-10 pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover -z-10"
         src="/bg-enter.mp4"
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
       />
 
-      {/* 🎵 Audio */}
+      {/* 🔈 Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* 💬 Orb Header */}
+      {/* 💬 Header */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
           <motion.h1
-            className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
+            className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
@@ -66,27 +65,9 @@ export default function EnterPage() {
             Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
           </motion.p>
         </div>
-
-        {/* 📱 Mobile Buttons */}
-        <div className="mt-4 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
-          {[
-            ["Explore Drops", "/drops"],
-            ["Collaborate", "/collaborate"],
-            ["Meet Our Team", "/team"],
-            ["Become a Fan Advisor", "/fan-advisor"],
-          ].map(([label, link]) => (
-            <button
-              key={link}
-              onClick={() => navigateTo(link)}
-              className="w-full px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* 🌟 Logo Toggle Nav */}
+      {/* 🔁 Logo Toggle Navigation */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -125,7 +106,7 @@ export default function EnterPage() {
               <button
                 key={`${item.label}-${item.link}`}
                 onClick={() => navigateTo(item.link)}
-                className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
+                className="flex items-center gap-2 text-white hover:text-purple-300 transition"
               >
                 {item.icon} {item.label}
               </button>
@@ -134,7 +115,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* HUD Labels */}
+      {/* 🧭 HUD Labels */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -144,40 +125,6 @@ export default function EnterPage() {
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
         Powered by Fan Magic
       </p>
-
-      {/* 🔧 Global Fixes */}
-      <style jsx global>{`
-        video::-webkit-media-controls {
-          display: none !important;
-        }
-        .shimmer {
-          animation: shimmerAnim 4s infinite ease-in-out;
-        }
-        @keyframes shimmerAnim {
-          0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-          50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
-          }
-          100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-        }
-        .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
-        }
-        .text-shadow-strong {
-          text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
-            0 0 4px rgba(0, 0, 0, 0.3);
-        }
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
-        }
-      `}</style>
     </div>
   );
 }
