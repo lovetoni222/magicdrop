@@ -1,49 +1,55 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
 const team = [
   {
+    id: "toni",
     name: "Toni Dippolito",
     title: "Founder & Chief Vision Weaver",
     description:
       "The visionary behind MagicDrop, blending strategic partnerships and creative leadership. Previously at Instagram, tech and beauty startups.",
-    img: "/team/toni.jpg",
+    img: "/toni.png",
   },
   {
+    id: "patrick",
     name: "Patrick Stephens",
     title: "Head of Artist & Brand Alchemy",
     description:
       "Forging legendary partnerships (Capitol, Salxco). Ensures collaborations enhance artist narrative.",
-    img: "/team/patrick.jpg",
+    img: "/patrick.png",
   },
   {
+    id: "oliver",
     name: "Oliver Sussman",
     title: "Head of Narrative Worlds & Visual Identity",
     description:
       "Visual architect behind the Dropverse. Directs campaigns and creative that embody artist stories.",
-    img: "/team/oliver.jpg",
+    img: "/oliver.png",
   },
   {
+    id: "pammy",
     name: "Pammy Hilton",
     title: "Head of Fandom & Community Weaving",
     description:
       "Fan-first strategist, formerly Head of Little Hiltons. Builds authentic bridges between artists and fans.",
-    img: "/team/pammy.jpg",
+    img: "/pammy.png",
   },
   {
+    id: "em",
     name: "Em Argio",
     title: "Lead Design Alchemist",
     description:
       "Multi-disciplinary visual artist crafting the look and feel of every drop. RCA Records alum. Designed for Miley.",
-    img: "/team/em.jpg",
+    img: "/em.png",
   },
 ];
 
 export default function TeamPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
 
@@ -68,16 +74,14 @@ export default function TeamPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white bg-black font-inter">
+    <div className="relative min-h-screen w-full overflow-hidden text-white font-inter bg-black">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
-
-      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* HEADER */}
+      {/* Header */}
       <div className="pt-24 text-center z-20 relative px-4">
-        <h1 className="text-4xl md:text-5xl font-bold font-cinzel tracking-wide text-white text-shadow-strong mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong mb-4">
           Meet the Team
         </h1>
         <p className="max-w-xl mx-auto text-white/80 text-shadow-strong text-sm md:text-base">
@@ -85,29 +89,70 @@ export default function TeamPage() {
         </p>
       </div>
 
-      {/* TEAM ORBS */}
-      <div className="relative z-20 mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 pb-32">
-        {team.map((member, i) => (
+      {/* Orbs */}
+      <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-3 gap-6 px-6 pb-40">
+        {team.map((member) => (
           <motion.div
-            key={member.name}
-            className="flex flex-col items-center text-center rounded-3xl bg-white/10 border border-white/20 p-4 backdrop-blur-md shadow-xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
+            key={member.id}
+            className="flex flex-col items-center cursor-pointer"
+            whileHover={{ scale: 1.08 }}
+            onClick={() => {
+              handleClickSound();
+              setSelectedId(member.id);
+            }}
           >
             <img
               src={member.img}
               alt={member.name}
-              className="w-24 h-24 rounded-full object-cover mb-4 border border-white/20 shadow-lg"
+              className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover"
             />
-            <h3 className="text-lg font-semibold font-cinzel">{member.name}</h3>
-            <p className="text-sm text-purple-300 font-medium">{member.title}</p>
-            <p className="text-xs text-white/80 mt-2 max-w-xs">{member.description}</p>
+            <p className="text-sm text-white mt-2 font-semibold">{member.name.split(" ")[0]}</p>
           </motion.div>
         ))}
       </div>
 
-      {/* NAV HUD (NAV + LOGO TOGGLE) */}
+      {/* Bio Modal */}
+      <AnimatePresence>
+        {selectedId && (
+          <motion.div
+            key="modal"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl max-w-md w-full p-6 text-center shadow-xl relative"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+            >
+              <button
+                onClick={() => setSelectedId(null)}
+                className="absolute top-4 right-5 text-white/60 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+              <img
+                src={team.find((m) => m.id === selectedId)?.img}
+                alt=""
+                className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 object-cover"
+              />
+              <h3 className="text-xl font-cinzel font-semibold">
+                {team.find((m) => m.id === selectedId)?.name}
+              </h3>
+              <p className="text-sm text-purple-300 font-medium mt-1">
+                {team.find((m) => m.id === selectedId)?.title}
+              </p>
+              <p className="text-xs text-white/80 mt-3">
+                {team.find((m) => m.id === selectedId)?.description}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* NAV + Logo */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         <AnimatePresence>
           {menuOpen && (
@@ -145,7 +190,6 @@ export default function TeamPage() {
           )}
         </AnimatePresence>
 
-        {/* LOGO TOGGLE */}
         <motion.img
           onClick={() => {
             handleClickSound();
@@ -158,54 +202,35 @@ export default function TeamPage() {
         />
       </div>
 
-      {/* GLOBAL STYLES */}
+      {/* Styles */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-
         .font-cinzel {
           font-family: 'Cinzel', serif;
         }
-
         .font-inter {
           font-family: 'Inter', sans-serif;
         }
-
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
-
         .animated-prism {
           background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
-
         @keyframes prismShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
-
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
-
         @keyframes shimmerPulse {
-          0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-          50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
-          }
-          100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
       `}</style>
     </div>
