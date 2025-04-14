@@ -123,7 +123,7 @@ export default function CollaboratePage() {
                   <p className="text-sm text-white/80">
                     We embed your product, service, or story inside immersive artist drops. Our
                     brand collabs include physical events, co-branded merch, digital content, and
-                    narrative-driven integrations. We focus on authentic matchmaking between high-value artists
+                    narrative-driven app integrations. We focus on authentic matchmaking between high-value artists
                     and partner brands for unforgettable experiences and hyper-targeted delivery.
                   </p>
                   <a
@@ -141,7 +141,7 @@ export default function CollaboratePage() {
                   <h3 className="text-xl font-cinzel font-semibold mb-2">Built For Artists</h3>
                   <p className="text-sm text-white/80">
                     MagicDrop exists to bring your world to life — from co-created products to immersive events.
-                    We partner with the same manufacturers as Boy Smells, Vacation Inc, Sephora, Pink Friday Nails, Brooklinen, and Olipop.
+                    We partner with the same manufacturers as Boy Smells, Vacation Inc, Sephora, Pink Friday Nails, Brooklinen, Olipop and other notable brands as well as small vendors hand selected by artists.
                     Every drop includes a custom-built web and mobile experience.
                     We fully fund drop production, manage creative and logistics, and generate revenue from brand sponsorship and product sales.
                     You retain full creative control — with no upfront risk.

@@ -10,9 +10,8 @@ const stickers = [
 ];
 
 export default function EnterPage() {
-  const ambientAudioRef = useRef<HTMLAudioElement>(null);
-  const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [menuOpen, setMenuOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [playing, setPlaying] = useState<Record<string, boolean>>({});
   const [positions, setPositions] = useState(() =>
     stickers.reduce((acc, s) => {
       acc[s.id] = { x: s.x, y: s.y };
@@ -20,14 +19,33 @@ export default function EnterPage() {
     }, {} as Record<string, { x: number; y: number }>)
   );
 
+  const ambientAudioRef = useRef<HTMLAudioElement>(null);
+  const clickAudioRef = useRef<HTMLAudioElement>(null);
+  const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+
   useEffect(() => {
     ambientAudioRef.current?.play().catch(() => {});
   }, []);
 
-  const playSound = (src: string) => {
-    const audio = new Audio(src);
-    audio.volume = 0.5;
-    audio.play().catch(() => {});
+  const playClick = () => {
+    clickAudioRef.current?.play().catch(() => {});
+  };
+
+  const toggleStickerAudio = (id: string) => {
+    const audio = audioRefs.current[id];
+    if (!audio) return;
+
+    if (playing[id]) {
+      audio.pause();
+      setPlaying((prev) => ({ ...prev, [id]: false }));
+    } else {
+      Object.values(audioRefs.current).forEach((a) => a.pause());
+      Object.keys(playing).forEach((k) => playing[k] && setPlaying((p) => ({ ...p, [k]: false })));
+
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      setPlaying((prev) => ({ ...prev, [id]: true }));
+    }
   };
 
   const handleDragEnd = (id: string, e: any, info: any) => {
@@ -35,36 +53,49 @@ export default function EnterPage() {
       ...prev,
       [id]: { x: info.point.x, y: info.point.y },
     }));
-    playSound(stickers.find((s) => s.id === id)?.audio || "");
-  };
-
-  const handleClickSound = () => {
-    clickAudioRef.current?.play().catch(() => {});
   };
 
   const navigateTo = (url: string) => {
-    handleClickSound();
+    playClick();
     setMenuOpen(false);
     window.location.href = url;
   };
+
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white bg-black font-inter">
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
+      {stickers.map((s) => (
+        <audio
+          key={s.id}
+          ref={(el) => {
+            if (el) audioRefs.current[s.id] = el;
+          }}
+          src={s.audio}
+          preload="auto"
+        />
+      ))}
 
-      {/* Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* Header */}
-      <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold text-white tracking-wide font-cinzel text-shadow-strong">
+      <div className="pt-24 text-center z-20 relative px-4">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong mb-3">
             Welcome to MagicDrop
           </h1>
-          <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
+          <p className="max-w-xl mx-auto text-white/80 text-shadow-strong text-sm md:text-base">
             Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
           </p>
         </div>
+        <motion.p
+          className="mt-6 text-sm md:text-base text-white/60 font-medium"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          Tap and drag the stickers below to remix the Dropverse. Each one plays a unique sound.
+        </motion.p>
       </div>
 
       {/* Stickers */}
@@ -74,6 +105,7 @@ export default function EnterPage() {
           className="absolute text-3xl cursor-grab select-none"
           drag
           dragMomentum={false}
+          onClick={() => toggleStickerAudio(s.id)}
           onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
           style={{
             left: positions[s.id].x,
@@ -87,7 +119,7 @@ export default function EnterPage() {
         </motion.div>
       ))}
 
-      {/* HUD */}
+      {/* HUD Text */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -98,15 +130,25 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* Nav Menu */}
-      <AnimatePresence>
+      {/* Nav + Logo Toggle */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
+        <motion.img
+          onClick={() => {
+            playClick();
+            setMenuOpen(!menuOpen);
+          }}
+          src="/logo.png"
+          alt="MagicDrop Nav"
+          className="h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+          whileTap={{ scale: 0.95 }}
+        />
         {menuOpen && (
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4 z-40"
+            className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl max-w-sm shadow-2xl flex flex-col items-center gap-3 relative"
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -114,7 +156,7 @@ export default function EnterPage() {
             >
               <X size={18} />
             </button>
-            <h2 className="text-lg font-bold text-shadow-strong">Navigate the Dropverse</h2>
+            <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
             {[
               { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
               { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
@@ -131,19 +173,7 @@ export default function EnterPage() {
             ))}
           </motion.div>
         )}
-      </AnimatePresence>
-
-      {/* Logo Toggle */}
-      <motion.img
-        onClick={() => {
-          handleClickSound();
-          setMenuOpen(!menuOpen);
-        }}
-        src="/logo.png"
-        alt="MagicDrop Nav"
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 z-50 cursor-pointer hover:scale-110 transition-transform shimmer"
-        whileTap={{ scale: 0.95 }}
-      />
+      </div>
 
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
