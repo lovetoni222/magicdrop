@@ -45,6 +45,14 @@ const team = [
       "With a background designing for RCA Records and shaping visuals for stars like Miley Cyrus, Em brings a multi-sensory approach to MagicDrop’s creative output. They translate emotion and narrative into stunning visual systems — turning each drop into a design-forward expression of fandom, magic, and identity.",
     img: "/em.png",
   },
+  {
+    id: "mystery",
+    name: "You?",
+    title: "Future MagicDrop Collaborator",
+    description:
+      "MagicDrop is growing, and we’re always looking for curious, passionate minds who believe in the power of fandom and storytelling. If you’re a designer, developer, strategist, or vibe curator who feels called to build with us, we’d love to hear from you.",
+    img: null, // We'll render a ? instead
+  },
 ];
 
 export default function TeamPage() {
@@ -117,12 +125,18 @@ export default function TeamPage() {
             whileHover={{ scale: 1.08 }}
             onClick={() => openProfile(member.id)}
           >
-            <div className="relative">
-              <img
-                src={member.img}
-                alt={member.name}
-                className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover z-10"
-              />
+            <div className="relative flex items-center justify-center">
+              {member.img ? (
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover z-10"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-full border border-white/20 shadow-lg bg-white/10 flex items-center justify-center text-4xl font-bold text-white z-10">
+                  ?
+                </div>
+              )}
               <div className="absolute inset-0 rounded-full glow-halo z-0" />
             </div>
             <p className="text-sm text-white mt-2 font-semibold">{member.name.split(" ")[0]}</p>
@@ -153,20 +167,46 @@ export default function TeamPage() {
               >
                 <X size={20} />
               </button>
-              <img
-                src={team.find((m) => m.id === selectedId)?.img}
-                alt=""
-                className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 object-cover"
-              />
-              <h3 className="text-xl font-cinzel font-semibold">
-                {team.find((m) => m.id === selectedId)?.name}
-              </h3>
-              <p className="text-sm text-purple-300 font-medium mt-1">
-                {team.find((m) => m.id === selectedId)?.title}
-              </p>
-              <p className="text-xs text-white/80 mt-3">
-                {team.find((m) => m.id === selectedId)?.description}
-              </p>
+              {selectedId === "mystery" ? (
+                <>
+                  <div className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 bg-white/10 flex items-center justify-center text-4xl font-bold text-white">
+                    ?
+                  </div>
+                  <h3 className="text-xl font-cinzel font-semibold">You?</h3>
+                  <p className="text-sm text-purple-300 font-medium mt-1">
+                    Future MagicDrop Collaborator
+                  </p>
+                  <p className="text-xs text-white/80 mt-3">
+                    MagicDrop is growing, and we’re always looking for curious, passionate minds who
+                    believe in the power of fandom and storytelling. If you’re a designer,
+                    developer, strategist, or vibe curator who feels called to build with us, we’d
+                    love to hear from you.
+                  </p>
+                  <a
+                    href="mailto:concierge@getmagicdrop.com"
+                    className="mt-4 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition"
+                  >
+                    Apply via Email
+                  </a>
+                </>
+              ) : (
+                <>
+                  <img
+                    src={team.find((m) => m.id === selectedId)?.img}
+                    alt=""
+                    className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 object-cover"
+                  />
+                  <h3 className="text-xl font-cinzel font-semibold">
+                    {team.find((m) => m.id === selectedId)?.name}
+                  </h3>
+                  <p className="text-sm text-purple-300 font-medium mt-1">
+                    {team.find((m) => m.id === selectedId)?.title}
+                  </p>
+                  <p className="text-xs text-white/80 mt-3">
+                    {team.find((m) => m.id === selectedId)?.description}
+                  </p>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
@@ -221,7 +261,44 @@ export default function TeamPage() {
         />
       </div>
 
+      {/* GLOBAL STYLES */}
       <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
+
+        .font-cinzel {
+          font-family: 'Cinzel', serif;
+        }
+
+        .font-inter {
+          font-family: 'Inter', sans-serif;
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+
+        @keyframes prismShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerPulse {
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+
         .glow-halo {
           pointer-events: none;
           border: 2px solid rgba(213, 179, 255, 0.6);
@@ -253,42 +330,6 @@ export default function TeamPage() {
         @keyframes sparkleFade {
           0% { opacity: 1; }
           100% { opacity: 0; }
-        }
-
-        .animated-prism {
-          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
-          background-size: 600% 600%;
-          animation: prismShift 30s ease infinite;
-        }
-
-        @keyframes prismShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        .shimmer {
-          animation: shimmerPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmerPulse {
-          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
-          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-
-        .font-cinzel {
-          font-family: 'Cinzel', serif;
-        }
-
-        .font-inter {
-          font-family: 'Inter', sans-serif;
-        }
-
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
       `}</style>
     </div>
