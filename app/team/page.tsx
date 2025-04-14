@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
@@ -96,9 +95,7 @@ export default function TeamPage() {
         <p className="max-w-xl mx-auto text-white/80 text-shadow-strong text-sm md:text-base">
           The creators, builders, and believers behind the Dropverse.
         </p>
-      </div>
-
-      {/* Orbs */}
+      </div>{/* Orbs */}
       <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-3 gap-6 px-6 pb-40">
         {team.map((member) => (
           <motion.div
@@ -169,7 +166,7 @@ export default function TeamPage() {
           {[
             { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
             { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-            { label: "Enter", link: "/enter", icon: <Users size={18} /> },
+            { label: "Home", link: "/enter", icon: <Users size={18} /> },
             { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
           ].map((item) => (
             <button
@@ -196,42 +193,6 @@ export default function TeamPage() {
 
       {/* GLOBAL STYLES */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-
-        .font-cinzel {
-          font-family: 'Cinzel', serif;
-        }
-
-        .font-inter {
-          font-family: 'Inter', sans-serif;
-        }
-
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-        }
-
-        .animated-prism {
-          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
-          background-size: 600% 600%;
-          animation: prismShift 30s ease infinite;
-        }
-
-        @keyframes prismShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        .shimmer {
-          animation: shimmerPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmerPulse {
-          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
-          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-        }
-
         .glow-pulse {
           pointer-events: none;
           position: absolute;
@@ -242,12 +203,10 @@ export default function TeamPage() {
                       0 0 24px rgba(213, 179, 255, 0.2);
           animation: pulse 3s infinite ease-in-out;
         }
-
         @keyframes pulse {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
         }
-
         .sparkle-overlay {
           position: absolute;
           inset: 0;
@@ -255,15 +214,40 @@ export default function TeamPage() {
           background: url('/sparkle.gif') center/contain no-repeat;
           opacity: 0;
         }
-
         .sparkle-overlay.fade {
           opacity: 1;
           animation: sparkleFade 1s ease-out forwards;
         }
-
         @keyframes sparkleFade {
           0% { opacity: 1; }
           100% { opacity: 0; }
+        }
+        .font-cinzel {
+          font-family: 'Cinzel', serif;
+        }
+        .font-inter {
+          font-family: 'Inter', sans-serif;
+        }
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+        @keyframes prismShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+        @keyframes shimmerPulse {
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
       `}</style>
     </div>
