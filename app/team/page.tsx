@@ -133,8 +133,8 @@ export default function TeamPage() {
                   className="w-24 h-24 rounded-full border border-white/20 shadow-lg object-cover z-10"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-4xl font-bold text-white z-10">
-                  ?
+                <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 z-10">
+                  💠
                 </div>
               )}
               <div className="absolute inset-0 rounded-full glow-halo z-0" />
@@ -144,7 +144,7 @@ export default function TeamPage() {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* Bio Modal */}
       <AnimatePresence>
         {selectedId && (
           <motion.div
@@ -175,8 +175,8 @@ export default function TeamPage() {
                   className="w-24 h-24 rounded-full border border-white/20 mx-auto mb-4 object-cover"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-4xl font-bold text-white mx-auto mb-4">
-                  ?
+                <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 mx-auto mb-4">
+                  💠
                 </div>
               )}
 
@@ -203,7 +203,7 @@ export default function TeamPage() {
         )}
       </AnimatePresence>
 
-      {/* Nav + Logo */}
+      {/* NAV + LOGO TOGGLE */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         {menuOpen && (
           <motion.div
@@ -252,7 +252,6 @@ export default function TeamPage() {
         />
       </div>
 
-      {/* Styles */}
       <style jsx global>{`
         .glow-halo {
           pointer-events: none;
