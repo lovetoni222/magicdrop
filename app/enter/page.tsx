@@ -30,32 +30,47 @@ export default function EnterPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden text-white bg-black">
-      {/* Audio */}
+      {/* AUDIO */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Gradient Background */}
+      {/* GRADIENT BACKGROUND */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* Floating Symbolic Orbs (Option D) */}
+      {/* AURORA OVERLAY */}
+      <motion.div
+        className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08)_0%,transparent_60%)]"
+        animate={{ opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* FLOATING SYMBOLIC ORBS */}
+      {["top-[15%] left-[10%]", "top-[35%] right-[12%]", "bottom-[20%] left-[15%]", "bottom-[10%] right-[20%]"].map((pos, i) => (
+        <motion.div
+          key={i}
+          className={`absolute w-8 h-8 rounded-full bg-purple-300/30 blur-xl ${pos} z-20`}
+          animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+          transition={{ repeat: Infinity, duration: 6 + i * 2, ease: "easeInOut" }}
+        />
+      ))}
+
+      {/* STARDUST */}
       <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        {Array.from({ length: 10 }).map((_, i) => (
+        {Array.from({ length: 30 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-6 h-6 rounded-full bg-gradient-to-br from-purple-300 to-pink-300 opacity-70 blur-md"
+            className="absolute w-1 h-1 rounded-full bg-white/60"
             initial={{
-              x: `${Math.random() * 100}%`,
-              y: `${Math.random() * 100}%`,
-              scale: 0.8,
+              x: Math.random() * 100 + "%",
+              y: Math.random() * 100 + "%",
               opacity: 0,
             }}
             animate={{
-              y: ["0%", "5%", "0%"],
-              opacity: [0, 0.8, 0],
-              scale: [0.8, 1.1, 0.8],
+              y: "-10%",
+              opacity: [0, 0.6, 0],
             }}
             transition={{
-              duration: 20 + Math.random() * 10,
+              duration: 12 + Math.random() * 10,
               repeat: Infinity,
               ease: "easeInOut",
               delay: Math.random() * 5,
@@ -75,10 +90,10 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* Header Orb */}
-      <div className="relative z-20 flex flex-col items-center justify-center pt-28 text-center px-4 space-y-6">
+      {/* HEADER */}
+      <div className="relative z-20 flex flex-col items-center justify-center pt-36 md:pt-40 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-wide text-glow-hard [font-family:var(--font-playfair)] shimmer-text">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-wide [font-family:var(--font-playfair)] text-prism-glow">
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
@@ -87,7 +102,7 @@ export default function EnterPage() {
         </div>
       </div>
 
-      {/* Nav Menu */}
+      {/* NAV MENU */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -95,7 +110,7 @@ export default function EnterPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="relative z-30 mt-12 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
+            className="relative z-30 mt-16 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -122,7 +137,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* Logo Toggle */}
+      {/* LOGO TOGGLE */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -134,10 +149,24 @@ export default function EnterPage() {
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* Styles */}
+      {/* STYLES */}
       <style jsx global>{`
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+        @keyframes shimmerPulse {
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
         }
         .animated-prism {
           background: linear-gradient(
@@ -162,35 +191,15 @@ export default function EnterPage() {
             background-position: 0% 50%;
           }
         }
-        .shimmer {
-          animation: shimmerPulse 4s ease-in-out infinite;
-        }
-        @keyframes shimmerPulse {
-          0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-          50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
-          }
-          100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-        }
-        .shimmer-text {
-          background: linear-gradient(
-            90deg,
-            #ffffff,
-            #e5dbff,
-            #ffffff,
-            #d1caff
-          );
+        .text-prism-glow {
+          background: linear-gradient(45deg, #f9a8d4, #c084fc, #60a5fa, #fcd34d);
           background-size: 300% 300%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: shimmerText 6s ease-in-out infinite;
+          animation: glowGradient 6s ease-in-out infinite;
+          text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
-
-        @keyframes shimmerText {
+        @keyframes glowGradient {
           0% {
             background-position: 0% 50%;
           }
