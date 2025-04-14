@@ -1,12 +1,33 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
 
+const drops = [
+  {
+    id: "becky",
+    title: "Becky G: Drop 01",
+    img: "/becky.jpg",
+    short:
+      "Becky G's 'Otro Capítulo del Mercado' celebrated her album Encuentros through a vibrant fan reunion.",
+    full: `Becky G's “Otro Capítulo del Mercado,” celebrating her album “Encuentros,” was designed
+as a “reunión” for fans and community, honoring Mexican culture. It translated her music's essence
+into a tangible experience, fostering connection and empowerment. The event featured a curated
+market, where limited-edition mercado bags, distributed upon entry, became a unifying element as
+fans explored the various vendors and shopped. Through these shared experiences, alongside immersive
+activities, the event mirrored her authentic artistry, creating a space for vulnerability and growth,
+and inspiring a shared sense of belonging.`,
+    link: "https://beckygmercado.com",
+  },
+];
+
 export default function DropsPage() {
-  const ambientAudioRef = useRef<HTMLAudioElement>(null);
-  const clickAudioRef = useRef<HTMLAudioElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const ambientAudioRef = useRef<HTMLAudioElement>(null);
+  const navClickAudioRef = useRef<HTMLAudioElement>(null);
+  const dropClickAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -15,179 +36,226 @@ export default function DropsPage() {
     }
   }, []);
 
-  const handleClickSound = () => {
-    if (clickAudioRef.current) {
-      clickAudioRef.current.currentTime = 0;
-      clickAudioRef.current.play().catch(() => {});
+  const playNavClick = () => {
+    if (navClickAudioRef.current) {
+      navClickAudioRef.current.currentTime = 0;
+      navClickAudioRef.current.play().catch(() => {});
     }
   };
 
-  const navigateTo = (url: string) => {
-    handleClickSound();
-    setMenuOpen(false);
-    window.location.href = url;
+  const playDropClick = () => {
+    if (dropClickAudioRef.current) {
+      dropClickAudioRef.current.currentTime = 0;
+      dropClickAudioRef.current.play().catch(() => {});
+    }
   };
 
+  const openDrop = (id: string) => {
+    playDropClick();
+    setSelectedId(id);
+  };
   return (
-    <div className="relative min-h-[100dvh] w-full overflow-hidden bg-black text-white">
-      {/* 🎧 Audio */}
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      {/* Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
-      <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
+      <audio ref={navClickAudioRef} src="/ui-hover.mp3" preload="auto" />
+      <audio ref={dropClickAudioRef} src="/drop-click.mp3" preload="auto" />
 
-      {/* 🎥 Background */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        src="/bg-enter.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
+      {/* Background */}
+      <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* 🌌 Dropverse Header & Cards */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 pt-32 pb-20">
-        <motion.h1
-          className="text-4xl md:text-6xl font-bold text-white text-glow-hard [font-family:var(--font-playfair)] mb-12"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          Explore the Dropverse
-        </motion.h1>
-
-        <div className="grid gap-8 w-full max-w-6xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {/* Becky G Drop */}
-          <motion.div
-            className="bg-white/10 border border-white/20 p-4 rounded-xl backdrop-blur-md shadow-md hover:shadow-xl transition duration-300 text-left"
-            whileHover={{ scale: 1.03 }}
-          >
-            <img
-              src="/becky.jpg"
-              alt="Becky G Drop"
-              className="w-full h-40 object-cover rounded-lg mb-4 border border-white/20"
-            />
-            <h3 className="text-xl font-semibold text-white mb-2">
-              Becky G: Drop 01
-            </h3>
-            <p className="text-sm text-white/90 mb-4">
-              Becky G's <em>“Otro Capítulo del Mercado”</em> celebrated her album{" "}
-              <em>Encuentros</em> through a vibrant fan reunion. Inspired by
-              Mexican culture, the event featured a curated market and limited-edition
-              mercado bags, given upon entry — uniting fans through shopping, storytelling,
-              and community-building.
-            </p>
-            <a
-              href="https://beckygmercado.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleClickSound}
-              className="text-[#a855f7] hover:text-white font-semibold text-[15px] sparkle"
-            >
-              View Drop →
-            </a>
-          </motion.div>
-
-          {/* Placeholders */}
-          {[1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="bg-white/5 border border-white/10 p-6 rounded-xl backdrop-blur-md text-center text-white/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 + i * 0.2 }}
-            >
-              <h3 className="text-lg font-semibold">Coming Soon</h3>
-              <p className="text-sm">New artist drops are being conjured.</p>
-            </motion.div>
-          ))}
+      {/* Header */}
+      <div className="pt-24 text-center z-20 relative px-4">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong mb-3">
+            Explore the Dropverse
+          </h1>
+          <p className="max-w-xl mx-auto text-white/80 text-shadow-strong text-sm md:text-base">
+            Where story-driven drops live and evolve. Start your journey below.
+          </p>
         </div>
       </div>
 
-      {/* 🧭 HUD Text */}
-      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        MAGICDROP UI
-      </p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        Build 01 — Public Alpha
-      </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
-        Powered by Fan Magic
-      </p>
-
-      {/* 💎 Logo Nav Toggle */}
-      <motion.img
-        onClick={() => {
-          handleClickSound();
-          setMenuOpen(!menuOpen);
-        }}
-        src="/logo.png"
-        alt="MagicDrop Logo"
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 h-16 shimmer cursor-pointer z-50"
-        whileTap={{ scale: 0.9 }}
-      />
-
-      {/* 🎮 Slide-up Nav Menu */}
-      <AnimatePresence>
-        {menuOpen && (
+      {/* Drop Orbs */}
+      <div className="relative z-20 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 pb-40">
+        {drops.map((drop) => (
           <motion.div
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[240px]"
+            key={drop.id}
+            onClick={() => openDrop(drop.id)}
+            className="flex flex-col items-center text-center cursor-pointer group"
+            whileHover={{ scale: 1.05 }}
           >
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-2 right-2 text-white/50 hover:text-white transition"
-            >
-              <X size={18} />
-            </button>
+            <div className="relative">
+              <img
+                src={drop.img}
+                alt={drop.title}
+                className="w-32 h-32 rounded-full object-cover border border-white/20 shadow-lg z-10"
+              />
+              <div className="absolute inset-0 rounded-full glow-halo z-0" />
+            </div>
+            <h3 className="text-lg font-semibold text-white mt-4">{drop.title}</h3>
+            <p className="text-xs text-white/70 mt-2 max-w-xs">{drop.short}</p>
+          </motion.div>
+        ))}
 
-            <button onClick={() => navigateTo("/enter")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
-              <Home size={18} /> Home
-            </button>
-            <button onClick={() => navigateTo("/drops")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
-              <Sparkles size={18} /> Explore Drops
-            </button>
-            <button onClick={() => navigateTo("/collaborate")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
-              <Mail size={18} /> Collaborate
-            </button>
-            <button onClick={() => navigateTo("/team")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
-              <Users size={18} /> Meet Our Team
-            </button>
-            <button onClick={() => navigateTo("/fan-advisor")} className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition">
-              <Star size={18} /> Become a Fan Advisor
-            </button>
+        {/* Coming Soon Cards */}
+        {[1, 2].map((i) => (
+          <motion.div
+            key={`coming-soon-${i}`}
+            className="bg-white/5 border border-white/10 p-6 rounded-xl backdrop-blur-md text-center text-white/60 shadow-inner"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 + i * 0.2 }}
+          >
+            <h3 className="text-lg font-semibold">Coming Soon</h3>
+            <p className="text-sm">New artist drops are being conjured.</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {selectedId && (
+          <motion.div
+            key="drop-modal"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl max-w-md w-full p-6 text-center shadow-xl relative overflow-hidden"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+            >
+              <button
+                onClick={() => setSelectedId(null)}
+                className="absolute top-4 right-5 text-white/60 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+              <img
+                src={drops.find((d) => d.id === selectedId)?.img}
+                alt=""
+                className="w-full h-40 object-cover rounded-xl border border-white/20 mb-4"
+              />
+              <h3 className="text-xl font-cinzel font-semibold mb-2">
+                {drops.find((d) => d.id === selectedId)?.title}
+              </h3>
+              <p className="text-xs text-white/80">
+                {drops.find((d) => d.id === selectedId)?.full}
+              </p>
+              <a
+                href={drops.find((d) => d.id === selectedId)?.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition"
+              >
+                View Full Drop →
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* NAV + Logo */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
+        {menuOpen && (
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3 relative"
+          >
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
+            >
+              <X size={18} />
+            </button>
+            <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
+            {[
+              { label: "Home", link: "/enter", icon: <Home size={18} /> },
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
+              <button
+                key={item.link}
+                onClick={() => {
+                  playNavClick();
+                  window.location.href = item.link;
+                }}
+                className="w-full flex items-center gap-2 justify-start px-4 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
+              >
+                {item.icon} {item.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+
+        <motion.img
+          onClick={() => {
+            playNavClick();
+            setMenuOpen(!menuOpen);
+          }}
+          src="/logo.png"
+          alt="MagicDrop Nav"
+          className="h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+          whileTap={{ scale: 0.95 }}
+        />
+      </div>
+
+      {/* Global styles */}
       <style jsx global>{`
-        .shimmer {
-          animation: shimmerAnim 4s infinite ease-in-out;
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
         }
-        @keyframes shimmerAnim {
+
+        @keyframes prismShift {
           0% {
-            filter: brightness(1)
-              drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            background-position: 0% 50%;
           }
           50% {
-            filter: brightness(1.3)
-              drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+            background-position: 100% 50%;
           }
           100% {
-            filter: brightness(1)
-              drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+            background-position: 0% 50%;
           }
         }
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
+
+        .glow-halo {
+          pointer-events: none;
+          border: 2px solid rgba(213, 179, 255, 0.6);
+          border-radius: 9999px;
+          box-shadow:
+            0 0 6px rgba(213, 179, 255, 0.4),
+            0 0 14px rgba(213, 179, 255, 0.3);
+          animation: haloPulse 3s ease-in-out infinite;
         }
-        .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
+
+        @keyframes haloPulse {
+          0%, 100% { opacity: 0.7; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerPulse {
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
       `}</style>
     </div>
