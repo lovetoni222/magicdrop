@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
@@ -71,7 +71,7 @@ export default function TeamPage() {
   const triggerSparkle = () => {
     if (sparkleRef.current) {
       sparkleRef.current.classList.remove("fade");
-      void sparkleRef.current.offsetWidth; // trigger reflow
+      void sparkleRef.current.offsetWidth;
       sparkleRef.current.classList.add("fade");
     }
   };
@@ -88,7 +88,7 @@ export default function TeamPage() {
       <audio ref={clickAudioRef} src="/team-click.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* HEADER */}
+      {/* Header */}
       <div className="pt-24 text-center z-20 relative px-4">
         <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong mb-4">
           Meet the Team
@@ -98,7 +98,7 @@ export default function TeamPage() {
         </p>
       </div>
 
-      {/* ORBS */}
+      {/* Orbs */}
       <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-3 gap-6 px-6 pb-40">
         {team.map((member) => (
           <motion.div
@@ -120,7 +120,7 @@ export default function TeamPage() {
         ))}
       </div>
 
-      {/* BIO MODAL */}
+      {/* Bio Modal */}
       <AnimatePresence>
         {selectedId && (
           <motion.div
@@ -136,9 +136,7 @@ export default function TeamPage() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
             >
-              {/* Glitter Burst */}
               <div ref={sparkleRef} className="sparkle-overlay pointer-events-none" />
-
               <button
                 onClick={() => setSelectedId(null)}
                 className="absolute top-4 right-5 text-white/60 hover:text-white"
@@ -164,11 +162,9 @@ export default function TeamPage() {
         )}
       </AnimatePresence>
 
-      {/* NAV + LOGO (same as enter) */}
+      {/* NAV + LOGO */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
-        <motion.div
-          className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3"
-        >
+        <motion.div className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3">
           <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
           {[
             { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
@@ -178,7 +174,10 @@ export default function TeamPage() {
           ].map((item) => (
             <button
               key={item.link}
-              onClick={() => navigateTo(item.link)}
+              onClick={() => {
+                playClick();
+                window.location.href = item.link;
+              }}
               className="w-full flex items-center gap-3 justify-center px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
             >
               {item.icon} {item.label}
@@ -195,37 +194,44 @@ export default function TeamPage() {
         />
       </div>
 
-      {/* STYLES */}
+      {/* GLOBAL STYLES */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
 
         .font-cinzel {
           font-family: 'Cinzel', serif;
         }
+
         .font-inter {
           font-family: 'Inter', sans-serif;
         }
+
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
+
         .animated-prism {
           background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
+
         @keyframes prismShift {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
+
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
+
         @keyframes shimmerPulse {
           0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
           50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
+
         .glow-pulse {
           pointer-events: none;
           position: absolute;
@@ -236,10 +242,12 @@ export default function TeamPage() {
                       0 0 24px rgba(213, 179, 255, 0.2);
           animation: pulse 3s infinite ease-in-out;
         }
+
         @keyframes pulse {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
         }
+
         .sparkle-overlay {
           position: absolute;
           inset: 0;
@@ -247,10 +255,12 @@ export default function TeamPage() {
           background: url('/sparkle.gif') center/contain no-repeat;
           opacity: 0;
         }
+
         .sparkle-overlay.fade {
           opacity: 1;
           animation: sparkleFade 1s ease-out forwards;
         }
+
         @keyframes sparkleFade {
           0% { opacity: 1; }
           100% { opacity: 0; }
