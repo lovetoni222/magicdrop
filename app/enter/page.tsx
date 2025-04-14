@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
+import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
 export default function EnterPage() {
-  const ambientAudioRef = useRef<HTMLAudioElement>(null);
+  const [menuOpen, setMenuOpen] = useState(true);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const ambientAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (ambientAudioRef.current) {
@@ -30,132 +30,47 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* ✅ Background Video */}
-      <video
-        muted
-        playsInline
-        autoPlay
-        loop
-        preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
-      >
-        <source src="/bg-enter.mp4" type="video/mp4" />
-      </video>
-
-      {/* 🎵 Audio */}
+    <div className="relative min-h-screen w-full overflow-hidden text-white bg-black">
+      {/* AUDIO */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* 💬 Orb Header */}
-      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 space-y-6">
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.5)] max-w-xl">
-          <motion.h1
-            className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
-            Welcome to MagicDrop
-          </motion.h1>
-          <motion.p
-            className="mt-4 text-base md:text-xl text-white text-shadow-strong"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
-          </motion.p>
-        </div>
+      {/* GRADIENT BACKGROUND */}
+      <div className="absolute inset-0 z-0 animated-prism" />
 
-        {/* 📱 Mobile Buttons */}
-        <div className="mt-4 flex flex-col gap-4 items-center w-full max-w-xs z-30 md:hidden">
-          {[
-            ["Explore Drops", "/drops"],
-            ["Collaborate", "/collaborate"],
-            ["Meet Our Team", "/team"],
-            ["Become a Fan Advisor", "/fan-advisor"],
-          ].map(([label, link]) => (
-            <button
-              key={link}
-              onClick={() => navigateTo(link)}
-              className="w-full px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all duration-300"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* AURORA OVERLAY */}
+      <motion.div
+        className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08)_0%,transparent_60%)]"
+        animate={{ opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      {/* 🖥 Floating Buttons (Desktop Only) */}
-      <div className="absolute inset-0 z-40 pointer-events-none hidden md:block">
-        {[
-          ["Explore Drops", "/drops", "top-[20%] left-[10%]"],
-          ["Collaborate", "/collaborate", "bottom-[25%] right-[10%]"],
-          ["Meet Our Team", "/team", "bottom-[18%] left-[6%]"],
-          ["Become a Fan Advisor", "/fan-advisor", "top-[22%] right-[12%]"],
-        ].map(([label, link, position], i) => (
-          <motion.button
-            key={link}
-            onClick={() => navigateTo(link)}
-            className={`absolute ${position} px-6 py-3 rounded-full font-semibold text-sm border border-white text-white bg-transparent hover:bg-purple-600 hover:border-purple-600 hover:text-white pointer-events-auto`}
-            animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 6 + i, ease: "easeInOut" }}
-          >
-            {label}
-          </motion.button>
+      {/* STARDUST PARTICLES */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        {Array.from({ length: 40 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-white/60"
+            initial={{
+              x: Math.random() * 100 + "%",
+              y: Math.random() * 100 + "%",
+              opacity: 0,
+            }}
+            animate={{
+              y: "-10%",
+              opacity: [0, 0.6, 0],
+            }}
+            transition={{
+              duration: 12 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 5,
+            }}
+          />
         ))}
       </div>
 
-      {/* 🌟 Logo Toggle Nav */}
-      <motion.img
-        onClick={() => {
-          handleClickSound();
-          setMenuOpen(!menuOpen);
-        }}
-        src="/logo.png"
-        alt="MagicDrop Nav"
-        className="mx-auto mt-6 h-20 cursor-pointer z-50 ring-2 ring-purple-400 rounded-full hover:scale-105 transition-transform duration-300 block"
-        whileTap={{ scale: 0.95 }}
-      />
-
-      {/* 🎮 Slide-Up Nav Panel */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md rounded-2xl px-8 py-6 z-50 shadow-lg border border-white/20 flex flex-col gap-4 items-start min-w-[240px]"
-          >
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-2 right-2 text-white/50 hover:text-white transition"
-            >
-              <X size={18} />
-            </button>
-
-            {[
-              { label: "Home", link: "/enter", icon: <Home size={18} /> },
-              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
-              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
-              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
-              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
-            ].map((item) => (
-              <button
-                key={`${item.label}-${item.link}`}
-                onClick={() => navigateTo(item.link)}
-                className="flex items-center gap-2 text-white sparkle hover:text-purple-300 transition"
-              >
-                {item.icon} {item.label}
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* 🧭 HUD Labels */}
+      {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -166,17 +81,102 @@ export default function EnterPage() {
         Powered by Fan Magic
       </p>
 
-      {/* 🌐 Global Fixes */}
+      {/* HEADER ORB */}
+      <div className="relative z-30 flex flex-col items-center justify-center pt-28 text-center px-4 space-y-6">
+        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
+          <h1 className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]">
+            Welcome to MagicDrop
+          </h1>
+          <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
+            Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
+          </p>
+        </div>
+      </div>
+
+      {/* NAV MENU */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute bottom-[18%] left-1/2 -translate-x-1/2 z-40 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm shadow-2xl flex flex-col items-center gap-4"
+          >
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
+            >
+              <X size={18} />
+            </button>
+            <h2 className="text-lg font-bold text-shadow-strong">Navigate the Dropverse</h2>
+            {[
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
+              <button
+                key={item.link}
+                onClick={() => navigateTo(item.link)}
+                className="w-full flex items-center gap-3 justify-center px-5 py-3 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition-all text-sm font-semibold"
+              >
+                {item.icon} {item.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* LOGO TOGGLE BUTTON */}
+      <motion.img
+        onClick={() => {
+          handleClickSound();
+          setMenuOpen(!menuOpen);
+        }}
+        src="/logo.png"
+        alt="MagicDrop Nav"
+        className="fixed bottom-[8%] left-1/2 -translate-x-1/2 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 z-30 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+        whileTap={{ scale: 0.95 }}
+      />
+
+      {/* GLOBAL STYLES */}
       <style jsx global>{`
-        video::-webkit-media-controls {
-          display: none !important;
+        .text-glow-hard {
+          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
+            0 0 28px rgba(213, 179, 255, 0.5),
+            0 0 48px rgba(213, 179, 255, 0.3);
         }
-
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+        .animated-prism {
+          background: linear-gradient(
+            135deg,
+            #c084fc,
+            #f472b6,
+            #60a5fa,
+            #fcd34d,
+            #a5f3fc
+          );
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+        @keyframes prismShift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
         .shimmer {
-          animation: shimmerAnim 4s infinite ease-in-out;
+          animation: shimmerPulse 4s ease-in-out infinite;
         }
-
-        @keyframes shimmerAnim {
+        @keyframes shimmerPulse {
           0% {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
@@ -186,22 +186,6 @@ export default function EnterPage() {
           100% {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
           }
-        }
-
-        .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
-        }
-
-        .text-shadow-strong {
-          text-shadow: 0 0 12px rgba(0, 0, 0, 0.5),
-            0 0 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .sparkle:hover {
-          text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
-            0 0 20px rgba(213, 179, 255, 0.5);
         }
       `}</style>
     </div>
