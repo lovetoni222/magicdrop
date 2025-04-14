@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
@@ -12,29 +11,41 @@ const stickers = [
 
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
-  const [positions, setPositions] = useState(
+  const [playing, setPlaying] = useState<Record<string, boolean>>({});
+  const [positions, setPositions] = useState(() =>
     stickers.reduce((acc, { id }) => {
       acc[id] = { x: 0, y: 0 };
       return acc;
     }, {} as Record<string, { x: number; y: number }>)
   );
 
-  const handleClickSound = () => {
-    const audio = document.getElementById("ui-hover") as HTMLAudioElement;
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-    }
+  const boardRef = useRef<HTMLDivElement>(null);
+  const ambientAudioRef = useRef<HTMLAudioElement>(null);
+  const clickAudioRef = useRef<HTMLAudioElement>(null);
+  const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+
+  useEffect(() => {
+    ambientAudioRef.current?.play().catch(() => {});
+  }, []);
+
+  const playClick = () => {
+    clickAudioRef.current?.play().catch(() => {});
   };
 
-  const handleStickerClick = (id: string) => {
-    const audio = document.getElementById(`audio-${id}`) as HTMLAudioElement;
-    if (audio) {
-      if (audio.paused) {
-        audio.play().catch(() => {});
-      } else {
-        audio.pause();
-      }
+  const toggleStickerAudio = (id: string) => {
+    const audio = audioRefs.current[id];
+    if (!audio) return;
+
+    if (playing[id]) {
+      audio.pause();
+      setPlaying((prev) => ({ ...prev, [id]: false }));
+    } else {
+      Object.values(audioRefs.current).forEach((a) => a.pause());
+      Object.keys(playing).forEach((k) => playing[k] && setPlaying((p) => ({ ...p, [k]: false })));
+
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      setPlaying((prev) => ({ ...prev, [id]: true }));
     }
   };
 
@@ -43,7 +54,7 @@ export default function EnterPage() {
     e: MouseEvent | TouchEvent,
     info: { point: { x: number; y: number } }
   ) => {
-    const board = document.getElementById("sticker-board");
+    const board = boardRef.current;
     const boardRect = board?.getBoundingClientRect();
     const iconSize = 60;
 
@@ -54,7 +65,7 @@ export default function EnterPage() {
       info.point.y < boardRect.top ||
       info.point.y > boardRect.bottom - iconSize
     ) {
-      return; // don't update if out of bounds
+      return;
     }
 
     setPositions((prev) => ({
@@ -66,19 +77,31 @@ export default function EnterPage() {
     }));
   };
 
-  return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white bg-black font-inter">
-      <audio id="ambient" src="/ambient.mp3" preload="none" loop autoPlay />
-      <audio id="ui-hover" src="/ui-hover.mp3" preload="auto" />
+  const navigateTo = (url: string) => {
+    playClick();
+    setMenuOpen(false);
+    window.location.href = url;
+  };
 
+  return (
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter">
+      <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
+      <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
       {stickers.map((s) => (
-        <audio key={s.id} id={`audio-${s.id}`} src={s.audio} preload="auto" />
+        <audio
+          key={s.id}
+          ref={(el) => {
+            if (el) audioRefs.current[s.id] = el;
+          }}
+          id={`audio-${s.id}`}
+          src={s.audio}
+          preload="auto"
+        />
       ))}
 
-      {/* Background Gradient */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* HUD Text */}
+      {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -100,26 +123,27 @@ export default function EnterPage() {
           </p>
         </div>
         <p className="text-sm text-white/70 max-w-sm mt-4">
-          ✨ Move the icons below to remix your own vibe. Tap them to play a sound — press again to stop.
+          ✨ Move the icons below to remix your own vibe. Tap them to play a sound — tap again to stop.
         </p>
       </div>
 
       {/* Sticker Board */}
       <div
+        ref={boardRef}
         id="sticker-board"
         className="relative z-10 mx-auto mt-12 mb-24 w-full max-w-3xl h-[280px] border border-white/10 rounded-3xl backdrop-blur-sm bg-white/5 overflow-hidden"
       >
-        {stickers.map((sticker) => (
+        {stickers.map((s) => (
           <motion.div
-            key={sticker.id}
+            key={s.id}
             className="absolute text-4xl cursor-grab touch-none hover:scale-110 transition"
             drag
-            dragConstraints="#sticker-board"
-            onClick={() => handleStickerClick(sticker.id)}
-            onDragEnd={(e, info) => handleDragEnd(sticker.id, e, info)}
+            dragConstraints={boardRef}
+            onClick={() => toggleStickerAudio(s.id)}
+            onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
             animate={{
-              x: positions[sticker.id].x,
-              y: positions[sticker.id].y,
+              x: positions[s.id].x,
+              y: positions[s.id].y,
             }}
             style={{
               width: 60,
@@ -133,7 +157,7 @@ export default function EnterPage() {
               boxShadow: "0 0 10px rgba(213,179,255,0.6)",
             }}
           >
-            {sticker.icon}
+            {s.icon}
           </motion.div>
         ))}
       </div>
@@ -165,37 +189,27 @@ export default function EnterPage() {
             </button>
             <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
             {[
-              { label: "Explore Drops", link: "/drops" },
-              { label: "Collaborate", link: "/collaborate" },
-              { label: "Meet Our Team", link: "/team" },
-              { label: "Become a Fan Advisor", link: "/fan-advisor" },
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
             ].map((item) => (
               <button
                 key={item.link}
-                onClick={() => {
-                  handleClickSound();
-                  window.location.href = item.link;
-                }}
+                onClick={() => navigateTo(item.link)}
                 className="w-full text-white text-sm font-semibold px-4 py-2 rounded-full border border-white/30 bg-white/10 hover:bg-purple-600 hover:border-purple-600 hover:text-white transition"
               >
-                {item.label}
+                {item.icon} {item.label}
               </button>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Global Styles */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
-
-        .font-cinzel {
-          font-family: 'Cinzel', serif;
-        }
-
-        .font-inter {
-          font-family: 'Inter', sans-serif;
-        }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
 
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
