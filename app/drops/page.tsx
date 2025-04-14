@@ -54,7 +54,6 @@ export default function DropsPage() {
   const openDrop = (id: string) => {
     playDropClick();
     setSelectedId(id);
-
     if (id === "becky" && beckyAudioRef.current) {
       beckyAudioRef.current.play().catch(() => {});
     }
@@ -67,18 +66,16 @@ export default function DropsPage() {
     }
     setSelectedId(null);
   };
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-      {/* Audio */}
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={navClickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <audio ref={dropClickAudioRef} src="/team-click.mp3" preload="auto" />
       <audio ref={beckyAudioRef} src="/becky-snippet.mp3" preload="auto" />
 
-      {/* Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* Header */}
       <div className="pt-24 text-center z-20 relative px-4">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong mb-3">
@@ -90,7 +87,6 @@ export default function DropsPage() {
         </div>
       </div>
 
-      {/* Drop Orbs */}
       <div className="relative z-20 mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 pb-40">
         {drops.map((drop) => (
           <motion.div
@@ -112,7 +108,6 @@ export default function DropsPage() {
           </motion.div>
         ))}
 
-        {/* Coming Soon Cards */}
         {[1, 2].map((i) => (
           <motion.div
             key={`coming-soon-${i}`}
@@ -127,7 +122,6 @@ export default function DropsPage() {
         ))}
       </div>
 
-      {/* Modal */}
       <AnimatePresence>
         {selectedId && (
           <motion.div
@@ -168,13 +162,10 @@ export default function DropsPage() {
               >
                 View Full Drop →
               </a>
-
               {selectedId === "becky" && (
                 <audio
                   ref={beckyAudioRef}
                   src="/becky-snippet.mp3"
-                  autoPlay
-                  preload="auto"
                   controls
                   className="mt-4 mx-auto w-full"
                 />
@@ -184,7 +175,6 @@ export default function DropsPage() {
         )}
       </AnimatePresence>
 
-      {/* NAV + LOGO */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         {menuOpen && (
           <motion.div
@@ -201,12 +191,11 @@ export default function DropsPage() {
               <X size={18} />
             </button>
             <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
-            {[
-              { label: "Home", link: "/enter", icon: <Home size={18} /> },
+            {[{ label: "Home", link: "/enter", icon: <Home size={18} /> },
               { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
               { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
               { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
-              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> }
             ].map((item) => (
               <button
                 key={item.link}
@@ -221,7 +210,6 @@ export default function DropsPage() {
             ))}
           </motion.div>
         )}
-
         <motion.img
           onClick={() => {
             playNavClick();
@@ -240,13 +228,11 @@ export default function DropsPage() {
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
-
         @keyframes prismShift {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
-
         .glow-halo {
           pointer-events: none;
           border: 2px solid rgba(213, 179, 255, 0.6);
@@ -255,22 +241,18 @@ export default function DropsPage() {
                       0 0 14px rgba(213, 179, 255, 0.3);
           animation: haloPulse 3s ease-in-out infinite;
         }
-
         @keyframes haloPulse {
           0%, 100% { opacity: 0.7; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
         }
-
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
-
         @keyframes shimmerPulse {
           0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
           50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
-
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
