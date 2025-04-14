@@ -20,9 +20,12 @@ export default function EnterPage() {
 
     let index = 0;
     const interval = setInterval(() => {
-      setTypedText((prev) => prev + fullText[index]);
-      index++;
-      if (index === fullText.length) clearInterval(interval);
+      setTypedText((prev) => {
+        const next = fullText[index];
+        index++;
+        if (index >= fullText.length) clearInterval(interval);
+        return prev + next;
+      });
     }, 35);
 
     return () => clearInterval(interval);
@@ -47,10 +50,10 @@ export default function EnterPage() {
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* BACKGROUND GRADIENT */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* AURORA OVERLAY */}
+      {/* AURORA */}
       <motion.div
         className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08)_0%,transparent_60%)]"
         animate={{ opacity: [0.3, 0.5, 0.3] }}
@@ -99,9 +102,11 @@ export default function EnterPage() {
           <h1 className="text-3xl md:text-5xl font-bold tracking-wide prism-text animate-pulse-slow">
             Welcome to MagicDrop
           </h1>
-          <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
+          <p className="mt-4 text-base md:text-xl text-white text-shadow-strong min-h-[80px]">
             {typedText}
-            <span className="inline-block w-[1ch] animate-blink">|</span>
+            {typedText.length < fullText.length && (
+              <span className="inline-block w-[1ch] animate-blink">|</span>
+            )}
           </p>
         </div>
       </div>
@@ -153,7 +158,7 @@ export default function EnterPage() {
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* GLOBAL STYLES */}
+      {/* STYLES */}
       <style jsx global>{`
         .animated-prism {
           background: linear-gradient(
