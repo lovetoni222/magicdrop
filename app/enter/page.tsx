@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
@@ -38,30 +37,25 @@ export default function EnterPage() {
       {/* Gradient Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* Aurora Effect */}
-      <motion.div
-        className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08)_0%,transparent_60%)]"
-        animate={{ opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Star Particles */}
+      {/* Floating Symbolic Orbs (Option D) */}
       <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        {Array.from({ length: 30 }).map((_, i) => (
+        {Array.from({ length: 10 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 rounded-full bg-white/40"
+            className="absolute w-6 h-6 rounded-full bg-gradient-to-br from-purple-300 to-pink-300 opacity-70 blur-md"
             initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
+              x: `${Math.random() * 100}%`,
+              y: `${Math.random() * 100}%`,
+              scale: 0.8,
               opacity: 0,
             }}
             animate={{
-              y: "-10%",
-              opacity: [0, 0.6, 0],
+              y: ["0%", "5%", "0%"],
+              opacity: [0, 0.8, 0],
+              scale: [0.8, 1.1, 0.8],
             }}
             transition={{
-              duration: 14 + Math.random() * 8,
+              duration: 20 + Math.random() * 10,
               repeat: Infinity,
               ease: "easeInOut",
               delay: Math.random() * 5,
@@ -70,21 +64,21 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* HUD Labels */}
-      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-40">
+      {/* HUD */}
+      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-40">
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         Build 01 — Public Alpha
       </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-40 text-right">
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
         Powered by Fan Magic
       </p>
 
-      {/* Header */}
+      {/* Header Orb */}
       <div className="relative z-20 flex flex-col items-center justify-center pt-28 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold text-white text-glow-hard tracking-wide [font-family:var(--font-playfair)]">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-wide text-glow-hard [font-family:var(--font-playfair)] shimmer-text">
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white text-shadow-strong">
@@ -128,7 +122,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* Logo Toggle Button */}
+      {/* Logo Toggle */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -142,11 +136,6 @@ export default function EnterPage() {
 
       {/* Styles */}
       <style jsx global>{`
-        .text-glow-hard {
-          text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 28px rgba(213, 179, 255, 0.5),
-            0 0 48px rgba(213, 179, 255, 0.3);
-        }
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
@@ -185,6 +174,31 @@ export default function EnterPage() {
           }
           100% {
             filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+        }
+        .shimmer-text {
+          background: linear-gradient(
+            90deg,
+            #ffffff,
+            #e5dbff,
+            #ffffff,
+            #d1caff
+          );
+          background-size: 300% 300%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmerText 6s ease-in-out infinite;
+        }
+
+        @keyframes shimmerText {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
           }
         }
       `}</style>
