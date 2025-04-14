@@ -11,7 +11,6 @@ export default function EnterPage() {
   const clickAudioRef = useRef<HTMLAudioElement>(null);
   const ambientAudioRef = useRef<HTMLAudioElement>(null);
 
-  // Typewriter Effect
   useEffect(() => {
     let index = 0;
     const timer = setInterval(() => {
@@ -22,7 +21,6 @@ export default function EnterPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Audio
   useEffect(() => {
     if (ambientAudioRef.current) {
       ambientAudioRef.current.volume = 0.4;
@@ -44,15 +42,19 @@ export default function EnterPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white bg-black font-inter">
-      {/* Audio */}
+    <div className="relative h-screen w-full overflow-hidden text-white bg-black font-inter">
       <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="none" />
 
-      {/* Background Gradient */}
+      {/* Background */}
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* Header Orb */}
+      {/* HUD */}
+      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
+
+      {/* Header */}
       <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
           <h1 className="text-3xl md:text-5xl font-bold text-white font-cinzel rainbow-glow tracking-wide">
@@ -73,12 +75,9 @@ export default function EnterPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="relative z-30 mt-12 mb-20 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
+            className="relative z-30 mt-12 px-6 py-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90%] max-w-sm mx-auto shadow-2xl flex flex-col items-center gap-4"
           >
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-3 right-4 text-white/60 hover:text-white"
-            >
+            <button onClick={() => setMenuOpen(false)} className="absolute top-3 right-4 text-white/60 hover:text-white">
               <X size={18} />
             </button>
             <h2 className="text-lg font-bold text-shadow-strong">Navigate the Dropverse</h2>
@@ -100,7 +99,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* Logo Toggle */}
+      {/* Logo Button – Now below the nav menu */}
       <motion.img
         onClick={() => {
           handleClickSound();
@@ -108,22 +107,11 @@ export default function EnterPage() {
         }}
         src="/logo.png"
         alt="MagicDrop Nav"
-        className="fixed bottom-[6%] left-1/2 -translate-x-1/2 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 z-50 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+        className="relative z-40 mt-10 h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 mx-auto cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* HUD Labels */}
-      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        MAGICDROP UI
-      </p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        Build 01 — Public Alpha
-      </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
-        Powered by Fan Magic
-      </p>
-
-      {/* Global Styles */}
+      {/* Global styles */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
 
@@ -148,12 +136,8 @@ export default function EnterPage() {
         }
 
         @keyframes rainbowPulse {
-          0%, 100% {
-            text-shadow: 0 0 10px rgba(213, 179, 255, 0.5);
-          }
-          50% {
-            text-shadow: 0 0 20px rgba(213, 179, 255, 0.9);
-          }
+          0%, 100% { text-shadow: 0 0 10px rgba(213, 179, 255, 0.5); }
+          50% { text-shadow: 0 0 20px rgba(213, 179, 255, 0.9); }
         }
 
         .blinking-cursor {
