@@ -18,17 +18,29 @@ const rotateSticker = (id: string) => { setState((prev) => ({ ...prev, [id]: { .
 
 useEffect(() => { const handler = (e: WheelEvent) => { const el = (e.target as HTMLElement).closest("[data-id]"); const id = el?.getAttribute("data-id"); if (id) handleWheel(id, e); }; window.addEventListener("wheel", handler, { passive: false }); return () => window.removeEventListener("wheel", handler); }, []);
 
-return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" /> <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%), radial-gradient(circle at 70% 30%, rgba(255,255,255,0.4) 0%, transparent 60%)", backgroundSize: "150% 150%", animation: "sparkleFloat 10s ease-in-out infinite", mixBlendMode: "screen", opacity: 0.8, }} />
+return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" />
 
-{/* Header */}
+{/* Static sparkle dots behind stickers */}
+  {[...Array(10)].map((_, i) => (
+    <div
+      key={`static-sparkle-${i}`}
+      className="absolute w-2 h-2 bg-white/80 rounded-full opacity-80 blur-sm z-20 pointer-events-none"
+      style={{
+        top: `${10 + i * 7}%`,
+        left: `${(i % 2 === 0 ? 20 : 70) + (i % 3) * 3}%`,
+      }}
+    />
+  ))}
+
+  {/* Header */}
   <motion.div
     initial={{ opacity: 0, y: -20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 1 }}
-    className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
+    className="relative z-30 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
   >
-    <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-      <h1 className="text-3xl md:text-5xl font-bold shimmer text-glow tracking-wide font-cinzel">
+    <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_20px_rgba(213,179,255,0.2)] max-w-xl">
+      <h1 className="text-3xl md:text-5xl font-bold text-white tracking-wide font-cinzel">
         Welcome to MagicDrop
       </h1>
       <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">

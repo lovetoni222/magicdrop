@@ -8,4 +8,6 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-};
+};git add tailwind.config.js
+git commit -m "Add safelist for sparkle classes to prevent purge"
+git push
