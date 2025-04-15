@@ -95,7 +95,6 @@ export default function EnterPage() {
     window.addEventListener("wheel", handler, { passive: false });
     return () => window.removeEventListener("wheel", handler);
   }, []);
-
   return (
     <div
       className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none"
@@ -111,7 +110,7 @@ export default function EnterPage() {
       <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
           <motion.h1
-            className="text-3xl md:text-5xl font-bold tracking-wide font-cinzel rainbow-header animate-pulse"
+            className="text-3xl md:text-5xl font-bold tracking-wide font-cinzel chrome-text animate-pulse"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
@@ -178,7 +177,7 @@ export default function EnterPage() {
         );
       })}
 
-      {/* Logo Nav Toggle */}
+      {/* Logo Toggle */}
       <motion.img
         onClick={() => {
           clickAudioRef.current?.play().catch(() => {});
@@ -234,13 +233,16 @@ export default function EnterPage() {
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
 
       <style jsx global>{`
-        .rainbow-header {
-          background: linear-gradient(90deg, #f472b6, #c084fc, #60a5fa, #fcd34d, #f472b6);
-          background-size: 400% 400%;
+        .chrome-text {
+          background: linear-gradient(135deg, #fff, #d1d5db, #6b7280);
+          background-size: 200% 200%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: shimmerText 6s ease-in-out infinite;
-          text-shadow: 0 0 20px rgba(213, 179, 255, 0.5);
+          animation: shimmerText 5s ease-in-out infinite;
+          text-shadow:
+            0 1px 1px rgba(255, 255, 255, 0.6),
+            0 2px 2px rgba(0, 0, 0, 0.2),
+            0 4px 4px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes shimmerText {
@@ -269,10 +271,6 @@ export default function EnterPage() {
           0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
           50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-        }
-
-        .text-glow {
-          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 14px rgba(213, 179, 255, 0.4);
         }
 
         .text-shadow-strong {
