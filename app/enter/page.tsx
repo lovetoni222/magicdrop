@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Mail, Users, Star, X, RotateCcw } from "lucide-react";
+import { Sparkles, Mail, Users, Star, X, RotateCcw, Camera } from "lucide-react";
+import html2canvas from "html2canvas";
 
 const stickers = [
   { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
@@ -86,6 +87,14 @@ export default function EnterPage() {
     }));
   };
 
+  const captureScreenshot = async () => {
+    const canvas = await html2canvas(document.body, { useCORS: true });
+    const link = document.createElement("a");
+    link.download = "magicdrop-remix.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  };
+
   useEffect(() => {
     const handler = (e: WheelEvent) => {
       const el = (e.target as HTMLElement).closest("[data-id]");
@@ -121,61 +130,81 @@ export default function EnterPage() {
             Customize the dropverse. Move, shape, and remix your world. Tap to play.
           </p>
         </div>
+
+        <button
+          onClick={captureScreenshot}
+          className="flex items-center gap-2 text-sm px-4 py-2 border border-white/20 text-white hover:text-purple-300 hover:border-purple-300 rounded-full mt-2 transition z-30"
+        >
+          <Camera size={16} /> Save My Mix
+        </button>
       </div>
 
       {/* Stickers */}
-      {stickers.map((s) => {
-        const isActive = active === s.id;
-        const { x, y, scale, rotation } = state[s.id];
-        return (
-          <motion.div
-            key={s.id}
-            data-id={s.id}
-            drag
-            dragMomentum={false}
-            dragElastic={0.1}
-            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-            animate={{ x, y, scale, rotate: rotation }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive(s.id);
-              toggleAudio(s.id);
-            }}
-            className="absolute select-none cursor-pointer z-30"
-            style={{ width: 64, height: 64 }}
-          >
-            <img src={s.image} alt={s.label} className="w-full h-full object-contain" draggable={false} />
-            <audio
-              ref={(el) => {
-                audioRefs.current[s.id] = el;
+      <AnimatePresence>
+        {stickers.map((s, i) => {
+          const isActive = active === s.id;
+          const { x, y, scale, rotation } = state[s.id];
+          return (
+            <motion.div
+              key={s.id}
+              data-id={s.id}
+              drag
+              dragMomentum={false}
+              dragElastic={0.1}
+              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ x, y, scale, rotate: rotation, opacity: 1 }}
+              transition={{ delay: i * 0.06, type: "spring" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActive(s.id);
+                toggleAudio(s.id);
               }}
-              src={s.sound}
-              preload="auto"
-            />
-            {isActive && (
-              <>
-                <div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg" />
-                <motion.div
-                  className="w-4 h-4 bg-white absolute bottom-0 right-0 z-40 rounded-full cursor-nesw-resize"
-                  drag
-                  dragMomentum={false}
-                  onDrag={(e, info) => handleResizeDrag(s.id, info.delta.x, info.delta.y)}
-                  style={{ touchAction: "none" }}
-                />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    rotateSticker(s.id);
-                  }}
-                  className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 z-40 text-white/70 hover:text-white"
-                >
-                  <RotateCcw size={16} />
-                </button>
-              </>
-            )}
-          </motion.div>
-        );
-      })}
+              className={`absolute select-none cursor-pointer z-30 ${
+                isActive ? "shadow-2xl ring-1 ring-white/20" : ""
+              }`}
+              style={{ width: 64, height: 64 }}
+            >
+              <img
+                src={s.image}
+                alt={s.label}
+                className={`w-full h-full object-contain ${
+                  active === s.id ? "drag-glow" : ""
+                }`}
+                draggable={false}
+              />
+              <audio
+                ref={(el) => {
+                  audioRefs.current[s.id] = el;
+                }}
+                src={s.sound}
+                preload="auto"
+              />
+              {isActive && (
+                <>
+                  <motion.div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg" />
+                  <motion.div
+                    className="w-4 h-4 bg-white absolute bottom-0 right-0 z-40 rounded-full cursor-nesw-resize"
+                    drag
+                    dragMomentum={false}
+                    onDrag={(e, info) => handleResizeDrag(s.id, info.delta.x, info.delta.y)}
+                    style={{ touchAction: "none" }}
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      rotateSticker(s.id);
+                    }}
+                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 z-40 text-white/70 hover:text-white"
+                  >
+                    <RotateCcw size={16} />
+                  </button>
+                </>
+              )}
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
 
       {/* Logo Toggle */}
       <motion.img
@@ -234,15 +263,14 @@ export default function EnterPage() {
 
       <style jsx global>{`
         .chrome-text {
-          background: linear-gradient(135deg, #fff, #d1d5db, #6b7280);
+          background: linear-gradient(135deg, #ffffff, #d1d5db, #6b7280);
           background-size: 200% 200%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           animation: shimmerText 5s ease-in-out infinite;
-          text-shadow:
-            0 1px 1px rgba(255, 255, 255, 0.6),
-            0 2px 2px rgba(0, 0, 0, 0.2),
-            0 4px 4px rgba(0, 0, 0, 0.2);
+          text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6),
+                       0 2px 2px rgba(0, 0, 0, 0.2),
+                       0 4px 4px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes shimmerText {
@@ -252,7 +280,7 @@ export default function EnterPage() {
         }
 
         .animated-prism {
-          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background: linear-gradient(135deg, #e879f9, #a855f7, #60a5fa, #38bdf8, #22d3ee);
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
@@ -271,6 +299,10 @@ export default function EnterPage() {
           0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
           50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+
+        .drag-glow {
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
         }
 
         .text-shadow-strong {

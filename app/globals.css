@@ -169,3 +169,20 @@ body.sparkle-effect::after {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+.chrome-text {
+  background: linear-gradient(135deg, #fff, #d1d5db, #6b7280);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 5s ease-in-out infinite;
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.6),
+    0 2px 2px rgba(0, 0, 0, 0.2),
+    0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes shimmerText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
