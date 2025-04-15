@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X, RotateCcw } from "lucide-react";
-import "../globals.css"; // Ensure global CSS is linked
+import "../globals.css"; // Ensure global CSS is linked properly
 
-// Sticker list
 const stickers = [
   { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
   { id: "hip-hop", label: "Hip-Hop", image: "/icons/hip-hop.png", sound: "/hip-hop.mp3" },
@@ -26,7 +25,6 @@ export default function EnterPage() {
   const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
   const clickAudioRef = useRef<HTMLAudioElement>(null);
 
-  // Sticker states for movement, scale, and rotation
   const [state, setState] = useState(() =>
     stickers.reduce((acc, s) => {
       acc[s.id] = {
@@ -42,7 +40,6 @@ export default function EnterPage() {
   const toggleAudio = (id: string) => {
     const audio = audioRefs.current[id];
     if (!audio) return;
-
     if (playing === id) {
       audio.pause();
       audio.currentTime = 0;
@@ -88,7 +85,6 @@ export default function EnterPage() {
       if (id) handleWheel(id, e);
     };
     window.addEventListener("wheel", handler, { passive: false });
-
     return () => window.removeEventListener("wheel", handler);
   }, []);
 
@@ -117,7 +113,7 @@ export default function EnterPage() {
         className="relative z-30 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
       >
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_20px_rgba(213,179,255,0.2)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold text-white tracking-wide" style={{ fontFamily: 'Rampart One, sans-serif' }}>
+          <h1 className="font-rampart-one text-5xl font-bold text-white tracking-wide">
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">
