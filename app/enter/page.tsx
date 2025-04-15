@@ -107,7 +107,7 @@ export default function EnterPage() {
       }}
     >
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
-      <div className="absolute inset-0 z-0 bg-[url('/sparkle.gif')] bg-cover opacity-10 animate-pulse" />
+      <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* Header */}
       <motion.div
@@ -182,7 +182,7 @@ export default function EnterPage() {
         );
       })}
 
-      {/* Nav Toggle */}
+      {/* Nav Button */}
       <motion.img
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -235,12 +235,8 @@ export default function EnterPage() {
 
       {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        Build 01 — Public Alpha
-      </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
-        Powered by Fan Magic
-      </p>
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
     </div>
   );
 }
