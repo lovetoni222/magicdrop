@@ -1,5 +1,5 @@
 @import "tailwindcss"; 
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap'); /* Rampart One */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
 
 /* THEME */
@@ -31,12 +31,8 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-.font-fredoka {
-  font-family: 'Fredoka One', sans-serif;
-}
-
-.header {
-  font-family: 'Fredoka One', sans-serif; /* Apply Fredoka to header */
+.font-rampart-one {
+  font-family: 'Rampart One', sans-serif;
 }
 
 .text-shadow-strong {
