@@ -82,7 +82,9 @@ export default function EnterPage() {
       {stickers.map((s) => (
         <audio
           key={s.id}
-          ref={(el) => (audioRefs.current[s.id] = el)}
+          ref={(el) => {
+            audioRefs.current[s.id] = el;
+          }}
           src={s.sound}
           preload="auto"
         />
@@ -116,7 +118,7 @@ export default function EnterPage() {
             drag
             dragConstraints={boardRef}
             dragElastic={0.1}
-            dragTransition={{ bounceStiffness: 400, bounceDamping: 15 }}
+            dragTransition={{ bounceStiffness: 400, bounceDamping: 20, power: 0 }}
             animate={positions[s.id]}
             onClick={() => toggleStickerSound(s.id)}
             onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
@@ -138,7 +140,7 @@ export default function EnterPage() {
         ))}
       </div>
 
-      {/* Nav Toggle */}
+      {/* Logo Toggle */}
       <motion.img
         onClick={() => {
           clickAudioRef.current?.play().catch(() => {});
@@ -195,6 +197,33 @@ export default function EnterPage() {
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
         Powered by Fan Magic
       </p>
+
+      <style jsx global>{`
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+        @keyframes prismShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+        @keyframes shimmerPulse {
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+        .text-glow {
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 14px rgba(213, 179, 255, 0.4);
+        }
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+      `}</style>
     </div>
   );
 }
