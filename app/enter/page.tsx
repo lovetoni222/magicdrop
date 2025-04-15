@@ -18,7 +18,7 @@ const rotateSticker = (id: string) => { setState((prev) => ({ ...prev, [id]: { .
 
 useEffect(() => { const handler = (e: WheelEvent) => { const el = (e.target as HTMLElement).closest("[data-id]"); const id = el?.getAttribute("data-id"); if (id) handleWheel(id, e); }; window.addEventListener("wheel", handler, { passive: false }); return () => window.removeEventListener("wheel", handler); }, []);
 
-return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" /> <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "rgba(255, 255, 255, 0.3)", mixBlendMode: "overlay", }} />
+return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" />
 
 {/* Header */}
   <motion.div
@@ -27,6 +27,15 @@ return ( <div className="relative min-h-screen w-full overflow-hidden bg-black t
     transition={{ duration: 1 }}
     className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
   >
+    {/* Test overlay inside header */}
+    <div
+      className="absolute inset-0 z-10"
+      style={{
+        background: "rgba(255, 0, 0, 0.2)",
+        mixBlendMode: "overlay",
+      }}
+    />
+
     <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
       <h1 className="text-3xl md:text-5xl font-bold shimmer text-glow tracking-wide font-cinzel">
         Welcome to MagicDrop
