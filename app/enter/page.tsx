@@ -9,39 +9,50 @@ type Sticker = {
   label: string;
   image: string;
   sound: string;
-  x: number;
-  y: number;
-  scale?: number;
-  rotation?: number;
 };
 
 const stickers: Sticker[] = [
-  { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3", x: 50, y: 360 },
-  { id: "hiphop", label: "Hip-Hop", image: "/icons/hip-hop.png", sound: "/hip-hop.mp3", x: 180, y: 250 },
-  { id: "electronic", label: "Electronic", image: "/icons/electronic.png", sound: "/electronic.mp3", x: 300, y: 420 },
-  { id: "rock", label: "Rock", image: "/icons/rock.png", sound: "/rock.mp3", x: 450, y: 320 },
-  { id: "house", label: "House", image: "/icons/house.png", sound: "/house.mp3", x: 160, y: 500 },
-  { id: "reggaeton", label: "Reggaeton", image: "/icons/reggaeton.png", sound: "/reggaeton.mp3", x: 600, y: 200 },
-  { id: "kpop", label: "K-Pop", image: "/icons/kpop.png", sound: "/kpop.mp3", x: 80, y: 520 },
-  { id: "indie", label: "Indie", image: "/icons/indie.png", sound: "/indie.mp3", x: 240, y: 320 },
-  { id: "trap", label: "Trap", image: "/icons/trap.png", sound: "/trap.mp3", x: 420, y: 180 },
-  { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3", x: 500, y: 450 },
+  { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
+  { id: "hip-hop", label: "Hip-Hop", image: "/icons/hip-hop.png", sound: "/hip-hop.mp3" },
+  { id: "electronic", label: "Electronic", image: "/icons/electronic.png", sound: "/electronic.mp3" },
+  { id: "rock", label: "Rock", image: "/icons/rock.png", sound: "/rock.mp3" },
+  { id: "house", label: "House", image: "/icons/house.png", sound: "/house.mp3" },
+  { id: "reggaeton", label: "Reggaeton", image: "/icons/reggaeton.png", sound: "/reggaeton.mp3" },
+  { id: "kpop", label: "K-Pop", image: "/icons/kpop.png", sound: "/kpop.mp3" },
+  { id: "indie", label: "Indie", image: "/icons/indie.png", sound: "/indie.mp3" },
+  { id: "trap", label: "Trap", image: "/icons/trap.png", sound: "/trap.mp3" },
+  { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3" },
 ];
+
+type StickerState = {
+  x: number;
+  y: number;
+};
 
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [playing, setPlaying] = useState<string | null>(null);
-  const [layout, setLayout] = useState<Record<string, Sticker>>({});
   const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
   const clickAudioRef = useRef<HTMLAudioElement>(null);
+  const [state, setState] = useState<Record<string, StickerState>>({});
+  const [mounted, setMounted] = useState(false);
 
+  // Sticker initial layout
   useEffect(() => {
-    const stickerState: Record<string, Sticker> = {};
-    stickers.forEach((s) => {
-      stickerState[s.id] = { ...s, scale: 1, rotation: 0 };
+    const layout: Record<string, StickerState> = {};
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    stickers.forEach((s, i) => {
+      layout[s.id] = {
+        x: Math.floor((screenWidth / 5) * (i % 5)),
+        y: Math.floor((screenHeight / 3) * Math.floor(i / 5)) + 240,
+      };
     });
-    setLayout(stickerState);
+
+    setState(layout);
+    setMounted(true);
   }, []);
 
   const toggleAudio = (id: string) => {
@@ -63,94 +74,69 @@ export default function EnterPage() {
     }
   };
 
-  const handleWheel = (id: string, e: WheelEvent) => {
-    setLayout((prev) => {
-      const sticker = prev[id];
-      const newScale = Math.max(0.5, Math.min(2, (sticker.scale || 1) + e.deltaY * -0.001));
-      return {
-        ...prev,
-        [id]: { ...sticker, scale: newScale },
-      };
-    });
-  };
-
-  useEffect(() => {
-    const handler = (e: WheelEvent) => {
-      const el = (e.target as HTMLElement).closest("[data-id]");
-      const id = el?.getAttribute("data-id");
-      if (id) handleWheel(id, e);
-    };
-    window.addEventListener("wheel", handler, { passive: false });
-    return () => window.removeEventListener("wheel", handler);
-  }, []);
-
   return (
-    <div className="relative min-h-screen w-full overflow-hidden text-white font-inter touch-none bg-black">
+    <div
+      className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter"
+      onClick={(e) => {
+        const target = (e.target as HTMLElement).closest("[data-id]");
+        if (!target) setActive(null);
+      }}
+    >
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* Header */}
-      <div className="relative z-20 flex flex-col items-center text-center px-4 pt-16 space-y-4">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-wide text-white text-shadow-strong [font-family:var(--font-playfair)]">
-          Welcome to
+      <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
+        <h1 className="text-4xl md:text-5xl font-bold font-cinzel text-white text-shadow-strong">
+          Welcome to <img src="/logo.png" alt="MagicDrop" className="inline-block h-10 ml-2" />
         </h1>
-        <motion.img
-          src="/logo.png"
-          alt="MagicDrop"
-          className="h-24 w-auto shimmer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        />
-        <p className="text-base md:text-lg max-w-md mt-2 text-white/90 text-shadow-strong">
+        <p className="text-base md:text-lg text-white text-shadow-strong max-w-md">
           Customize the Dropverse. Move, shape, and remix your world. Tap to play.
         </p>
       </div>
 
       {/* Stickers */}
-      <div className="absolute inset-0 z-10">
-        {Object.values(layout).map((s, i) => (
-          <motion.div
-            key={s.id}
-            data-id={s.id}
-            drag
-            dragMomentum={false}
-            dragElastic={0.2}
-            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-            animate={{
-              x: s.x,
-              y: s.y,
-              scale: s.scale,
-              rotate: s.rotation,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive(s.id);
-              toggleAudio(s.id);
-            }}
-            className={`absolute z-30 select-none cursor-pointer ${
-              active === s.id ? "drop-shadow-lg" : ""
-            }`}
-            style={{ width: 70, height: 70 }}
-          >
-            <img
-              src={s.image}
-              alt={s.label}
-              className="w-full h-full object-contain"
-              draggable={false}
-            />
-            <audio
-              ref={(el) => {
-                audioRefs.current[s.id] = el;
-              }}
-              src={s.sound}
-              preload="auto"
-            />
-          </motion.div>
-        ))}
-      </div>
+      {mounted && (
+        <AnimatePresence>
+          {stickers.map((s) => {
+            const isActive = active === s.id;
+            const { x, y } = state[s.id];
+            return (
+              <motion.div
+                key={s.id}
+                data-id={s.id}
+                drag
+                dragConstraints={{ left: 0, top: 0, right: window.innerWidth - 64, bottom: window.innerHeight - 64 }}
+                dragMomentum={false}
+                animate={{ x, y }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActive(s.id);
+                  toggleAudio(s.id);
+                }}
+                className={`absolute z-30 cursor-pointer ${isActive ? "ring-2 ring-white/30" : ""}`}
+                style={{ width: 64, height: 64 }}
+              >
+                <img
+                  src={s.image}
+                  alt={s.label}
+                  className="w-full h-full object-contain"
+                  draggable={false}
+                />
+                <audio
+                  ref={(el) => {
+                    audioRefs.current[s.id] = el;
+                  }}
+                  src={s.sound}
+                  preload="auto"
+                />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      )}
 
-      {/* Nav Button */}
+      {/* Logo Nav Toggle */}
       <motion.img
         onClick={() => setMenuOpen(!menuOpen)}
         src="/logo.png"
@@ -159,7 +145,7 @@ export default function EnterPage() {
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* Menu */}
+      {/* Nav Menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -200,8 +186,18 @@ export default function EnterPage() {
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
 
       <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
+
+        .font-cinzel {
+          font-family: 'Cinzel', serif;
+        }
+
+        .font-inter {
+          font-family: 'Inter', sans-serif;
+        }
+
         .animated-prism {
-          background: linear-gradient(135deg, #f472b6, #a855f7, #60a5fa, #38bdf8, #22d3ee);
+          background: linear-gradient(135deg, #e879f9, #a855f7, #60a5fa, #38bdf8, #22d3ee);
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
