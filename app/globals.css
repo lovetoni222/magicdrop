@@ -25,13 +25,18 @@ body {
 /* TYPOGRAPHY */
 .font-cinzel {
   font-family: 'Cinzel', serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
 
 .font-rampart-one {
   font-family: 'Rampart One', sans-serif;
 }
 
 .text-shadow-strong {
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);https://magicdrop.vercel.app/enter
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
 .text-glow {

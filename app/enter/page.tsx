@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X, RotateCcw } from "lucide-react";
-import "../globals.css"; // Ensure global CSS is linked
+import "../globals.css"; // Ensure global CSS is still linked properly
 
 // Sticker list
 const stickers = [
@@ -93,7 +93,7 @@ export default function EnterPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }}>
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-rampart-one touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }}>
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
@@ -117,9 +117,7 @@ export default function EnterPage() {
         className="relative z-30 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
       >
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_20px_rgba(213,179,255,0.2)] max-w-xl">
-          <h1 className="font-rampart-one text-3xl md:text-5xl font-bold text-white tracking-wide">
-            Welcome to MagicDrop
-          </h1>
+          <h1 className="header">Welcome to MagicDrop</h1>
           <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">
             Customize the dropverse. Move, shape, and remix your world. Tap to play.
           </p>
