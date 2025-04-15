@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X, RotateCcw } from "lucide-react";
-import "../globals.css"; // Ensure global CSS is linked properly
+import "../globals.css"; // Ensure global CSS is still linked properly
 
 const stickers = [
   { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
