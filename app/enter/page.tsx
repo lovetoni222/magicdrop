@@ -31,18 +31,27 @@ export default function EnterPage() {
   const [playing, setPlaying] = useState<string | null>(null);
   const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
   const clickAudioRef = useRef<HTMLAudioElement>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const [state, setState] = useState<Record<string, StickerState>>(() =>
-    stickers.reduce((acc, s) => {
-      acc[s.id] = {
-        x: Math.floor(Math.random() * 200) + 60,
-        y: Math.floor(Math.random() * 250) + 100,
-        scale: 1,
-        rotation: 0,
-      };
-      return acc;
-    }, {} as Record<string, StickerState>)
-  );
+  const [state, setState] = useState<Record<string, StickerState>>({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const layout: Record<string, StickerState> = {};
+      stickers.forEach((s, i) => {
+        layout[s.id] = {
+          x: 80 + (i % 5) * (width / 6),
+          y: 320 + Math.floor(i / 5) * (height / 6),
+          scale: 1,
+          rotation: 0,
+        };
+      });
+      setState(layout);
+      setMounted(true);
+    }
+  }, []);
 
   const toggleAudio = (id: string) => {
     const audio = audioRefs.current[id];
@@ -117,11 +126,11 @@ export default function EnterPage() {
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* Header */}
-      <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
+      <div className="relative z-20 flex flex-col items-center justify-center pt-20 text-center px-4 space-y-6">
         <motion.img
           src="/title/welcome-magicdrop.png"
           alt="Welcome to MagicDrop"
-          className="w-full max-w-md md:max-w-lg xl:max-w-2xl mx-auto shimmer delay-[1s]"
+          className="w-full max-w-md md:max-w-lg xl:max-w-2xl mx-auto crystalline-logo"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -129,7 +138,6 @@ export default function EnterPage() {
         <p className="text-base md:text-lg text-white text-shadow-strong max-w-md">
           Customize the Dropverse. Move, shape, and remix your world. Tap to play.
         </p>
-
         <button
           onClick={captureScreenshot}
           className="flex items-center gap-2 text-sm px-4 py-2 border border-white/20 text-white hover:text-purple-300 hover:border-purple-300 rounded-full mt-2 transition z-30"
@@ -139,73 +147,54 @@ export default function EnterPage() {
       </div>
 
       {/* Stickers */}
-      <AnimatePresence>
-        {stickers.map((s, i) => {
-          const isActive = active === s.id;
-          const { x, y, scale, rotation } = state[s.id];
-          return (
-            <motion.div
-              key={s.id}
-              data-id={s.id}
-              drag
-              dragMomentum={false}
-              dragElastic={0.1}
-              dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ x, y, scale, rotate: rotation, opacity: 1 }}
-              transition={{ delay: i * 0.06, type: "spring" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setActive(s.id);
-                toggleAudio(s.id);
-              }}
-              className={`absolute select-none cursor-pointer z-30 ${
-                isActive ? "shadow-2xl ring-1 ring-white/20" : ""
-              }`}
-              style={{ width: 64, height: 64 }}
-            >
-              <img
-                src={s.image}
-                alt={s.label}
-                className={`w-full h-full object-contain ${
-                  active === s.id ? "drag-glow" : ""
-                }`}
-                draggable={false}
-              />
-              <audio
-                ref={(el) => {
-                  audioRefs.current[s.id] = el;
+      {mounted && (
+        <AnimatePresence>
+          {stickers.map((s, i) => {
+            const isActive = active === s.id;
+            const { x, y, scale, rotation } = state[s.id];
+            return (
+              <motion.div
+                key={s.id}
+                data-id={s.id}
+                drag
+                dragMomentum={false}
+                dragElastic={0.1}
+                dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ x, y, scale, rotate: rotation, opacity: 1 }}
+                transition={{ delay: i * 0.06, type: "spring" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActive(s.id);
+                  toggleAudio(s.id);
                 }}
-                src={s.sound}
-                preload="auto"
-              />
-              {isActive && (
-                <>
-                  <div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg" />
-                  <motion.div
-                    className="w-4 h-4 bg-white absolute bottom-0 right-0 z-40 rounded-full cursor-nesw-resize"
-                    drag
-                    dragMomentum={false}
-                    onDrag={(e, info) => handleResizeDrag(s.id, info.delta.x, info.delta.y)}
-                    style={{ touchAction: "none" }}
-                  />
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      rotateSticker(s.id);
-                    }}
-                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 z-40 text-white/70 hover:text-white"
-                  >
-                    <RotateCcw size={16} />
-                  </button>
-                </>
-              )}
-            </motion.div>
-          );
-        })}
-      </AnimatePresence>
+                className={`absolute select-none cursor-pointer z-30 ${
+                  isActive ? "shadow-2xl ring-1 ring-white/20" : ""
+                }`}
+                style={{ width: 64, height: 64 }}
+              >
+                <img
+                  src={s.image}
+                  alt={s.label}
+                  className={`w-full h-full object-contain ${
+                    active === s.id ? "drag-glow" : ""
+                  }`}
+                  draggable={false}
+                />
+                <audio
+                  ref={(el) => {
+                    audioRefs.current[s.id] = el;
+                  }}
+                  src={s.sound}
+                  preload="auto"
+                />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      )}
 
-      {/* Logo Nav Toggle */}
+      {/* Nav Logo */}
       <motion.img
         onClick={() => setMenuOpen(!menuOpen)}
         src="/logo.png"
@@ -283,6 +272,11 @@ export default function EnterPage() {
 
         .drag-glow {
           filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+        }
+
+        .crystalline-logo {
+          mix-blend-mode: lighten;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
         }
       `}</style>
     </div>
