@@ -113,7 +113,7 @@ export default function EnterPage() {
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">
-            Tap to play. Drag to arrange. Pinch or scroll to resize. Tap to rotate.
+          Customize the dropverse. Move, shape, and remix your world. Tap to play.
           </p>
         </div>
       </div>
