@@ -35,6 +35,10 @@ body {
   font-family: 'Fredoka One', sans-serif;
 }
 
+.header {
+  font-family: 'Fredoka One', sans-serif; /* Apply Fredoka to header */
+}
+
 .text-shadow-strong {
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
