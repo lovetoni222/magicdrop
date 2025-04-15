@@ -95,6 +95,7 @@ export default function EnterPage() {
     window.addEventListener("wheel", handler, { passive: false });
     return () => window.removeEventListener("wheel", handler);
   }, []);
+
   return (
     <div
       className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none"
@@ -109,11 +110,16 @@ export default function EnterPage() {
       {/* Header */}
       <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl">
-          <h1 className="text-3xl md:text-5xl font-bold text-white text-glow tracking-wide font-cinzel">
+          <motion.h1
+            className="text-3xl md:text-5xl font-bold tracking-wide font-cinzel rainbow-header animate-pulse"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
             Welcome to MagicDrop
-          </h1>
+          </motion.h1>
           <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">
-          Customize the dropverse. Move, shape, and remix your world. Tap to play.
+            Customize the dropverse. Move, shape, and remix your world. Tap to play.
           </p>
         </div>
       </div>
@@ -147,8 +153,6 @@ export default function EnterPage() {
               src={s.sound}
               preload="auto"
             />
-
-            {/* Resize & Rotate UI */}
             {isActive && (
               <>
                 <div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg" />
@@ -174,7 +178,7 @@ export default function EnterPage() {
         );
       })}
 
-      {/* Nav Toggle */}
+      {/* Logo Nav Toggle */}
       <motion.img
         onClick={() => {
           clickAudioRef.current?.play().catch(() => {});
@@ -226,12 +230,55 @@ export default function EnterPage() {
 
       {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
-      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        Build 01 — Public Alpha
-      </p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
-        Powered by Fan Magic
-      </p>
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
+
+      <style jsx global>{`
+        .rainbow-header {
+          background: linear-gradient(90deg, #f472b6, #c084fc, #60a5fa, #fcd34d, #f472b6);
+          background-size: 400% 400%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmerText 6s ease-in-out infinite;
+          text-shadow: 0 0 20px rgba(213, 179, 255, 0.5);
+        }
+
+        @keyframes shimmerText {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+
+        @keyframes prismShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerPulse {
+          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
+          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+        }
+
+        .text-glow {
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 14px rgba(213, 179, 255, 0.4);
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+      `}</style>
     </div>
   );
 }
