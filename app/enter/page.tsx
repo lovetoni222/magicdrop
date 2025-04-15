@@ -6,16 +6,16 @@ import { Sparkles, Mail, Users, Star, X, RotateCcw, Camera } from "lucide-react"
 import html2canvas from "html2canvas";
 
 const stickers = [
-  { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
-  { id: "hip-hop", label: "Hip-Hop", image: "/icons/hip-hop.png", sound: "/hip-hop.mp3" },
-  { id: "electronic", label: "Electronic", image: "/icons/electronic.png", sound: "/electronic.mp3" },
-  { id: "rock", label: "Rock", image: "/icons/rock.png", sound: "/rock.mp3" },
-  { id: "house", label: "House", image: "/icons/house.png", sound: "/house.mp3" },
-  { id: "reggaeton", label: "Reggaeton", image: "/icons/reggaeton.png", sound: "/reggaeton.mp3" },
-  { id: "kpop", label: "K-Pop", image: "/icons/kpop.png", sound: "/kpop.mp3" },
-  { id: "indie", label: "Indie", image: "/icons/indie.png", sound: "/indie.mp3" },
-  { id: "trap", label: "Trap", image: "/icons/trap.png", sound: "/trap.mp3" },
-  { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3" },
+  { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3", x: 100, y: 360 },
+  { id: "hip-hop", label: "Hip-Hop", image: "/icons/hip-hop.png", sound: "/hip-hop.mp3", x: 220, y: 420 },
+  { id: "electronic", label: "Electronic", image: "/icons/electronic.png", sound: "/electronic.mp3", x: 340, y: 480 },
+  { id: "rock", label: "Rock", image: "/icons/rock.png", sound: "/rock.mp3", x: 180, y: 560 },
+  { id: "house", label: "House", image: "/icons/house.png", sound: "/house.mp3", x: 60, y: 500 },
+  { id: "reggaeton", label: "Reggaeton", image: "/icons/reggaeton.png", sound: "/reggaeton.mp3", x: 320, y: 340 },
+  { id: "kpop", label: "K-Pop", image: "/icons/kpop.png", sound: "/kpop.mp3", x: 240, y: 600 },
+  { id: "indie", label: "Indie", image: "/icons/indie.png", sound: "/indie.mp3", x: 420, y: 400 },
+  { id: "trap", label: "Trap", image: "/icons/trap.png", sound: "/trap.mp3", x: 100, y: 480 },
+  { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3", x: 200, y: 300 },
 ];
 
 type StickerState = {
@@ -35,8 +35,8 @@ export default function EnterPage() {
   const [state, setState] = useState<Record<string, StickerState>>(() =>
     stickers.reduce((acc, s) => {
       acc[s.id] = {
-        x: Math.floor(Math.random() * 200) + 60,
-        y: Math.floor(Math.random() * 250) + 100,
+        x: s.x,
+        y: s.y,
         scale: 1,
         rotation: 0,
       };
@@ -116,12 +116,12 @@ export default function EnterPage() {
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
-      {/* Header */}
-      <div className="relative z-20 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6">
+      {/* HEADER */}
+      <div className="relative z-20 flex flex-col items-center justify-center pt-20 text-center px-4 space-y-6">
         <motion.img
           src="/title/welcome-magicdrop.png"
           alt="Welcome to MagicDrop"
-          className="w-full max-w-md md:max-w-lg xl:max-w-2xl mx-auto shimmer delay-[1s]"
+          className="w-full max-w-md md:max-w-lg xl:max-w-2xl mx-auto crystalline-logo"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -129,7 +129,6 @@ export default function EnterPage() {
         <p className="text-base md:text-lg text-white text-shadow-strong max-w-md">
           Customize the Dropverse. Move, shape, and remix your world. Tap to play.
         </p>
-
         <button
           onClick={captureScreenshot}
           className="flex items-center gap-2 text-sm px-4 py-2 border border-white/20 text-white hover:text-purple-300 hover:border-purple-300 rounded-full mt-2 transition z-30"
@@ -138,7 +137,7 @@ export default function EnterPage() {
         </button>
       </div>
 
-      {/* Stickers */}
+      {/* STICKERS */}
       <AnimatePresence>
         {stickers.map((s, i) => {
           const isActive = active === s.id;
@@ -205,7 +204,7 @@ export default function EnterPage() {
         })}
       </AnimatePresence>
 
-      {/* Logo Nav Toggle */}
+      {/* NAV TOGGLE */}
       <motion.img
         onClick={() => setMenuOpen(!menuOpen)}
         src="/logo.png"
@@ -214,7 +213,7 @@ export default function EnterPage() {
         whileTap={{ scale: 0.95 }}
       />
 
-      {/* Nav Menu */}
+      {/* NAV MENU */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -277,12 +276,17 @@ export default function EnterPage() {
           100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
         }
 
+        .drag-glow {
+          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+        }
+
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
 
-        .drag-glow {
-          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+        .crystalline-logo {
+          mix-blend-mode: lighten;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
         }
       `}</style>
     </div>
