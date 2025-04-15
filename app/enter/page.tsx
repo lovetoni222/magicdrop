@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X, RotateCcw } from "lucide-react";
-import "../globals.css"; // Ensure global CSS is still linked properly
+import "../globals.css"; // Ensure global CSS is linked properly
 
 const stickers = [
   { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
@@ -84,12 +84,12 @@ export default function EnterPage() {
       const id = el?.getAttribute("data-id");
       if (id) handleWheel(id, e);
     };
-    window.addEventListener("wheel", handler);
+    window.addEventListener("wheel", handler, { passive: false });
     return () => window.removeEventListener("wheel", handler);
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }}>
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none">
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
@@ -105,18 +105,32 @@ export default function EnterPage() {
         />
       ))}
 
-      {/* Header */}
+      {/* New Header */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
         className="relative z-30 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
       >
-        <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_20px_rgba(213,179,255,0.2)] max-w-xl">
-          <h1 className="font-kalnia-glaze text-5xl font-bold text-white tracking-wide">
-            Welcome to MagicDrop
-          </h1>
-        </div>
+        {/* Main Header */}
+        <h1 className="font-kalnia-glaze text-6xl sm:text-7xl md:text-8xl text-white font-bold tracking-wide">
+          MagicDrop
+        </h1>
+
+        {/* Subtitle */}
+        <p className="text-lg sm:text-xl md:text-2xl text-white/80 mt-4 tracking-tight">
+          Customize the dropverse. Move, shape, and remix your world.
+        </p>
+        
+        {/* Interactive Button */}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="mt-6 px-8 py-3 bg-white text-black rounded-full font-bold transition-transform"
+        >
+          Enter Dropverse
+        </motion.button>
       </motion.div>
 
       {/* Stickers */}
@@ -229,6 +243,7 @@ export default function EnterPage() {
       {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
       <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
     </div>
   );
 }

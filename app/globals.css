@@ -1,5 +1,6 @@
 @import "tailwindcss"; 
 @import url('https://fonts.googleapis.com/css2?family=Kalnia+Glaze&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
 /* THEME */
 :root {
@@ -31,7 +32,7 @@ body {
 }
 
 .font-kalnia-glaze {
-  font-family: 'Kalnia Glaze', sans-serif; /* Applying Kalnia Glaze font */
+  font-family: 'Kalnia Glaze', sans-serif;
 }
 
 .text-shadow-strong {
@@ -146,6 +147,7 @@ body {
 .sparkle-18 { top: 90%; left: 90%; animation-delay: 9s; }
 .sparkle-19 { top: 12%; left: 45%; animation-delay: 9.5s; }
 
+/* Tailwind Imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
