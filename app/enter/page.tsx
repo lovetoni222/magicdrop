@@ -54,7 +54,11 @@ export default function EnterPage() {
     }
   };
 
-  const handleDragEnd = (id: string, _, info: { point: { x: number; y: number } }) => {
+  const handleDragEnd = (
+    id: string,
+    _e: MouseEvent | TouchEvent | PointerEvent,
+    info: { point: { x: number; y: number } }
+  ) => {
     const bounds = boardRef.current?.getBoundingClientRect();
     if (!bounds) return;
     const x = Math.min(bounds.width - 80, Math.max(0, info.point.x - bounds.left - 32));
@@ -68,29 +72,9 @@ export default function EnterPage() {
     window.location.href = url;
   };
 
-  const handleWheel = (id: string, event: WheelEvent) => {
-    setPositions((prev) => {
-      const newScale = Math.max(0.6, Math.min(2, prev[id].scale + event.deltaY * -0.001));
-      return { ...prev, [id]: { ...prev[id], scale: newScale } };
-    });
-  };
-
-  useEffect(() => {
-    const handle = (e: WheelEvent) => {
-      const el = e.target as HTMLElement;
-      const match = el?.closest("[data-id]");
-      if (match) {
-        const id = match.getAttribute("data-id");
-        if (id) handleWheel(id, e);
-      }
-    };
-    document.addEventListener("wheel", handle, { passive: false });
-    return () => document.removeEventListener("wheel", handle);
-  }, []);
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter">
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
-
       <div className="absolute inset-0 z-0 animated-prism" />
 
       {/* Header */}
@@ -108,7 +92,7 @@ export default function EnterPage() {
         </p>
       </div>
 
-      {/* Sticker Canvas */}
+      {/* Sticker Board */}
       <div
         ref={boardRef}
         className="relative z-10 mx-auto mt-12 mb-36 w-full max-w-lg h-[340px] border border-white/10 rounded-3xl backdrop-blur-sm bg-white/5 overflow-hidden"
@@ -209,51 +193,6 @@ export default function EnterPage() {
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
         Powered by Fan Magic
       </p>
-
-      <style jsx global>{`
-        .animated-prism {
-          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
-          background-size: 600% 600%;
-          animation: prismShift 30s ease infinite;
-        }
-
-        @keyframes prismShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-
-        .shimmer {
-          animation: shimmerPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmerPulse {
-          0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-          50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
-          }
-          100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-        }
-
-        .text-glow {
-          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
-            0 0 14px rgba(213, 179, 255, 0.4);
-        }
-
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-        }
-      `}</style>
     </div>
   );
 }
