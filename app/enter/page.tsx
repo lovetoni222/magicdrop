@@ -4,33 +4,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Users, Star, X } from "lucide-react";
 
 const stickers = [
-  { id: "pop", icon: "🎧", sound: "/pop.mp3", x: 40, y: 120 },
-  { id: "hiphop", icon: "🎤", sound: "/hip-hop.mp3", x: 200, y: 80 },
-  { id: "electronic", icon: "🎛️", sound: "/electronic.mp3", x: 120, y: 180 },
+  { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
+  { id: "hip-hop", label: "Hip-Hop", image: "/icons/hip-hop.png", sound: "/hip-hop.mp3" },
+  { id: "electronic", label: "Electronic", image: "/icons/electronic.png", sound: "/electronic.mp3" },
+  { id: "rock", label: "Rock", image: "/icons/rock.png", sound: "/rock.mp3" },
+  { id: "house", label: "House", image: "/icons/house.png", sound: "/house.mp3" },
+  { id: "reggaeton", label: "Reggaeton", image: "/icons/reggaeton.png", sound: "/reggaeton.mp3" },
+  { id: "kpop", label: "K-Pop", image: "/icons/kpop.png", sound: "/kpop.mp3" },
+  { id: "indie", label: "Indie", image: "/icons/indie.png", sound: "/indie.mp3" },
+  { id: "trap", label: "Trap", image: "/icons/trap.png", sound: "/trap.mp3" },
+  { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3" },
 ];
 
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
   const [playing, setPlaying] = useState<string | null>(null);
-  const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
+  const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
   const boardRef = useRef<HTMLDivElement>(null);
-  const ambientAudioRef = useRef<HTMLAudioElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
-  const [positions, setPositions] = useState(() =>
-    stickers.reduce((acc, s) => {
-      acc[s.id] = { x: s.x, y: s.y };
-      return acc;
-    }, {} as Record<string, { x: number; y: number }>)
+
+  const [positions, setPositions] = useState(
+    () =>
+      stickers.reduce((acc, s, i) => {
+        acc[s.id] = {
+          x: Math.floor(Math.random() * 180) + 30,
+          y: Math.floor(Math.random() * 100) + 40,
+          scale: 1,
+        };
+        return acc;
+      }, {} as Record<string, { x: number; y: number; scale: number }>)
   );
 
-  useEffect(() => {
-    ambientAudioRef.current?.play().catch(() => {});
-  }, []);
-
-  const toggleStickerSound = (id: string) => {
+  const toggleAudio = (id: string) => {
     const audio = audioRefs.current[id];
     if (!audio) return;
-
     if (playing === id) {
       audio.pause();
       audio.currentTime = 0;
@@ -47,26 +54,12 @@ export default function EnterPage() {
     }
   };
 
-  const handleDragEnd = (
-    id: string,
-    e: MouseEvent | TouchEvent,
-    info: { point: { x: number; y: number } }
-  ) => {
-    const board = boardRef.current;
-    const boardRect = board?.getBoundingClientRect();
-    const iconSize = 64;
-    if (!board || !boardRect) return;
-
-    let x = info.point.x - boardRect.left - iconSize / 2;
-    let y = info.point.y - boardRect.top - iconSize / 2;
-
-    const maxX = board.clientWidth - iconSize;
-    const maxY = board.clientHeight - iconSize;
-
-    x = Math.max(0, Math.min(x, maxX));
-    y = Math.max(0, Math.min(y, maxY));
-
-    setPositions((prev) => ({ ...prev, [id]: { x, y } }));
+  const handleDragEnd = (id: string, _, info: { point: { x: number; y: number } }) => {
+    const bounds = boardRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const x = Math.min(bounds.width - 80, Math.max(0, info.point.x - bounds.left - 32));
+    const y = Math.min(bounds.height - 80, Math.max(0, info.point.y - bounds.top - 32));
+    setPositions((prev) => ({ ...prev, [id]: { ...prev[id], x, y } }));
   };
 
   const navigateTo = (url: string) => {
@@ -75,20 +68,28 @@ export default function EnterPage() {
     window.location.href = url;
   };
 
+  const handleWheel = (id: string, event: WheelEvent) => {
+    setPositions((prev) => {
+      const newScale = Math.max(0.6, Math.min(2, prev[id].scale + event.deltaY * -0.001));
+      return { ...prev, [id]: { ...prev[id], scale: newScale } };
+    });
+  };
+
+  useEffect(() => {
+    const handle = (e: WheelEvent) => {
+      const el = e.target as HTMLElement;
+      const match = el?.closest("[data-id]");
+      if (match) {
+        const id = match.getAttribute("data-id");
+        if (id) handleWheel(id, e);
+      }
+    };
+    document.addEventListener("wheel", handle, { passive: false });
+    return () => document.removeEventListener("wheel", handle);
+  }, []);
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter">
-      <audio ref={ambientAudioRef} src="/ambient.mp3" preload="none" loop />
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
-      {stickers.map((s) => (
-        <audio
-          key={s.id}
-          ref={(el) => {
-            audioRefs.current[s.id] = el;
-          }}
-          src={s.sound}
-          preload="auto"
-        />
-      ))}
 
       <div className="absolute inset-0 z-0 animated-prism" />
 
@@ -103,44 +104,55 @@ export default function EnterPage() {
           </p>
         </div>
         <p className="text-sm text-white/60 max-w-sm mt-2">
-          Tap & drag the icons below to remix your vibe. Each plays a trending sound — like Charli XCX, TikTok edits, and more.
+          Arrange your personal fan chart. Tap to play trending sounds. Scroll to resize. Drag to rank.
         </p>
       </div>
 
-      {/* Sticker Board */}
+      {/* Sticker Canvas */}
       <div
         ref={boardRef}
-        className="relative z-10 mx-auto mt-12 mb-24 w-full max-w-md h-[260px] border border-white/10 rounded-3xl bg-white/5 backdrop-blur-sm"
+        className="relative z-10 mx-auto mt-12 mb-36 w-full max-w-lg h-[340px] border border-white/10 rounded-3xl backdrop-blur-sm bg-white/5 overflow-hidden"
       >
         {stickers.map((s) => (
           <motion.div
             key={s.id}
+            data-id={s.id}
             drag
             dragConstraints={boardRef}
             dragElastic={0.1}
-            dragTransition={{ bounceStiffness: 400, bounceDamping: 20, power: 0 }}
-            animate={positions[s.id]}
-            onClick={() => toggleStickerSound(s.id)}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+            animate={{
+              x: positions[s.id].x,
+              y: positions[s.id].y,
+              scale: positions[s.id].scale,
+            }}
             onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
-            className="absolute text-5xl cursor-pointer hover:scale-110 transition-transform duration-200 select-none"
+            onClick={() => toggleAudio(s.id)}
+            className="absolute select-none cursor-pointer hover:scale-105 transition"
             style={{
               width: 64,
               height: 64,
-              borderRadius: "50%",
-              background: "rgba(255,255,255,0.1)",
-              boxShadow: "0 0 10px rgba(213,179,255,0.6)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               zIndex: 30,
             }}
           >
-            {s.icon}
+            <img
+              src={s.image}
+              alt={s.label}
+              className="w-full h-full object-contain"
+              draggable={false}
+            />
+            <audio
+              ref={(el) => {
+                audioRefs.current[s.id] = el;
+              }}
+              src={s.sound}
+              preload="auto"
+            />
           </motion.div>
         ))}
       </div>
 
-      {/* Logo Toggle */}
+      {/* Nav Toggle */}
       <motion.img
         onClick={() => {
           clickAudioRef.current?.play().catch(() => {});
@@ -187,7 +199,7 @@ export default function EnterPage() {
         )}
       </AnimatePresence>
 
-      {/* HUD Corner Labels */}
+      {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         MAGICDROP UI
       </p>
@@ -204,22 +216,40 @@ export default function EnterPage() {
           background-size: 600% 600%;
           animation: prismShift 30s ease infinite;
         }
+
         @keyframes prismShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
+
         .shimmer {
           animation: shimmerPulse 4s ease-in-out infinite;
         }
+
         @keyframes shimmerPulse {
-          0% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
-          50% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6)); }
-          100% { filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3)); }
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
         }
+
         .text-glow {
-          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 14px rgba(213, 179, 255, 0.4);
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+            0 0 14px rgba(213, 179, 255, 0.4);
         }
+
         .text-shadow-strong {
           text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
