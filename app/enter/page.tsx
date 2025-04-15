@@ -84,7 +84,7 @@ export default function EnterPage() {
       const id = el?.getAttribute("data-id");
       if (id) handleWheel(id, e);
     };
-    window.addEventListener("wheel", handler, { passive: false });
+    window.addEventListener("wheel", handler);
     return () => window.removeEventListener("wheel", handler);
   }, []);
 
@@ -113,7 +113,7 @@ export default function EnterPage() {
         className="relative z-30 flex flex-col items-center justify-center pt-24 text-center px-4 space-y-6"
       >
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_20px_rgba(213,179,255,0.2)] max-w-xl">
-          <h1 className="font-rampart-one text-5xl font-bold text-white tracking-wide">
+          <h1 className="font-kalnia-glaze text-5xl font-bold text-white tracking-wide">
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">

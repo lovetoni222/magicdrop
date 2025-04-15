@@ -1,6 +1,5 @@
 @import "tailwindcss"; 
-@import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap&font-display=swap'); /* Rampart One */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap&font-display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalnia+Glaze&display=swap');
 
 /* THEME */
 :root {
@@ -18,7 +17,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', sans-serif !important; /* Default font with !important */
+  font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
 
@@ -28,11 +27,11 @@ body {
 }
 
 .font-inter {
-  font-family: 'Inter', sans-serif !important; /* Apply Inter font with !important */
+  font-family: 'Inter', sans-serif;
 }
 
-.font-rampart-one {
-  font-family: 'Rampart One', sans-serif !important; /* Apply Rampart One font with !important */
+.font-kalnia-glaze {
+  font-family: 'Kalnia Glaze', sans-serif; /* Applying Kalnia Glaze font */
 }
 
 .text-shadow-strong {
@@ -95,9 +94,58 @@ body {
   }
 }
 
-/* REMOVE SPARKLE LAYER */
+/* SPARKLE LAYER */
+.sparkle-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
 
-/* Tailwind Imports */
+.sparkle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+  animation: sparkleTwinkle 3s infinite ease-in-out;
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 1;
+  }
+}
+
+.sparkle-0 { top: 10%; left: 15%; animation-delay: 0s; }
+.sparkle-1 { top: 25%; left: 60%; animation-delay: 0.5s; }
+.sparkle-2 { top: 45%; left: 35%; animation-delay: 1s; }
+.sparkle-3 { top: 80%; left: 70%; animation-delay: 1.5s; }
+.sparkle-4 { top: 65%; left: 20%; animation-delay: 2s; }
+.sparkle-5 { top: 30%; left: 85%; animation-delay: 2.5s; }
+.sparkle-6 { top: 50%; left: 10%; animation-delay: 3s; }
+.sparkle-7 { top: 75%; left: 40%; animation-delay: 3.5s; }
+.sparkle-8 { top: 20%; left: 30%; animation-delay: 4s; }
+.sparkle-9 { top: 5%; left: 90%; animation-delay: 4.5s; }
+.sparkle-10 { top: 55%; left: 55%; animation-delay: 5s; }
+.sparkle-11 { top: 35%; left: 65%; animation-delay: 5.5s; }
+.sparkle-12 { top: 85%; left: 15%; animation-delay: 6s; }
+.sparkle-13 { top: 40%; left: 25%; animation-delay: 6.5s; }
+.sparkle-14 { top: 70%; left: 50%; animation-delay: 7s; }
+.sparkle-15 { top: 15%; left: 75%; animation-delay: 7.5s; }
+.sparkle-16 { top: 60%; left: 5%; animation-delay: 8s; }
+.sparkle-17 { top: 95%; left: 35%; animation-delay: 8.5s; }
+.sparkle-18 { top: 90%; left: 90%; animation-delay: 9s; }
+.sparkle-19 { top: 12%; left: 45%; animation-delay: 9.5s; }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
