@@ -1,116 +1,103 @@
-/* Global font imports with font-display for better performance */
+@import "tailwindcss"; 
 @import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap&font-display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap&font-display=swap');
 
-/* Global Styles */
+/* THEME */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
 body {
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #000;
-  color: #fff;
-  font-size: 16px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif; /* Default font */
+  overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  font-family: 'Rampart One', sans-serif;
-}
-
-/* Ensure font sizes and font-family settings are inherited globally */
-* {
-  box-sizing: border-box;
-}
-
-html {
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-}
-
-/* Basic reset for common elements */
-a, button {
-  text-decoration: none;
-  outline: none;
-  border: none;
-  background: none;
-}
-
-/* Apply specific font family to text elements */
-.font-rampart-one {
-  font-family: 'Rampart One', sans-serif;
+/* TYPOGRAPHY */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
 }
 
 .font-inter {
   font-family: 'Inter', sans-serif;
 }
 
-/* Styling for headers to ensure Rampart One is applied */
-h1, h2, h3 {
-  font-family: 'Rampart One', sans-serif;
-  font-weight: bold;
-}
-
-/* Styling for paragraph text with Inter font */
-p {
-  font-family: 'Inter', sans-serif;
-}
-
-/* Optional: Font-weight handling */
-.font-light {
-  font-weight: 300;
-}
-
-.font-normal {
-  font-weight: 400;
-}
-
-.font-medium {
-  font-weight: 500;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-/* Add more styles if necessary for better UX */
-button, a {
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover, a:hover {
-  opacity: 0.8;
-}
-
-/* Miscellaneous elements */
-body {
-  line-height: 1.5;
-  padding: 0;
-  font-size: 18px;
-}
-
-.text-white {
-  color: white;
-}
-
-.text-black {
-  color: black;
-}
-
-.bg-black {
-  background-color: black;
-}
-
-.bg-white {
-  background-color: white;
+.font-rampart-one {
+  font-family: 'Rampart One', sans-serif !important; /* Add !important to increase specificity */
 }
 
 .text-shadow-strong {
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  body {
-    font-size: 14px;
+.text-glow {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+               0 0 14px rgba(213, 179, 255, 0.4);
+}
+
+/* SHIMMER + GLOW */
+.shimmer {
+  animation: shimmerPulse 4s ease-in-out infinite;
+}
+
+@keyframes shimmerPulse {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+  }
+  100% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
   }
 }
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 6px rgba(213, 179, 255, 0.6),
+                 0 0 10px rgba(213, 179, 255, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(213, 179, 255, 0.9),
+                 0 0 20px rgba(213, 179, 255, 0.6);
+  }
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* PRISM BACKGROUND */
+.animated-prism {
+  background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+  background-size: 600% 600%;
+  animation: prismShift 30s ease infinite;
+}
+
+@keyframes prismShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* REMOVE SPARKLE LAYER */
+
+/* Tailwind Imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
