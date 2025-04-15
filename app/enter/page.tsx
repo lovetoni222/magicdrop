@@ -18,7 +18,7 @@ const rotateSticker = (id: string) => { setState((prev) => ({ ...prev, [id]: { .
 
 useEffect(() => { const handler = (e: WheelEvent) => { const el = (e.target as HTMLElement).closest("[data-id]"); const id = el?.getAttribute("data-id"); if (id) handleWheel(id, e); }; window.addEventListener("wheel", handler, { passive: false }); return () => window.removeEventListener("wheel", handler); }, []);
 
-return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" /> <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 0%, transparent 40%), radial-gradient(circle at 80% 60%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 50% 90%, rgba(255,255,255,0.1) 0%, transparent 60%)", backgroundSize: "200% 200%", animation: "sparkleFloat 20s ease-in-out infinite", }} />
+return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" /> <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "rgba(255, 255, 255, 0.3)", mixBlendMode: "overlay", }} />
 
 {/* Header */}
   <motion.div
