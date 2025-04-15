@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Mail, Users, Star, X } from "lucide-react";
+import { Sparkles, Mail, Users, Star, X, RotateCcw } from "lucide-react";
 
 const stickers = [
   { id: "pop", label: "Pop", image: "/icons/pop.png", sound: "/pop.mp3" },
@@ -16,24 +16,30 @@ const stickers = [
   { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3" },
 ];
 
-type Pos = { x: number; y: number; scale: number };
+type StickerState = {
+  x: number;
+  y: number;
+  scale: number;
+  rotation: number;
+};
 
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
+  const [active, setActive] = useState<string | null>(null);
   const [playing, setPlaying] = useState<string | null>(null);
-  const [activeSticker, setActiveSticker] = useState<string | null>(null);
   const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
   const clickAudioRef = useRef<HTMLAudioElement>(null);
 
-  const [positions, setPositions] = useState<Record<string, Pos>>(() =>
+  const [state, setState] = useState<Record<string, StickerState>>(() =>
     stickers.reduce((acc, s) => {
       acc[s.id] = {
         x: Math.floor(Math.random() * 200) + 60,
         y: Math.floor(Math.random() * 250) + 100,
         scale: 1,
+        rotation: 0,
       };
       return acc;
-    }, {} as Record<string, Pos>)
+    }, {} as Record<string, StickerState>)
   );
 
   const toggleAudio = (id: string) => {
@@ -55,34 +61,46 @@ export default function EnterPage() {
     }
   };
 
-  const handleResize = (id: string, delta: number) => {
-    setPositions((prev) => {
-      const next = Math.max(0.5, Math.min(2, prev[id].scale + delta));
-      return { ...prev, [id]: { ...prev[id], scale: next } };
+  const handleWheel = (id: string, e: WheelEvent) => {
+    setState((prev) => {
+      const scale = Math.max(0.4, Math.min(2.2, prev[id].scale + e.deltaY * -0.001));
+      return { ...prev, [id]: { ...prev[id], scale } };
     });
   };
 
-  const deselectSticker = () => {
-    setActiveSticker(null);
+  const handleResizeDrag = (id: string, dx: number, dy: number) => {
+    const delta = (dx + dy) * 0.005;
+    setState((prev) => {
+      const scale = Math.max(0.4, Math.min(2.2, prev[id].scale + delta));
+      return { ...prev, [id]: { ...prev[id], scale } };
+    });
+  };
+
+  const rotateSticker = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        rotation: (prev[id].rotation + 90) % 360,
+      },
+    }));
   };
 
   useEffect(() => {
-    const onWheel = (e: WheelEvent) => {
+    const handler = (e: WheelEvent) => {
       const el = (e.target as HTMLElement).closest("[data-id]");
       const id = el?.getAttribute("data-id");
-      if (id) {
-        handleResize(id, e.deltaY * -0.001);
-      }
+      if (id) handleWheel(id, e);
     };
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
+    window.addEventListener("wheel", handler, { passive: false });
+    return () => window.removeEventListener("wheel", handler);
   }, []);
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter"
+      className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none"
       onClick={(e) => {
         const target = (e.target as HTMLElement).closest("[data-id]");
-        if (!target) deselectSticker();
+        if (!target) setActive(null);
       }}
     >
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
@@ -95,17 +113,15 @@ export default function EnterPage() {
             Welcome to MagicDrop
           </h1>
           <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">
-            Choose your path. Explore immersive drops, co-created stories, and artist-led worlds.
+            Tap to play. Drag to arrange. Pinch or scroll to resize. Tap to rotate.
           </p>
         </div>
-        <p className="text-sm text-white/60 max-w-sm mt-2">
-          Tap to play. Pinch or scroll to resize. Drag to arrange.
-        </p>
       </div>
 
-      {/* Sticker Canvas */}
+      {/* Stickers */}
       {stickers.map((s) => {
-        const isActive = s.id === activeSticker;
+        const isActive = active === s.id;
+        const { x, y, scale, rotation } = state[s.id];
         return (
           <motion.div
             key={s.id}
@@ -114,30 +130,16 @@ export default function EnterPage() {
             dragMomentum={false}
             dragElastic={0.1}
             dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-            animate={{
-              x: positions[s.id].x,
-              y: positions[s.id].y,
-              scale: positions[s.id].scale,
-            }}
+            animate={{ x, y, scale, rotate: rotation }}
             onClick={(e) => {
               e.stopPropagation();
+              setActive(s.id);
               toggleAudio(s.id);
-              setActiveSticker(s.id);
             }}
             className="absolute select-none cursor-pointer z-30"
-            style={{
-              width: 64,
-              height: 64,
-              transformOrigin: "center",
-              transformBox: "fill-box",
-            }}
+            style={{ width: 64, height: 64 }}
           >
-            <img
-              src={s.image}
-              alt={s.label}
-              className="w-full h-full object-contain"
-              draggable={false}
-            />
+            <img src={s.image} alt={s.label} className="w-full h-full object-contain" draggable={false} />
             <audio
               ref={(el) => {
                 audioRefs.current[s.id] = el;
@@ -145,20 +147,34 @@ export default function EnterPage() {
               src={s.sound}
               preload="auto"
             />
-            {/* Resize Handles */}
+
+            {/* Resize & Rotate UI */}
             {isActive && (
-              <div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg">
-                <div className="w-2 h-2 bg-white rounded-full absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-                <div className="w-2 h-2 bg-white rounded-full absolute top-0 right-0 translate-x-1/2 -translate-y-1/2"></div>
-                <div className="w-2 h-2 bg-white rounded-full absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></div>
-                <div className="w-2 h-2 bg-white rounded-full absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2"></div>
-              </div>
+              <>
+                <div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg" />
+                <motion.div
+                  className="w-4 h-4 bg-white absolute bottom-0 right-0 z-40 rounded-full cursor-nesw-resize"
+                  drag
+                  dragMomentum={false}
+                  onDrag={(e, info) => handleResizeDrag(s.id, info.delta.x, info.delta.y)}
+                  style={{ touchAction: "none" }}
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    rotateSticker(s.id);
+                  }}
+                  className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 z-40 text-white/70 hover:text-white"
+                >
+                  <RotateCcw size={16} />
+                </button>
+              </>
             )}
           </motion.div>
         );
       })}
 
-      {/* Logo Nav Toggle */}
+      {/* Nav Toggle */}
       <motion.img
         onClick={() => {
           clickAudioRef.current?.play().catch(() => {});
