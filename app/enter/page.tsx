@@ -16,23 +16,23 @@ const stickers = [
   { id: "experimental", label: "Experimental", image: "/icons/experimental.png", sound: "/experimental.mp3" },
 ];
 
+type Pos = { x: number; y: number; scale: number };
+
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
   const [playing, setPlaying] = useState<string | null>(null);
   const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
-  const boardRef = useRef<HTMLDivElement>(null);
   const clickAudioRef = useRef<HTMLAudioElement>(null);
 
-  const [positions, setPositions] = useState(
-    () =>
-      stickers.reduce((acc, s, i) => {
-        acc[s.id] = {
-          x: Math.floor(Math.random() * 180) + 30,
-          y: Math.floor(Math.random() * 100) + 40,
-          scale: 1,
-        };
-        return acc;
-      }, {} as Record<string, { x: number; y: number; scale: number }>)
+  const [positions, setPositions] = useState<Record<string, Pos>>(() =>
+    stickers.reduce((acc, s) => {
+      acc[s.id] = {
+        x: Math.floor(Math.random() * 200) + 60,
+        y: Math.floor(Math.random() * 250) + 100,
+        scale: 1,
+      };
+      return acc;
+    }, {} as Record<string, Pos>)
   );
 
   const toggleAudio = (id: string) => {
@@ -54,24 +54,22 @@ export default function EnterPage() {
     }
   };
 
-  const handleDragEnd = (
-    id: string,
-    _e: MouseEvent | TouchEvent | PointerEvent,
-    info: { point: { x: number; y: number } }
-  ) => {
-    const bounds = boardRef.current?.getBoundingClientRect();
-    if (!bounds) return;
-    const x = Math.min(bounds.width - 80, Math.max(0, info.point.x - bounds.left - 32));
-    const y = Math.min(bounds.height - 80, Math.max(0, info.point.y - bounds.top - 32));
-    setPositions((prev) => ({ ...prev, [id]: { ...prev[id], x, y } }));
+  const handleWheel = (id: string, e: WheelEvent) => {
+    setPositions((prev) => {
+      const newScale = Math.max(0.5, Math.min(2, prev[id].scale + e.deltaY * -0.001));
+      return { ...prev, [id]: { ...prev[id], scale: newScale } };
+    });
   };
 
-  const navigateTo = (url: string) => {
-    clickAudioRef.current?.play().catch(() => {});
-    setMenuOpen(false);
-    window.location.href = url;
-  };
-
+  useEffect(() => {
+    const handler = (e: WheelEvent) => {
+      const el = (e.target as HTMLElement).closest("[data-id]");
+      const id = el?.getAttribute("data-id");
+      if (id) handleWheel(id, e);
+    };
+    window.addEventListener("wheel", handler, { passive: false });
+    return () => window.removeEventListener("wheel", handler);
+  }, []);
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter">
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
@@ -88,55 +86,45 @@ export default function EnterPage() {
           </p>
         </div>
         <p className="text-sm text-white/60 max-w-sm mt-2">
-          Arrange your personal fan chart. Tap to play trending sounds. Scroll to resize. Drag to rank.
+          Tap to play a sound. Scroll to resize. Drag to decorate.
         </p>
       </div>
 
-      {/* Sticker Board */}
-      <div
-        ref={boardRef}
-        className="relative z-10 mx-auto mt-12 mb-36 w-full max-w-lg h-[340px] border border-white/10 rounded-3xl backdrop-blur-sm bg-white/5 overflow-hidden"
-      >
-        {stickers.map((s) => (
-          <motion.div
-            key={s.id}
-            data-id={s.id}
-            drag
-            dragConstraints={boardRef}
-            dragElastic={0.1}
-            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-            animate={{
-              x: positions[s.id].x,
-              y: positions[s.id].y,
-              scale: positions[s.id].scale,
+      {/* Free Sticker Canvas */}
+      {stickers.map((s) => (
+        <motion.div
+          key={s.id}
+          data-id={s.id}
+          drag
+          dragMomentum={false}
+          dragElastic={0.1}
+          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+          animate={{
+            x: positions[s.id].x,
+            y: positions[s.id].y,
+            scale: positions[s.id].scale,
+          }}
+          onClick={() => toggleAudio(s.id)}
+          className="absolute select-none cursor-pointer hover:scale-105 transition-transform duration-200 z-30"
+          style={{ width: 64, height: 64 }}
+        >
+          <img
+            src={s.image}
+            alt={s.label}
+            className="w-full h-full object-contain"
+            draggable={false}
+          />
+          <audio
+            ref={(el) => {
+              audioRefs.current[s.id] = el;
             }}
-            onDragEnd={(e, info) => handleDragEnd(s.id, e, info)}
-            onClick={() => toggleAudio(s.id)}
-            className="absolute select-none cursor-pointer hover:scale-105 transition"
-            style={{
-              width: 64,
-              height: 64,
-              zIndex: 30,
-            }}
-          >
-            <img
-              src={s.image}
-              alt={s.label}
-              className="w-full h-full object-contain"
-              draggable={false}
-            />
-            <audio
-              ref={(el) => {
-                audioRefs.current[s.id] = el;
-              }}
-              src={s.sound}
-              preload="auto"
-            />
-          </motion.div>
-        ))}
-      </div>
+            src={s.sound}
+            preload="auto"
+          />
+        </motion.div>
+      ))}
 
-      {/* Nav Toggle */}
+      {/* Logo Nav Toggle */}
       <motion.img
         onClick={() => {
           clickAudioRef.current?.play().catch(() => {});
@@ -173,7 +161,10 @@ export default function EnterPage() {
             ].map((item) => (
               <button
                 key={item.link}
-                onClick={() => navigateTo(item.link)}
+                onClick={() => {
+                  clickAudioRef.current?.play().catch(() => {});
+                  window.location.href = item.link;
+                }}
                 className="w-full text-white text-sm font-semibold px-4 py-2 rounded-full border border-white/30 bg-white/10 hover:bg-purple-600 hover:border-purple-600 hover:text-white transition"
               >
                 {item.icon} {item.label}
@@ -184,15 +175,58 @@ export default function EnterPage() {
       </AnimatePresence>
 
       {/* HUD */}
-      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
-        MAGICDROP UI
-      </p>
+      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
       <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">
         Build 01 — Public Alpha
       </p>
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
         Powered by Fan Magic
       </p>
+
+      <style jsx global>{`
+        .animated-prism {
+          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+          background-size: 600% 600%;
+          animation: prismShift 30s ease infinite;
+        }
+
+        @keyframes prismShift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .shimmer {
+          animation: shimmerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerPulse {
+          0% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+          50% {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+          }
+          100% {
+            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+          }
+        }
+
+        .text-glow {
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+            0 0 14px rgba(213, 179, 255, 0.4);
+        }
+
+        .text-shadow-strong {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+      `}</style>
     </div>
   );
 }
