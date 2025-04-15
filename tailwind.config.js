@@ -3,7 +3,7 @@ module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
   ],
-  safelist: ['sparkle-layer'],
+  safelist: Array.from({ length: 20 }, (_, i) => `sparkle-${i}`),
   theme: {
     extend: {},
   },
