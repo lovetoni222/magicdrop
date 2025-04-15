@@ -1,53 +1,176 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap');
+
+/* THEME */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* TYPOGRAPHY */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+.text-shadow-strong {
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+.text-glow {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+               0 0 14px rgba(213, 179, 255, 0.4);
+}
+
+/* SHIMMER + SPARKLE */
+.shimmer {
+  animation: shimmerPulse 4s ease-in-out infinite;
+}
+@keyframes shimmerPulse {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
+  }
+  100% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
+  }
+}
+.sparkle:hover {
+  text-shadow: 0 0 10px rgba(213, 179, 255, 0.8),
+               0 0 20px rgba(213, 179, 255, 0.5);
+}
+
+/* GLOW ANIMATIONS */
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 6px rgba(213, 179, 255, 0.6),
+                 0 0 10px rgba(213, 179, 255, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(213, 179, 255, 0.9),
+                 0 0 20px rgba(213, 179, 255, 0.6);
+  }
+}
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* FLICKER */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 22%, 24%, 55% {
+    opacity: 0.7;
+  }
+}
+.animate-flicker {
+  animation: flicker 4s linear infinite;
+}
+
+/* SMOKE EFFECT */
+body.sparkle-effect {
+  animation: smokeRise 2s forwards;
+  overflow: hidden;
+}
+@keyframes smokeRise {
+  0% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(8px);
+    background-color: black;
+  }
+}
+body.sparkle-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+  animation: smokeFlow 2s infinite ease-in-out;
+  opacity: 0.7;
+}
+@keyframes smokeFlow {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.5; }
+}
+
+/* PRISM GRADIENT BACKGROUND */
+.animated-prism {
+  background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
+  background-size: 600% 600%;
+  animation: prismShift 30s ease infinite;
+}
+@keyframes prismShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* TYPEWRITER + RAINBOW TEXT */
+.blinking-cursor {
+  animation: blink 1.2s step-start infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.rainbow-header {
+  background: linear-gradient(90deg, #f472b6, #c084fc, #60a5fa, #fcd34d, #f472b6);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 6s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(213, 179, 255, 0.5);
+}
+@keyframes shimmerText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* CHROME TEXT STYLE */
+.chrome-text {
+  background: linear-gradient(135deg, #fff, #d1d5db, #6b7280);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 5s ease-in-out infinite;
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.6),
+    0 2px 2px rgba(0, 0, 0, 0.2),
+    0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* TAILWIND BASE */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer utilities {
-  .shimmer {
-    animation: shimmer 2s infinite;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
-  .text-glow {
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-  }
-
-  .text-shadow-strong {
-    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
-  }
-
-  .animated-prism {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    background-size: 400% 400%;
-    animation: prismShift 15s ease infinite;
-  }
-
-  @keyframes prismShift {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-}
