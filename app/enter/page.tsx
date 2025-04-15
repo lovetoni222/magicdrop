@@ -21,6 +21,7 @@ type Pos = { x: number; y: number; scale: number };
 export default function EnterPage() {
   const [menuOpen, setMenuOpen] = useState(true);
   const [playing, setPlaying] = useState<string | null>(null);
+  const [activeSticker, setActiveSticker] = useState<string | null>(null);
   const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
   const clickAudioRef = useRef<HTMLAudioElement>(null);
 
@@ -54,24 +55,36 @@ export default function EnterPage() {
     }
   };
 
-  const handleWheel = (id: string, e: WheelEvent) => {
+  const handleResize = (id: string, delta: number) => {
     setPositions((prev) => {
-      const newScale = Math.max(0.5, Math.min(2, prev[id].scale + e.deltaY * -0.001));
-      return { ...prev, [id]: { ...prev[id], scale: newScale } };
+      const next = Math.max(0.5, Math.min(2, prev[id].scale + delta));
+      return { ...prev, [id]: { ...prev[id], scale: next } };
     });
   };
 
+  const deselectSticker = () => {
+    setActiveSticker(null);
+  };
+
   useEffect(() => {
-    const handler = (e: WheelEvent) => {
+    const onWheel = (e: WheelEvent) => {
       const el = (e.target as HTMLElement).closest("[data-id]");
       const id = el?.getAttribute("data-id");
-      if (id) handleWheel(id, e);
+      if (id) {
+        handleResize(id, e.deltaY * -0.001);
+      }
     };
-    window.addEventListener("wheel", handler, { passive: false });
-    return () => window.removeEventListener("wheel", handler);
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
   }, []);
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter">
+    <div
+      className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter"
+      onClick={(e) => {
+        const target = (e.target as HTMLElement).closest("[data-id]");
+        if (!target) deselectSticker();
+      }}
+    >
       <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
@@ -86,43 +99,64 @@ export default function EnterPage() {
           </p>
         </div>
         <p className="text-sm text-white/60 max-w-sm mt-2">
-          Tap to play a sound. Scroll to resize. Drag to decorate.
+          Tap to play. Pinch or scroll to resize. Drag to arrange.
         </p>
       </div>
 
-      {/* Free Sticker Canvas */}
-      {stickers.map((s) => (
-        <motion.div
-          key={s.id}
-          data-id={s.id}
-          drag
-          dragMomentum={false}
-          dragElastic={0.1}
-          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-          animate={{
-            x: positions[s.id].x,
-            y: positions[s.id].y,
-            scale: positions[s.id].scale,
-          }}
-          onClick={() => toggleAudio(s.id)}
-          className="absolute select-none cursor-pointer hover:scale-105 transition-transform duration-200 z-30"
-          style={{ width: 64, height: 64 }}
-        >
-          <img
-            src={s.image}
-            alt={s.label}
-            className="w-full h-full object-contain"
-            draggable={false}
-          />
-          <audio
-            ref={(el) => {
-              audioRefs.current[s.id] = el;
+      {/* Sticker Canvas */}
+      {stickers.map((s) => {
+        const isActive = s.id === activeSticker;
+        return (
+          <motion.div
+            key={s.id}
+            data-id={s.id}
+            drag
+            dragMomentum={false}
+            dragElastic={0.1}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+            animate={{
+              x: positions[s.id].x,
+              y: positions[s.id].y,
+              scale: positions[s.id].scale,
             }}
-            src={s.sound}
-            preload="auto"
-          />
-        </motion.div>
-      ))}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleAudio(s.id);
+              setActiveSticker(s.id);
+            }}
+            className="absolute select-none cursor-pointer z-30"
+            style={{
+              width: 64,
+              height: 64,
+              transformOrigin: "center",
+              transformBox: "fill-box",
+            }}
+          >
+            <img
+              src={s.image}
+              alt={s.label}
+              className="w-full h-full object-contain"
+              draggable={false}
+            />
+            <audio
+              ref={(el) => {
+                audioRefs.current[s.id] = el;
+              }}
+              src={s.sound}
+              preload="auto"
+            />
+            {/* Resize Handles */}
+            {isActive && (
+              <div className="absolute inset-0 border border-white/30 pointer-events-none rounded-lg">
+                <div className="w-2 h-2 bg-white rounded-full absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+                <div className="w-2 h-2 bg-white rounded-full absolute top-0 right-0 translate-x-1/2 -translate-y-1/2"></div>
+                <div className="w-2 h-2 bg-white rounded-full absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></div>
+                <div className="w-2 h-2 bg-white rounded-full absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2"></div>
+              </div>
+            )}
+          </motion.div>
+        );
+      })}
 
       {/* Logo Nav Toggle */}
       <motion.img
@@ -182,51 +216,6 @@ export default function EnterPage() {
       <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">
         Powered by Fan Magic
       </p>
-
-      <style jsx global>{`
-        .animated-prism {
-          background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #fcd34d, #a5f3fc);
-          background-size: 600% 600%;
-          animation: prismShift 30s ease infinite;
-        }
-
-        @keyframes prismShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-
-        .shimmer {
-          animation: shimmerPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmerPulse {
-          0% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-          50% {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(213, 179, 255, 0.6));
-          }
-          100% {
-            filter: brightness(1) drop-shadow(0 0 6px rgba(213, 179, 255, 0.3));
-          }
-        }
-
-        .text-glow {
-          text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
-            0 0 14px rgba(213, 179, 255, 0.4);
-        }
-
-        .text-shadow-strong {
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-        }
-      `}</style>
     </div>
   );
 }
