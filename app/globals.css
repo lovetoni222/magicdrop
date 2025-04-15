@@ -18,7 +18,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', sans-serif; /* Default font */
+  font-family: 'Inter', sans-serif !important; /* Default font with !important */
   overflow-x: hidden;
 }
 
@@ -28,11 +28,11 @@ body {
 }
 
 .font-inter {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif !important; /* Apply Inter font with !important */
 }
 
 .font-rampart-one {
-  font-family: 'Rampart One', sans-serif !important; /* Add !important to increase specificity */
+  font-family: 'Rampart One', sans-serif !important; /* Apply Rampart One font with !important */
 }
 
 .text-shadow-strong {
