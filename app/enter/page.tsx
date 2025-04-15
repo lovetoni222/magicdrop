@@ -116,9 +116,6 @@ export default function EnterPage() {
           <h1 className="font-kalnia-glaze text-5xl font-bold text-white tracking-wide">
             Welcome to MagicDrop
           </h1>
-          <p className="mt-4 text-base md:text-xl text-white/80 text-shadow-strong">
-            Customize the dropverse. Move, shape, and remix your world. Tap to play.
-          </p>
         </div>
       </motion.div>
 
@@ -232,7 +229,6 @@ export default function EnterPage() {
       {/* HUD */}
       <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
       <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
-      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
     </div>
   );
 }
