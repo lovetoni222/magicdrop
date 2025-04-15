@@ -18,7 +18,7 @@ const rotateSticker = (id: string) => { setState((prev) => ({ ...prev, [id]: { .
 
 useEffect(() => { const handler = (e: WheelEvent) => { const el = (e.target as HTMLElement).closest("[data-id]"); const id = el?.getAttribute("data-id"); if (id) handleWheel(id, e); }; window.addEventListener("wheel", handler, { passive: false }); return () => window.removeEventListener("wheel", handler); }, []);
 
-return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 animated-prism" />
+return ( <div className="relative min-h-screen w-full overflow-hidden bg-black text-white font-inter touch-none" onClick={(e) => { const target = (e.target as HTMLElement).closest("[data-id]"); if (!target) setActive(null); }} > <audio ref={clickAudioRef} src="/ui-hover.mp3" preload="auto" /> <div className="absolute inset-0 z-0 pointer-events-none sparkle-layer" /> <div className="absolute inset-0 z-0 animated-prism" />
 
 {/* Header */}
   <motion.div
