@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Sparkles, Mail, Users, Star, X } from "lucide-react";
+import { Home, Sparkles, Mail, Users, Star, X as LucideX } from "lucide-react";
 
 export default function CollaboratePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,6 +35,11 @@ export default function CollaboratePage() {
     }
   };
 
+  const closeModal = () => {
+    playClick();
+    setSelectedCard(null);
+  };
+
   const navigateTo = (url: string) => {
     playClick();
     setMenuOpen(false);
@@ -58,20 +63,20 @@ export default function CollaboratePage() {
           <h1 className="text-4xl md:text-5xl font-bold font-kalnia-glaze text-white text-shadow-strong mb-3">
             Collaborate with Us
           </h1>
-          <p className="max-w-xl mx-auto text-white text-shadow-strong text-sm md:text-base mt-2 px-4 py-2 rounded-md backdrop-blur-md bg-black/10">
+          <p className="max-w-xl mx-auto text-white text-shadow-strong text-sm md:text-base mt-2">
             Whether you're an artist or a brand, MagicDrop is your gateway to story-driven commerce.
           </p>
         </div>
       </div>
 
+      {/* Visual Link Module */}
+      <div className="text-center text-white/80 text-shadow-strong mt-8 text-sm italic">
+        Trusted by artists. Backed by magic.
+      </div>
+
       {/* Orbs */}
-      <div className="relative z-20 mt-12 grid grid-cols-2 sm:grid-cols-2 gap-6 px-6 pb-40">
-        {/* Brand Orb */}
-        <motion.div
-          className="flex flex-col items-center cursor-pointer group"
-          onClick={() => openModal("brand")}
-          whileHover={{ scale: 1.08 }}
-        >
+      <div className="relative z-20 mt-6 grid grid-cols-2 sm:grid-cols-2 gap-6 px-6 pb-40">
+        <motion.div className="flex flex-col items-center cursor-pointer group" onClick={() => openModal("brand")} whileHover={{ scale: 1.08 }}>
           <div className="relative flex items-center justify-center">
             <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 z-10">
               💼
@@ -81,12 +86,7 @@ export default function CollaboratePage() {
           <p className="text-sm text-white mt-2 font-semibold">Brand Partners</p>
         </motion.div>
 
-        {/* Artist Orb */}
-        <motion.div
-          className="flex flex-col items-center cursor-pointer group"
-          onClick={() => openModal("artist")}
-          whileHover={{ scale: 1.08 }}
-        >
+        <motion.div className="flex flex-col items-center cursor-pointer group" onClick={() => openModal("artist")} whileHover={{ scale: 1.08 }}>
           <div className="relative flex items-center justify-center">
             <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 z-10">
               🎤
@@ -108,41 +108,32 @@ export default function CollaboratePage() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl max-w-md w-full p-6 text-center shadow-xl relative overflow-hidden"
+              className="card-luxe max-w-md w-full p-6 text-center shadow-xl relative overflow-hidden"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
             >
               <div ref={sparkleRef} className="sparkle-overlay pointer-events-none" />
               <button
-                onClick={() => setSelectedCard(null)}
+                onClick={closeModal}
                 className="absolute top-4 right-5 text-white/60 hover:text-white"
               >
-                <X size={20} />
+                <LucideX size={20} />
               </button>
 
               {selectedCard === "brand" && (
                 <>
                   <div className="text-4xl mb-3">💼</div>
-                  <h3 className="text-xl font-kalnia-glaze font-semibold mb-4 text-white">Partner With MagicDrop</h3>
+                  <h3 className="text-xl font-kalnia-glaze font-semibold mb-4 text-white text-glow-white">
+                    Partner With MagicDrop
+                  </h3>
                   <div className="text-sm text-white/80 text-left space-y-4">
                     <p>MagicDrop exists to bring artists’ worlds to life — from <strong>co-created products</strong> to <strong>immersive experiences</strong>.</p>
                     <ul className="list-disc list-inside space-y-2">
-                      <li>
-                        We partner with <strong>top suppliers and leading brands</strong> across
-                        <br /> <strong>beauty</strong>, <strong>lifestyle</strong>, <strong>food & beverage</strong>, and <strong>premium textiles</strong>.
-                      </li>
-                      <li>
-                        Every drop includes <strong>a custom-built experience</strong> — which can be <strong>web</strong>, <strong>mobile</strong>, <strong>IRL</strong>, or a mix of all three — depending on the creative vision.
-                        <br /><em>(Every drop is different, and we build around the artist’s world.)</em>
-                      </li>
-                      <li>
-                        We <strong>fully fund drop production</strong>, manage <strong>creative</strong> and <strong>logistics</strong>,
-                        <br /> and generate revenue through <strong>brand sponsorships</strong> and <strong>product sales</strong>.
-                      </li>
-                      <li>
-                        Artists retain <strong>full creative control</strong> — with <strong>no upfront risk</strong>.
-                      </li>
+                      <li>We partner with <strong>top suppliers and leading brands</strong> across <br /> <strong>beauty</strong>, <strong>lifestyle</strong>, <strong>food & beverage</strong>, and <strong>premium textiles</strong>.</li>
+                      <li>Every drop includes <strong>a custom-built experience</strong> — web, mobile, IRL, or a mix of all three. <br /><em>(Every drop is different, and we build around the artist’s world.)</em></li>
+                      <li>We <strong>fully fund drop production</strong>, manage <strong>creative</strong> and <strong>logistics</strong>, <br /> and generate revenue through <strong>brand sponsorships</strong> and <strong>product sales</strong>.</li>
+                      <li>Artists retain <strong>full creative control</strong> — with <strong>no upfront risk</strong>.</li>
                     </ul>
                   </div>
                   <a
@@ -157,7 +148,9 @@ export default function CollaboratePage() {
               {selectedCard === "artist" && (
                 <>
                   <div className="text-4xl mb-3">🎤</div>
-                  <h3 className="text-xl font-kalnia-glaze font-semibold mb-4 text-white">Built For Artists</h3>
+                  <h3 className="text-xl font-kalnia-glaze font-semibold mb-4 text-white text-glow-white">
+                    Built For Artists
+                  </h3>
                   <p className="text-sm text-white/80">
                     Whether you're launching your next moment or unlocking new dimensions of fan engagement, we fund, build, and manage your drop — and you retain creative control from start to finish.
                   </p>
@@ -220,6 +213,38 @@ export default function CollaboratePage() {
           whileTap={{ scale: 0.95 }}
         />
       </div>
+
+      {/* Glow and Card Luxe Styles */}
+      <style jsx global>{`
+        .text-glow-white {
+          text-shadow: 0 0 6px rgba(255, 255, 255, 0.6), 0 0 14px rgba(255, 255, 255, 0.4);
+        }
+        .card-luxe {
+          background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), 0 0 20px rgba(213, 179, 255, 0.1);
+          backdrop-filter: blur(8px);
+          position: relative;
+          overflow: hidden;
+        }
+        .card-luxe::after {
+          content: "";
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(ellipse at center, rgba(255,255,255,0.2), transparent 70%);
+          animation: shimmerSweep 8s linear infinite;
+        }
+        @keyframes shimmerSweep {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
+}
+    }
+  ]
 }
