@@ -40,6 +40,7 @@ export default function CollaboratePage() {
     setMenuOpen(false);
     window.location.href = url;
   };
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden text-white font-inter bg-black">
       {/* Audio */}
@@ -54,19 +55,28 @@ export default function CollaboratePage() {
             Collaborate with Us
           </h1>
           <div className="space-y-4 text-white text-base leading-relaxed text-shadow-strong">
-            <p>MagicDrop exists to bring artists’ worlds to life — from <strong>co-created products</strong> to <strong>immersive experiences</strong>.</p>
+            <p>
+              MagicDrop exists to bring artists’ worlds to life — from <strong>co-created products</strong> to{" "}
+              <strong>immersive experiences</strong>.
+            </p>
             <ul className="list-disc list-inside space-y-2">
               <li>
                 We partner with <strong>top suppliers and leading brands</strong> across
-                <br /> <strong>beauty</strong>, <strong>lifestyle</strong>, <strong>food & beverage</strong>, and <strong>premium textiles</strong>.
+                <br /> <strong>beauty</strong>, <strong>lifestyle</strong>, <strong>food & beverage</strong>, and{" "}
+                <strong>premium textiles</strong>.
               </li>
               <li>
-                Every drop includes <strong>a custom-built experience</strong> — which can be <strong>web</strong>, <strong>mobile</strong>, <strong>IRL</strong>, or a mix of all three — depending on the creative vision.
-                <br /> <em>(Every drop is different, and we build around the artist’s world.)</em>
+                Every drop includes <strong>a custom-built experience</strong> — which can be{" "}
+                <strong>web</strong>, <strong>mobile</strong>, <strong>IRL</strong>, or a mix of all three — depending on
+                the creative vision.
+                <br />
+                <em>(Every drop is different, and we build around the artist’s world.)</em>
               </li>
               <li>
-                We <strong>fully fund drop production</strong>, manage <strong>creative</strong> and <strong>logistics</strong>,
-                <br /> and generate revenue through <strong>brand sponsorships</strong> and <strong>product sales</strong>.
+                We <strong>fully fund drop production</strong>, manage <strong>creative</strong> and{" "}
+                <strong>logistics</strong>,
+                <br /> and generate revenue through <strong>brand sponsorships</strong> and{" "}
+                <strong>product sales</strong>.
               </li>
               <li>
                 Artists retain <strong>full creative control</strong> — with <strong>no upfront risk</strong>.
@@ -76,5 +86,7 @@ export default function CollaboratePage() {
         </div>
       </div>
 
-      {/* Orbs */}
-      ...
+      {/* Orbs, Modals, Nav, etc. (continue your page logic here) */}
+    </div>
+  );
+}
