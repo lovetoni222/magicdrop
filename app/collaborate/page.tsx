@@ -47,6 +47,11 @@ export default function CollaboratePage() {
       <audio ref={clickAudioRef} src="/team-click.mp3" preload="auto" />
       <div className="absolute inset-0 z-0 animated-prism" />
 
+      {/* Corner Branding */}
+      <p className="absolute top-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">MAGICDROP UI</p>
+      <p className="absolute bottom-2 left-3 text-xs text-white/50 font-mono tracking-wide z-50">Build 01 — Public Alpha</p>
+      <p className="absolute bottom-2 right-3 text-xs text-white/50 font-mono tracking-wide z-50 text-right">Powered by Fan Magic</p>
+
       {/* Header */}
       <div className="pt-24 text-center z-20 relative px-4">
         <div className="rounded-full bg-white/10 border border-white/20 p-6 md:p-8 backdrop-blur-md shadow-[0_0_40px_rgba(213,179,255,0.4)] max-w-xl mx-auto">
@@ -154,8 +159,7 @@ export default function CollaboratePage() {
                   <div className="text-4xl mb-3">🎤</div>
                   <h3 className="text-xl font-kalnia-glaze font-semibold mb-4 text-white">Built For Artists</h3>
                   <p className="text-sm text-white/80">
-                    Whether you're launching your next moment or unlocking new dimensions of fan engagement,
-                    we fund, build, and manage your drop — and you retain creative control from start to finish.
+                    Whether you're launching your next moment or unlocking new dimensions of fan engagement, we fund, build, and manage your drop — and you retain creative control from start to finish.
                   </p>
                   <a
                     href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP ARTIST - CODE 5480AR"
@@ -170,7 +174,52 @@ export default function CollaboratePage() {
         )}
       </AnimatePresence>
 
-      {/* Additional UI like Nav, Logo, etc. can follow here */}
+      {/* Bottom Navigation & Logo */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
+        {menuOpen && (
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3 relative"
+          >
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-3 right-4 text-white/60 hover:text-white"
+            >
+              <X size={18} />
+            </button>
+            <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
+            {[
+              { label: "Home", link: "/enter", icon: <Home size={18} /> },
+              { label: "Explore Drops", link: "/drops", icon: <Sparkles size={18} /> },
+              { label: "Collaborate", link: "/collaborate", icon: <Mail size={18} /> },
+              { label: "Meet Our Team", link: "/team", icon: <Users size={18} /> },
+              { label: "Become a Fan Advisor", link: "/fan-advisor", icon: <Star size={18} /> },
+            ].map((item) => (
+              <button
+                key={item.link}
+                onClick={() => navigateTo(item.link)}
+                className="w-full flex items-center gap-2 justify-start px-4 py-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-purple-600 hover:border-purple-600 transition text-sm font-semibold"
+              >
+                {item.icon} {item.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+
+        <motion.img
+          onClick={() => {
+            playClick();
+            setMenuOpen(!menuOpen);
+          }}
+          src="/logo.png"
+          alt="MagicDrop Nav"
+          className="h-16 w-16 rounded-full border-2 border-purple-400 bg-black/40 p-2 cursor-pointer hover:scale-110 transition-transform duration-300 shimmer"
+          whileTap={{ scale: 0.95 }}
+        />
+      </div>
     </div>
   );
 }
