@@ -69,9 +69,11 @@ export default function CollaboratePage() {
         </div>
       </div>
 
-      {/* Fixed Visual Module */}
-      <div className="mt-12 text-center text-white text-lg font-semibold tracking-wide text-glow-white z-30">
-        Trusted by artists. Backed by magic.
+      {/* Visual Module */}
+      <div className="mt-12 mb-6 px-4 text-center z-30">
+        <p className="text-white text-lg md:text-xl font-semibold tracking-wide text-glow-white">
+          Trusted by artists. Backed by magic.
+        </p>
       </div>
 
       {/* Orbs */}
@@ -97,7 +99,7 @@ export default function CollaboratePage() {
         ))}
       </div>
 
-      {/* Modals */}
+      {/* Modal */}
       <AnimatePresence>
         {selectedCard && (
           <motion.div
@@ -125,16 +127,26 @@ export default function CollaboratePage() {
                     Partner With MagicDrop
                   </h3>
                   <div className="text-sm text-white/80 text-left space-y-4">
-                    <p>MagicDrop exists to bring artists’ worlds to life — from <strong>co-created products</strong> to <strong>immersive experiences</strong>.</p>
+                    <p>We embed your brand into immersive, artist-led moments — from <strong>physical products</strong> to <strong>narrative content</strong> and <strong>IRL experiences</strong>.</p>
                     <ul className="list-disc list-inside space-y-2">
-                      <li>We partner with <strong>top suppliers and leading brands</strong> across <br /> <strong>beauty</strong>, <strong>lifestyle</strong>, <strong>food & beverage</strong>, and <strong>premium textiles</strong>.</li>
-                      <li>Every drop includes <strong>a custom-built experience</strong> — web, mobile, IRL, or a mix of all three. <br /><em>(Every drop is different, and we build around the artist’s world.)</em></li>
-                      <li>We <strong>fully fund drop production</strong>, manage <strong>creative</strong> and <strong>logistics</strong>, <br /> and generate revenue through <strong>brand sponsorships</strong> and <strong>product sales</strong>.</li>
-                      <li>Artists retain <strong>full creative control</strong> — with <strong>no upfront risk</strong>.</li>
+                      <li>
+                        Collaborate on <strong>limited-edition products</strong>, <strong>co-branded merch</strong>, and <strong>custom drops</strong> built around artist vision.
+                      </li>
+                      <li>
+                        Tap into artist fanbases through <strong>authentic storytelling</strong> and <strong>narrative app experiences</strong>.
+                      </li>
+                      <li>
+                        Extend your reach via <strong>physical events</strong>, <strong>social rollouts</strong>, and <strong>fan-powered discovery</strong>.
+                      </li>
+                      <li>
+                        Enjoy turnkey execution: we handle <strong>production</strong>, <strong>creative</strong>, and <strong>logistics</strong> — with measurable ROI.
+                      </li>
                     </ul>
                   </div>
-                  <a href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP BRANDS - CODE 9143BR"
-                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition z-50">
+                  <a
+                    href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP BRANDS - CODE 9143BR"
+                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition z-50"
+                  >
                     Email Us →
                   </a>
                 </>
@@ -146,11 +158,19 @@ export default function CollaboratePage() {
                   <h3 className="text-xl font-kalnia-glaze font-semibold mb-4 text-white text-glow-white">
                     Built For Artists
                   </h3>
-                  <p className="text-sm text-white/80">
-                    Whether you're launching your next moment or unlocking new dimensions of fan engagement, we fund, build, and manage your drop — and you retain creative control from start to finish.
-                  </p>
-                  <a href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP ARTIST - CODE 5480AR"
-                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition z-50">
+                  <div className="text-sm text-white/80 text-left space-y-4">
+                    <p>MagicDrop exists to bring artists’ worlds to life — from <strong>co-created products</strong> to <strong>immersive experiences</strong>.</p>
+                    <ul className="list-disc list-inside space-y-2">
+                      <li>We partner with <strong>top suppliers and leading brands</strong> across <br /> <strong>beauty</strong>, <strong>lifestyle</strong>, <strong>food & beverage</strong>, and <strong>premium textiles</strong>.</li>
+                      <li>Every drop includes <strong>a custom-built experience</strong> — web, mobile, IRL, or a mix of all three. <br /><em>(Every drop is different, and we build around the artist’s world.)</em></li>
+                      <li>We <strong>fully fund drop production</strong>, manage <strong>creative</strong> and <strong>logistics</strong>, <br /> and generate revenue through <strong>brand sponsorships</strong> and <strong>product sales</strong>.</li>
+                      <li>Artists retain <strong>full creative control</strong> — with <strong>no upfront risk</strong>.</li>
+                    </ul>
+                  </div>
+                  <a
+                    href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP ARTIST - CODE 5480AR"
+                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition z-50"
+                  >
                     Email Us →
                   </a>
                 </>
