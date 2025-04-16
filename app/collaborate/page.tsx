@@ -69,55 +69,52 @@ export default function CollaboratePage() {
         </div>
       </div>
 
-      {/* Visual Link Module */}
-      <div className="text-center text-white/80 text-shadow-strong mt-8 text-sm italic">
+      {/* Fixed Visual Module */}
+      <div className="mt-12 text-center text-white text-lg font-semibold tracking-wide text-glow-white z-30">
         Trusted by artists. Backed by magic.
       </div>
 
       {/* Orbs */}
       <div className="relative z-20 mt-6 grid grid-cols-2 sm:grid-cols-2 gap-6 px-6 pb-40">
-        <motion.div className="flex flex-col items-center cursor-pointer group" onClick={() => openModal("brand")} whileHover={{ scale: 1.08 }}>
-          <div className="relative flex items-center justify-center">
-            <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 z-10">
-              💼
+        {[
+          { id: "brand", icon: "💼", label: "Brand Partners" },
+          { id: "artist", icon: "🎤", label: "Artist Partners" },
+        ].map(({ id, icon, label }) => (
+          <motion.div
+            key={id}
+            className="flex flex-col items-center cursor-pointer group"
+            onClick={() => openModal(id)}
+            whileHover={{ scale: 1.08 }}
+          >
+            <div className="relative flex items-center justify-center">
+              <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 z-10">
+                {icon}
+              </div>
+              <div className="absolute inset-0 rounded-full glow-halo z-0" />
             </div>
-            <div className="absolute inset-0 rounded-full glow-halo z-0" />
-          </div>
-          <p className="text-sm text-white mt-2 font-semibold">Brand Partners</p>
-        </motion.div>
-
-        <motion.div className="flex flex-col items-center cursor-pointer group" onClick={() => openModal("artist")} whileHover={{ scale: 1.08 }}>
-          <div className="relative flex items-center justify-center">
-            <div className="w-24 h-24 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-3xl font-bold text-purple-200 z-10">
-              🎤
-            </div>
-            <div className="absolute inset-0 rounded-full glow-halo z-0" />
-          </div>
-          <p className="text-sm text-white mt-2 font-semibold">Artist Partners</p>
-        </motion.div>
+            <p className="text-sm text-white mt-2 font-semibold">{label}</p>
+          </motion.div>
+        ))}
       </div>
 
-      {/* Modal */}
+      {/* Modals */}
       <AnimatePresence>
         {selectedCard && (
           <motion.div
-            key="collab-modal"
+            key="modal"
             className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="card-luxe max-w-md w-full p-6 text-center shadow-xl relative overflow-hidden"
+              className="card-luxe max-w-md w-full p-6 text-center shadow-xl relative z-50"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
             >
-              <div ref={sparkleRef} className="sparkle-overlay pointer-events-none" />
-              <button
-                onClick={closeModal}
-                className="absolute top-4 right-5 text-white/60 hover:text-white"
-              >
+              <div ref={sparkleRef} className="sparkle-overlay pointer-events-none z-10" />
+              <button onClick={closeModal} className="absolute top-4 right-5 text-white/60 hover:text-white z-50">
                 <LucideX size={20} />
               </button>
 
@@ -136,10 +133,8 @@ export default function CollaboratePage() {
                       <li>Artists retain <strong>full creative control</strong> — with <strong>no upfront risk</strong>.</li>
                     </ul>
                   </div>
-                  <a
-                    href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP BRANDS - CODE 9143BR"
-                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition"
-                  >
+                  <a href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP BRANDS - CODE 9143BR"
+                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition z-50">
                     Email Us →
                   </a>
                 </>
@@ -154,10 +149,8 @@ export default function CollaboratePage() {
                   <p className="text-sm text-white/80">
                     Whether you're launching your next moment or unlocking new dimensions of fan engagement, we fund, build, and manage your drop — and you retain creative control from start to finish.
                   </p>
-                  <a
-                    href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP ARTIST - CODE 5480AR"
-                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition"
-                  >
+                  <a href="mailto:partnerships@getmagicdrop.com?subject=MAGICDROP ARTIST - CODE 5480AR"
+                    className="mt-6 inline-block px-4 py-2 rounded-full border border-purple-400 text-sm text-white bg-purple-600 hover:bg-purple-700 transition z-50">
                     Email Us →
                   </a>
                 </>
@@ -167,7 +160,7 @@ export default function CollaboratePage() {
         )}
       </AnimatePresence>
 
-      {/* Bottom Nav + Logo */}
+      {/* Bottom Nav */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         {menuOpen && (
           <motion.div
@@ -177,11 +170,8 @@ export default function CollaboratePage() {
             transition={{ duration: 0.4 }}
             className="px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl w-[90vw] max-w-sm shadow-2xl flex flex-col items-center gap-3 relative"
           >
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-3 right-4 text-white/60 hover:text-white"
-            >
-              <X size={18} />
+            <button onClick={() => setMenuOpen(false)} className="absolute top-3 right-4 text-white/60 hover:text-white z-50">
+              <LucideX size={18} />
             </button>
             <h2 className="text-lg font-bold text-shadow-strong mt-3 mb-1">Navigate the Dropverse</h2>
             {[
@@ -201,7 +191,6 @@ export default function CollaboratePage() {
             ))}
           </motion.div>
         )}
-
         <motion.img
           onClick={() => {
             playClick();
@@ -213,38 +202,6 @@ export default function CollaboratePage() {
           whileTap={{ scale: 0.95 }}
         />
       </div>
-
-      {/* Glow and Card Luxe Styles */}
-      <style jsx global>{`
-        .text-glow-white {
-          text-shadow: 0 0 6px rgba(255, 255, 255, 0.6), 0 0 14px rgba(255, 255, 255, 0.4);
-        }
-        .card-luxe {
-          background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), 0 0 20px rgba(213, 179, 255, 0.1);
-          backdrop-filter: blur(8px);
-          position: relative;
-          overflow: hidden;
-        }
-        .card-luxe::after {
-          content: "";
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(ellipse at center, rgba(255,255,255,0.2), transparent 70%);
-          animation: shimmerSweep 8s linear infinite;
-        }
-        @keyframes shimmerSweep {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
-}
-    }
-  ]
 }
