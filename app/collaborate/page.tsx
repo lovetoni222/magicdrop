@@ -58,7 +58,7 @@ export default function CollaboratePage() {
           <h1 className="text-4xl md:text-5xl font-bold font-kalnia-glaze text-white text-shadow-strong mb-3">
             Collaborate with Us
           </h1>
-          <p className="max-w-xl mx-auto text-white/80 text-shadow-strong text-sm md:text-base">
+          <p className="max-w-xl mx-auto text-white text-shadow-strong text-sm md:text-base mt-2 px-4 py-2 rounded-md backdrop-blur-md bg-black/10">
             Whether you're an artist or a brand, MagicDrop is your gateway to story-driven commerce.
           </p>
         </div>
@@ -174,7 +174,7 @@ export default function CollaboratePage() {
         )}
       </AnimatePresence>
 
-      {/* Bottom Navigation & Logo */}
+      {/* Bottom Nav + Logo */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-50">
         {menuOpen && (
           <motion.div
